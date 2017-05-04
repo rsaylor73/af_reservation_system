@@ -1,0 +1,33 @@
+RewriteEngine On 
+RewriteCond %{SERVER_PORT} 80 
+RewriteRule ^(.*)$ https://dev.aggressor.com/$1 [R,L]
+
+RewriteCond %{SCRIPT_FILENAME} !-d
+RewriteCond %{SCRIPT_FILENAME} !-f
+
+# One param
+# IE: search
+
+RewriteRule ^/?([^/]*)$ index.php?section=$1 [NC,L]
+
+# Two params
+# IE: search/12345
+
+RewriteRule ^edit_access/([a-zA-Z0-9]+)/?$ index.php?section=edit_access&actionID=$1 [NC,L]
+RewriteRule ^edit_boat/([a-zA-Z0-9]+)/?$ index.php?section=edit_boat&boatID=$1 [NC,L]
+RewriteRule ^edit_historic_boat/([a-zA-Z0-9]+)/?$ index.php?section=edit_historic_boat&boatID=$1 [NC,L]
+RewriteRule ^manage_bunks/([a-zA-Z0-9]+)/?$ index.php?section=manage_bunks&boatID=$1 [NC,L]
+RewriteRule ^manage_destinations/([a-zA-Z0-9]+)/?$ index.php?section=manage_destinations&boatID=$1 [NC,L]
+RewriteRule ^new_bunk/([a-zA-Z0-9]+)/?$ index.php?section=new_bunk&boatID=$1 [NC,L]
+RewriteRule ^new_destination/([a-zA-Z0-9]+)/?$ index.php?section=new_destination&boatID=$1 [NC,L]
+RewriteRule ^manage_boats/([a-zA-Z0-9]+)/?$ index.php?section=manage_boats&status=$1 [NC,L]
+RewriteRule ^charter_status/([a-zA-Z0-9]+)/?$ index.php?section=charter_status&status=$1 [NC,L]
+RewriteRule ^delete_historic_boat/([a-zA-Z0-9]+)/?$ index.php?section=delete_historic_boat&boatID=$1 [NC,L]
+
+# Three params
+# IE: search/12345/676767
+
+RewriteRule ^edit_bunk/([a-zA-Z0-9]+)/([a-zA-Z0-9]+)/?$ index.php?section=edit_bunk&bunkID=$1&boatID=$2 [NC,L]
+RewriteRule ^delete_bunk/([a-zA-Z0-9]+)/([a-zA-Z0-9]+)/?$ index.php?section=delete_bunk&bunkID=$1&boatID=$2 [NC,L]
+RewriteRule ^edit_destination/([a-zA-Z0-9]+)/([a-zA-Z0-9]+)/?$ index.php?section=edit_destination&destinationID=$1&boatID=$2 [NC,L]
+RewriteRule ^delete_destination/([a-zA-Z0-9]+)/([a-zA-Z0-9]+)/?$ index.php?section=delete_destination&destinationID=$1&boatID=$2 [NC,L]
