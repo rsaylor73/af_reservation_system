@@ -37,6 +37,12 @@ class core {
                 $result = $this->new_mysql($sql);
                 while ($row = $result->fetch_assoc()) {
                         $found = "1";
+			if ($_SESSION['geo'] == "") {
+				// this will log the users GEO location if they accept the browser warning
+				$this->activity_log('login');
+				$_SESSION['geo'] = "1";
+			}
+
                         // update session data
                         foreach ($row as $key=>$value) {
                                 $_SESSION[$key] = $value;

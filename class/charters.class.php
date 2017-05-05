@@ -37,6 +37,16 @@ class charters extends boats {
                         $html .= "<tr><td>
                         <a href=\"/edit_charter_status/$row[statusID]\" data-toggle=\"tooltip\" title=\"Edit Charter Status\">
 			<i class=\"fa fa-pencil-square-o\" aria-hidden=\"true\"></i></a>&nbsp;
+
+                        <a href=\"javascript:void(0);\" data-toggle=\"tooltip\" title=\"Delete Charter Status\"
+                        onclick=\"
+                        if(confirm('You are about to delete $row[name]. If there are linked charter the system will not delete the status. Click OK to continue.')) {
+                                document.location.href='/delete_charter_status/$row[statusID]';
+                        }
+                        \"
+
+                        ><i class=\"fa fa-trash-o\" aria-hidden=\"true\"></i></a>&nbsp;
+
                         </td><td>$row[name]</td><td>$row[status]</td></tr>";
 		}
 		$data['html'] = $html;
@@ -90,6 +100,37 @@ class charters extends boats {
                         $msg = '<div class="alert alert-danger">'.$_POST['name'].' failed to add.</div>';
                 }
                 $this->charter_status($msg);
+	}
+
+	// this will allow the user to delete a status if it is not linked to a charter
+	public function delete_charter_status() {
+                $this->security('charter_status',$_SESSION['user_typeID']);
+
+		$sql = "SELECT `name` FROM `statuses` WHERE `statusID` = '$_GET[statusID]'";
+                $result = $this->new_mysql($sql);
+                while ($row = $result->fetch_assoc()) {
+                        $name = $row['name'];
+		}
+
+		$sql = "SELECT `statusID` FROM `charters` WHERE `statusID` = '$_GET[statusID]'";
+		$counter = "0";
+		$result = $this->new_mysql($sql);
+                while ($row = $result->fetch_assoc()) {
+                        $counter++;
+                }
+                if ($counter > 0) {
+                        $msg = '<div class="alert alert-danger">'.$name.' has linked charters and can not be deleted.</div>';
+                } else {
+                        $sql = "DELETE FROM `statuses` WHERE `statusID` = '$_GET[statusID]'";
+                        $result = $this->new_mysql($sql);
+                        if ($result == "TRUE") {
+                                $msg = '<div class="alert alert-success">'.$name.' was deleted.</div>';
+                        } else {
+                                $msg = '<div class="alert alert-danger">'.$name.' failed to delete.</div>';
+                        }
+                }
+                $this->charter_status($msg);
+
 	}
 }
 ?>
