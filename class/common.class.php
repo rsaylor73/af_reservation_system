@@ -145,8 +145,42 @@ class common extends destinations {
 		return($html);
 	}
 
+	/* This will display a list of countries for a select box */
+	public function list_country($countryID) {
+		// default at top
+		$option = "<optgroup label=\"Top 5 Countries\">
+		<option value=\"2\">USA</option>
+		<option value=\"24\">Mexico</option>
+		<option value=\"9\">Spain</option>
+		<option value=\"35\">Russia</option>
+		<option value=\"19\">Italy</option>
+		</optgroup>";
 
+		$sql = "SELECT `countryID`,`country` FROM `countries` ORDER BY `country` ASC";
+		$result = $this->new_mysql($sql);
+		while ($row = $result->fetch_assoc()) {
+			if ($row['countryID'] == $countryID) {
+				$option .= "<option selected value=\"$row[countryID]\">$row[country]</option>";
+			} else {
+                                $option .= "<option value=\"$row[countryID]\">$row[country]</option>";
+			}
+		}
+		return($option);
+	}
 
+	/* This will display a list of US states for a select box */
+	public function list_states($state_abbr) {
+		$sql = "SELECT `state`,`state_abbr` FROM `state` ORDER BY `state` ASC";
+                $result = $this->new_mysql($sql);
+                while ($row = $result->fetch_assoc()) {
+			if ($row['state_abbr'] == $state_abbr) {
+				$option .= "<option selected value=\"$row[state_abbr]\">$row[state]</option>";
+			} else {
+                                $option .= "<option value=\"$row[state_abbr]\">$row[state]</option>";
+			}
+		}
+		return($option);
+	}
 
 
 }

@@ -9,7 +9,13 @@ class api extends core {
 	public function activity_log($type='login') {
 
 		switch ($type) {
+
 			case "login":
+                        $date = date("Ymd");
+                        $time = date("H:n:i");
+                        $ip = $_SERVER['REMOTE_ADDR'];
+			$sql = "INSERT INTO `activity_user_login` (`userID`,`date`,`time`,`ip`) VALUES ('$_SESSION[userID]','$date','$time','$ip')";
+			$result=$this->new_mysql($sql);
 			?>
 			<script>
 			getLocation();

@@ -28,6 +28,7 @@ switch ($section) {
 	case "new_bunk":
 	case "edit_destination":
 	case "new_destination":
+	case "logout":
 	// The following items above will not display the header (do the same in the footer)
 	break;
 

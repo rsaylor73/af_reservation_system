@@ -15,6 +15,8 @@
      <!-- GOOGLE FONTS-->
      <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
 
+    <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
     <script src="/assets/js/jquery-1.10.2.js"></script>
     <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js" integrity="sha256-0YPKAwZP7Mp3ALMRVB2i8GXeEndvCq3eSl/WsAl1Ryk=" crossorigin="anonymous"></script>
     <script src="/assets/js/bootstrap.min.js"></script>
@@ -23,8 +25,27 @@
     <link rel="stylesheet" type="text/css" href="/css/jquery-gmaps-latlon-picker.css"/>
     <script src="/js/jquery-gmaps-latlon-picker.js"></script>
 
-
+    <style>
+    .table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+      background-color: #00d4ff;
+    }
+    </style>
 {literal}
+
+<script>
+$(function() {
+	$( "#dob" ).datepicker({ 
+        	dateFormat: "yy-mm-dd",
+		changeMonth: true,
+		changeYear: true,
+		minDate: "-99Y", 
+		maxDate: "-1D",
+		yearRange: "-100:+0"
+	});
+
+});
+</script>
+
 <script>
   function onSubmit(token) {
 

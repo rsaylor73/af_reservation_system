@@ -14,7 +14,11 @@ $sql = "SELECT `userID` FROM `users` WHERE `userID` = '$_GET[u]'";
 $result = $core->new_mysql($sql);
 while ($row = $result->fetch_assoc()) {
 	// ok found valid user
-	$sql2 = "INSERT INTO `activity_user_login` (`userID`,`location`,`date`,`time`,`ip`) VALUES ('$_GET[u]','$_GET[field]','$date','$time','$ip')";
+	$sql2 = "SELECT `id` FROM `activity_user_login` WHERE `date` = '$date' AND `userID` = '$_GET[u]' ORDER BY `id` DESC LIMIT 1";
 	$result2 = $core->new_mysql($sql2);
+	while ($row2 = $result2->fetch_assoc()) {
+		$sql3 = "UPDATE `activity_user_login` SET `location` = '$_GET[field]' WHERE `id` = '$row2[id]'";
+		$result3 = $core->new_mysql($sql3);
+	}
 }
 ?>

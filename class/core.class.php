@@ -33,14 +33,15 @@ class core {
 
 	// checks if a user is signed in
         public function check_login() {
+
                 $sql = "SELECT * FROM `users` WHERE `username` = '$_SESSION[username]' AND `password` = '$_SESSION[password]' AND `status` = 'Active'";
                 $result = $this->new_mysql($sql);
                 while ($row = $result->fetch_assoc()) {
                         $found = "1";
-			if ($_SESSION['geo'] == "") {
+			if ($_SESSION['geo_record'] == "") {
 				// this will log the users GEO location if they accept the browser warning
 				$this->activity_log('login');
-				$_SESSION['geo'] = "1";
+				$_SESSION['geo_record'] = "1";
 			}
 
                         // update session data
@@ -101,7 +102,16 @@ class core {
 
 	// logout
 	public function logout() {
+		$_SESSION = array();
+		if (ini_get("session.use_cookies")) {
+			$params = session_get_cookie_params();
+			setcookie(session_name(), '', time() - 42000,
+			$params["path"], $params["domain"],
+			$params["secure"], $params["httponly"]
+			);
+		}
                 session_destroy();
+		$this->load_smarty(null,'header.tpl');
                 print "<font color=green>Your have been logged out.</font>";
                 ?>
                 <script>
