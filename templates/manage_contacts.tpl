@@ -16,7 +16,7 @@
 		<div class="col-sm-2">Middle Name:</div>
 		<div class="col-sm-2"><input type="text" name="middle" class="form-control"></div>
 		<div class="col-sm-2">Date Of Birth:</div>
-		<div class="col-sm-2"><input type="text" name="dob" id="dob" class="form-control"></div>
+		<div class="col-sm-2"><input type="text" name="dob" id="dob" class="form-control" readonly></div>
 	</div>
 
         <div class="row pad-top" id="h1" style="display:none">
@@ -54,7 +54,7 @@
         <div class="row pad-top">
 		<div class="col-sm-2">Club: (may select multiple)</div>
 		<div class="col-sm-2">
-			<select name="club" multiple class="form-control">
+			<select name="club[]" multiple class="form-control">
 				<option selected value="">Select</option>
 				<option>VIP</option>
 				<option>VIPplus</option>
@@ -63,7 +63,8 @@
 		</div>
 		<div class="col-sm-4"><input type="button" value="Search" class="btn btn-primary" onclick="search_contacts(this.form)">&nbsp;
 		<input type="button" value="Show More Fields" id="h3" class="btn btn-info" onclick="document.getElementById('h1').style.display='inherit';
-		document.getElementById('h2').style.display='inherit';document.getElementById('h3').style.display='none';">
+		document.getElementById('h2').style.display='inherit';document.getElementById('h3').style.display='none';">&nbsp;
+		<input type="button" value="Clear" class="btn btn-warning" onclick="document.location.href='/manage_contacts'">
 		</div>
 	</div>
 
@@ -73,7 +74,7 @@
 
 <div class="well">
 	<div id="search_results">
-		Submit form above to view filtered search results	
+		Search results are limited to 50 records. Use more filters to narrow down your search.	
 	</div>
 </div>
 
