@@ -5,7 +5,7 @@ include "../include/settings.php";
 include "../include/templates.php";
 $smarty->error_reporting = E_ALL & ~E_NOTICE;
 if ($_SESSION['logged'] == "TRUE") {
-	if ($_GET['country'] == "2") {
+	if ($_GET['ct_country'] == "2") {
 		print "State:";
 		$state = $core->list_states(null);
 		?>

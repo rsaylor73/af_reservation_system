@@ -25,7 +25,8 @@ RewriteRule ^charter_status/([a-zA-Z0-9]+)/?$ index.php?section=charter_status&s
 RewriteRule ^delete_historic_boat/([a-zA-Z0-9]+)/?$ index.php?section=delete_historic_boat&boatID=$1 [NC,L]
 RewriteRule ^edit_charter_status/([a-zA-Z0-9]+)/?$ index.php?section=edit_charter_status&statusID=$1 [NC,L]
 RewriteRule ^delete_charter_status/([a-zA-Z0-9]+)/?$ index.php?section=delete_charter_status&statusID=$1 [NC,L]
-
+RewriteRule ^contacts/([a-zA-Z0-9]+)/?$ index.php?section=contacts&contactID=$1 [NC,L]
+RewriteRule ^manage_contacts/([a-zA-Z0-9]+)/?$ index.php?section=manage_contacts&clear=yes [NC,L]
 # Three params
 # IE: search/12345/676767
 
