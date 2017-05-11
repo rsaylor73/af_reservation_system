@@ -49,6 +49,15 @@ class contacts extends resellers {
 			foreach ($row as $key=>$value) {
 				$data[$key] = $value;
 			}
+			if ($row['vip'] == "checked") {
+				$data['vip_checked'] = "selected";
+			}
+			if ($row['vip5'] == "checked") {
+				$data['vipplus_checked'] = "selected";
+			}
+			if ($row['seven_seas'] == "checked") {
+				$data['seven_seas_checked'] = "selected";
+			}
 		}
 
 		$this->load_smarty($data,$template);

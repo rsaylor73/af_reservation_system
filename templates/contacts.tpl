@@ -45,14 +45,71 @@
 
 	<div class="row pad-top">
 		<div class="col-sm-4"><input type="text" name="preferred_name" value="{$preferred_name}" class="form-control"></div>
+                <div class="col-sm-4">
+                	<select data-placeholder="Club Membership" name="club" multiple class="chosen-select form-control">
+                        	<option value=""></option>
+                        	<option {$vip_checked} value="vip">VIP</option>
+			    	<option {$vipplus_checked} value="vip5">VIPplus</option>
+				<option {$seven_seas_checked} value="seven_seas">Seven Seas</option>
+                          </select>
+                </div>
+	</div>
+
+        <div class="row">
+                <div class="col-sm-4">&nbsp;<b>Preferred Name</b></div>
+                <div class="col-sm-4">&nbsp;<b>Club Membership</b></div>
+        </div>
+
+        <div class="row pad-top">
+		<div class="col-sm-4"><input type="text" name="address1" value="{$address1}" class="form-control" required></div>
+                <div class="col-sm-4"><input type="text" name="address2" value="{$address2}" class="form-control"></div>
+		<div class="col-sm-4"><input type="text" name="city" value="{$city}" class="form-control" required></div>
 	</div>
 
 	<div class="row">
-		<div class="col-sm-4">&nbsp;<b>Preferred Name</b></div>
+		<div class="col-sm-4">&nbsp;<b>Address</b></div>
+		<div class="col-sm-4">&nbsp;<b>Appt/Unit</b></div>
+		<div class="col-sm-4">&nbsp;<b>City</b></div>
 	</div>
 
+        <div class="row pad-top">
+		<div class="col-sm-4">
+			{if $countryID eq "2"}
+				<select name="state" class="form-control" required>{$states}</select>
+			{else}
+				<input type="text" name="province" value="{$province}" class="form-control" required>
+			{/if}
+		</div>
+		<div class="col-sm-4"><select name="country" class="form-control" required>{$country}</select></div>
+		<div class="col-sm-4"><input type="text" name="zip" value="{$zip}" class="form-control" required></div>
+	</div>
 
+        <div class="row">
+		<div class="col-sm-4">
+                        {if $countryID eq "2"}
+				&nbsp;State
+			{else}
+				&nbsp;Province
+			{/if}
+		</div>
+		<div class="col-sm-4">&nbsp;Country</div>
+		<div class="col-sm-4">&nbsp;Zip</div>
+	</div>
 
+        <div class="row pad-top">
+		<div class="col-sm-4">
+			<input type="radio" name="gender" value="male" {$male}> male &nbsp;&nbsp;
+			<input type="radio" name="gender" value="female" {$female}> female
+		</div>
+		<div class="col-sm-4"><input type="checkbox" name="certification" value="checked" {$certification}> Yes (Checked if the certification has been verified)</div>
+		<div class="col-sm-4"><input type="text" name="email" value="{$email}" class="form-control" required></div>
+	</div>
+
+        <div class="row">
+		<div class="col-sm-4">&nbsp;Gender</div>
+		<div class="col-sm-4">&nbsp;Certification</div>
+		<div class="col-sm-4">&nbsp;E-mail</div>
+	</div>
 
 
 </div>

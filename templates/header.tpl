@@ -15,6 +15,8 @@
      <!-- GOOGLE FONTS-->
      <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
 
+    <link rel="stylesheet" href="/chosen.css">
+
     <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
     <script src="/assets/js/jquery-1.10.2.js"></script>

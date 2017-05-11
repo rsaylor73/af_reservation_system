@@ -19,7 +19,8 @@
           
 
     <script src="/assets/js/custom.js"></script>
-    
+    <script src="/chosen.jquery.js" type="text/javascript"></script>
+    <script src="/docsupport/init.js" type="text/javascript" charset="utf-8"></script> 
    
 </body>
 </html>
