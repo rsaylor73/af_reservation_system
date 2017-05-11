@@ -3,7 +3,10 @@
 <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Reservation</button>
 </h2>
 {$msg}
-<form name="myform">
+<form name="myform" action="/" method="post">
+<input type="hidden" name="section" value="update_contact">
+<input type="hidden" name="part" value="contact">
+<input type="hidden" name="contactID" value="{$contactID}">
 
 <ul class="nav nav-pills">
 	<li role="presentation" class="active"><a href="/contact/{$contactID}">Contact</a></li>
@@ -12,6 +15,7 @@
         <li role="presentation"><a href="/contact/history/{$contactID}">History</a></li>
 	<li role="presentation"><a href="/contact/notes/{$contactID}">Notes</a></li>
         <li role="presentation"><a href="/contact/cancels/{$contactID}">Cancels</a></li>
+        <li role="presentation"><a href="/contact/crs_rrs/{$contactID}">CRS/RRS</a></li>
 </ul>
 
 <div class="well">
@@ -73,19 +77,19 @@
 	</div>
 
         <div class="row pad-top">
-		<div class="col-sm-4">
+		<div class="col-sm-4" id="c1">
 			{if $countryID eq "2"}
 				<select name="state" class="form-control" required>{$states}</select>
 			{else}
 				<input type="text" name="province" value="{$province}" class="form-control" required>
 			{/if}
 		</div>
-		<div class="col-sm-4"><select name="country" class="form-control" required>{$country}</select></div>
+		<div class="col-sm-4"><select name="countryID" class="form-control" required onchange="filter_country(this.form)">{$country}</select></div>
 		<div class="col-sm-4"><input type="text" name="zip" value="{$zip}" class="form-control" required></div>
 	</div>
 
         <div class="row">
-		<div class="col-sm-4">
+		<div class="col-sm-4" id="c2">
                         {if $countryID eq "2"}
 				&nbsp;State
 			{else}
@@ -97,19 +101,85 @@
 	</div>
 
         <div class="row pad-top">
-		<div class="col-sm-4">
+		<div class="col-sm-4">&nbsp;Gender&nbsp;&nbsp;
 			<input type="radio" name="gender" value="male" {$male}> male &nbsp;&nbsp;
 			<input type="radio" name="gender" value="female" {$female}> female
 		</div>
-		<div class="col-sm-4"><input type="checkbox" name="certification" value="checked" {$certification}> Yes (Checked if the certification has been verified)</div>
-		<div class="col-sm-4"><input type="text" name="email" value="{$email}" class="form-control" required></div>
+		<div class="col-sm-4">&nbsp;Certification Verified? <input type="checkbox" name="certification" value="checked" {$certification}> Yes</div>
+		<div class="col-sm-4"><input type="text" name="email" value="{$email}" placeholder="E-mail address" class="form-control" required></div>
+	</div>
+
+
+        <div class="row pad-top">
+		<div class="col-sm-1">
+			<select name="phone1_type" class="form-control">
+				{if $phone1_type ne ""}<option selected>{$phone1_type}</option>{else}<option selected value=""></option>{/if}
+				<option>Home</option>
+				<option>Work</option>
+				<option>Mobile</option>
+			</select>
+		</div>
+		<div class="col-sm-2"><input type="text" name="phone1" value="{$phone1}" class="form-control"></div>
+
+                <div class="col-sm-1">
+                        <select name="phone2_type" class="form-control">
+                                {if $phone2_type ne ""}<option selected>{$phone2_type}</option>{else}<option selected value=""></option>{/if}
+                                <option>Home</option>
+                                <option>Work</option>
+                                <option>Mobile</option>
+                        </select>
+                </div>
+                <div class="col-sm-2"><input type="text" name="phone2" value="{$phone2}" class="form-control"></div>
+
+                <div class="col-sm-1">
+                        <select name="phone3_type" class="form-control">
+                                {if $phone3_type ne ""}<option selected>{$phone3_type}</option>{else}<option selected value=""></option>{/if}
+                                <option>Home</option>
+                                <option>Work</option>
+                                <option>Mobile</option>
+                        </select>
+                </div>
+                <div class="col-sm-2"><input type="text" name="phone3" value="{$phone3}" class="form-control"></div>
+
+                <div class="col-sm-1">
+                        <select name="phone1_type" class="form-control">
+                                {if $phone4_type ne ""}<option selected>{$phone4_type}</option>{else}<option selected value=""></option>{/if}
+                                <option>Home</option>
+                                <option>Work</option>
+                                <option>Mobile</option>
+                        </select>
+                </div>
+                <div class="col-sm-2"><input type="text" name="phone4" value="{$phone4}" class="form-control"></div>
 	</div>
 
         <div class="row">
-		<div class="col-sm-4">&nbsp;Gender</div>
-		<div class="col-sm-4">&nbsp;Certification</div>
-		<div class="col-sm-4">&nbsp;E-mail</div>
+		<div class="col-sm-1">&nbsp;Type</div>
+		<div class="col-sm-2">&nbsp;Phone Number</div>
+		<div class="col-sm-1">&nbsp;Type</div>
+		<div class="col-sm-2">&nbsp;Phone Number</div>
+		<div class="col-sm-1">&nbsp;Type</div>
+                <div class="col-sm-2">&nbsp;Phone Number</div>
+                <div class="col-sm-1">&nbsp;Type</div>
+                <div class="col-sm-2">&nbsp;Phone Number</div>
+	</div>
+
+
+        <div class="row pad-top">
+		<div class="col-sm-12">
+			<input type="submit" value="Save" class="btn btn-success">&nbsp;&nbsp;
+			<input type="button" value="Cancel" class="btn btn-warning" onclick="document.location.href='/manage_contacts'">
+		</div>
 	</div>
 
 
 </div>
+
+<script>
+function filter_country(myform) {
+        $.get('/ajax/filter_contact_country.php',
+        $(myform).serialize(),
+        function(php_msg) {
+        $("#c1").html(php_msg);
+        });
+}
+</script>

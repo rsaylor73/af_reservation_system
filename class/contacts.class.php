@@ -58,9 +58,73 @@ class contacts extends resellers {
 			if ($row['seven_seas'] == "checked") {
 				$data['seven_seas_checked'] = "selected";
 			}
+	                $data['country'] = $this->list_country($row['countryID']);
+			$data['states'] = $this->list_states($row['state']);
+
 		}
 
 		$this->load_smarty($data,$template);
+	}
+
+	/* This will update the contact. There are 7 parts of the contact and each will have a different call */
+	public function update_contact() {
+                $this->security('manage_contacts',$_SESSION['user_typeID']);
+
+		$p = array(); // set the var to array
+		foreach ($_POST as $key=>$value) {
+			$p[$key] = $this->linkID->real_escape_string($value);
+		}
+
+
+		switch ($_POST['part']) {
+			// Contacts : Tab 1
+			case "contact":
+			// clean the array
+			unset($p['contactID']);
+			unset($p['section']);
+			unset($p['part']);
+
+
+	                print "<pre>";
+        	        print_r($p);
+                	print "</pre>";
+
+			break;
+
+                        // Contacts : Tab 2
+			case "personal":
+
+			break;
+
+                        // Contacts : Tab 3
+			case "emergency":
+
+			break;
+
+                        // Contacts : Tab 4
+			case "history":
+
+			break;
+
+                        // Contacts : Tab 5
+			case "notes":
+
+			break;
+
+                        // Contacts : Tab 6
+			case "cancels":
+
+			break;
+
+                        // Contacts : Tab 7
+			case "crs_rrs":
+
+			break;
+		}
+		// run SQL
+
+		// redirect back to the page
+
 	}
 
 }

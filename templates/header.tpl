@@ -149,6 +149,8 @@ $(function() {
                     <li>
                         <a href="/logout"><i class="fa fa-sign-out"></i>Logout</a>
                     </li>
+
+
                 </ul>
             </div>
         </nav>
