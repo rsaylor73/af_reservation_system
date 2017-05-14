@@ -71,6 +71,7 @@ switch ($section) {
         break;
 
         default:
+	$smarty->assign('toggle_menu',$_SESSION['toggle_menu']);
 	$smarty->display('footer.tpl');
 	break;
 }

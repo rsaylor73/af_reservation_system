@@ -1,66 +1,49 @@
 ﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en">
 <head>
-      <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Aggressor Fleet</title>
-	<!-- BOOTSTRAP STYLES-->
-    <link href="/assets/css/bootstrap.css" rel="stylesheet" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-dialog/1.35.3/css/bootstrap-dialog.css" rel="stylesheet">
-
-     <!-- FONTAWESOME STYLES-->
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-        <!-- CUSTOM STYLES-->
-    <link href="/assets/css/custom.css" rel="stylesheet" />
-     <!-- GOOGLE FONTS-->
-     <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Aggressor Fleet :: Reservation System</title>
+    <meta name="author" content="Custom PHP Design : Robert Saylor : http://www.customphpdesign.com">
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/simple-sidebar.css" rel="stylesheet">
+    <link href="/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
     <link rel="stylesheet" href="/chosen.css">
 
-    <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-
-    <script src="/assets/js/jquery-1.10.2.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js" integrity="sha256-0YPKAwZP7Mp3ALMRVB2i8GXeEndvCq3eSl/WsAl1Ryk=" crossorigin="anonymous"></script>
-    <script src="/assets/js/bootstrap.min.js"></script>
-
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBQbQO-EyjRgdLPbzcAJk3kelHqYCPBhvs"></script>
     <link rel="stylesheet" type="text/css" href="/css/jquery-gmaps-latlon-picker.css"/>
-    <script src="/js/jquery-gmaps-latlon-picker.js"></script>
 
     <style>
     .table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
       background-color: #00d4ff;
     }
+
+.navbar-brand,
+.navbar-nav li a {
+    line-height: 68px;
+    height: 68px;
+    padding-top: 0;
+}
+
     </style>
+
 {literal}
-
-<script>
-$(function() {
-	$( "#dob" ).datepicker({ 
-        	dateFormat: "yy-mm-dd",
-		changeMonth: true,
-		changeYear: true,
-		minDate: "-99Y", 
-		maxDate: "-1D",
-		yearRange: "-100:+0"
-	});
-
-});
-</script>
-
 <script>
   function onSubmit(token) {
 
-	var value = document.getElementById('field').value;
-	// Or if you are using jQuery $('#field').val()
-	$.get('/ajax/forgotpassword.php',
+        var value = document.getElementById('field').value;
+        // Or if you are using jQuery $('#field').val()
+        $.get('/ajax/forgotpassword.php',
         {field: value},
         function(php_msg) {
-        	$("#forgotpassword").html(php_msg);
+                $("#forgotpassword").html(php_msg);
         });
 
 
-	//alert('thanks ' + document.getElementById('field').value);
+        //alert('thanks ' + document.getElementById('field').value);
   }
 
   function validate(event) {
@@ -76,91 +59,50 @@ $(function() {
     var element = document.getElementById('submit');
     element.onclick = validate;
   }
+
+
 </script>
-<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 {/literal}
-
-
-    <style>
-      /* Always set the map height explicitly to define the size of the div
-       * element that contains the map. */
-      #map {
-        height: 100%;
-      }
-      /* Optional: Makes the sample page fill the window. */
-      html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-      }
-      #floating-panel {
-        position: absolute;
-        top: 10px;
-        left: 25%;
-        z-index: 5;
-        background-color: #fff;
-        padding: 5px;
-        border: 1px solid #999;
-        text-align: center;
-        font-family: 'Roboto','sans-serif';
-        line-height: 30px;
-        padding-left: 10px;
-      }
-    </style>
 
 </head>
 <body>
-     
-           
-          
-    <div id="wrapper">
-
-
-
-         <div class="navbar navbar-default navbar-fixed-top">
-            <div class="adjust-nav">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
+    <nav class="navbar navbar-default no-margin">
+    <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header fixed-brand">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"  id="menu-toggle">
+                      <span class="glyphicon glyphicon-th-large" aria-hidden="true"></span>
                     </button>
-                    <a class="navbar-brand" href="#">
-                        <img src="/assets/img/af-df_hdr_logo.png" height="64" />
-
-                    </a><br><br><br>
-                    
-                </div>
-              
-            </div>
-        </div>
-
+                    <a class="navbar-brand" href="/"><img src="/assets/img/af-df_hdr_logo.png" height="64" /></a>
+                </div><!-- navbar-header-->
+ 
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                            <ul class="nav navbar-nav">
+                                <li class="active" ><button class="navbar-toggle collapse in" data-toggle="collapse" id="menu-toggle-2"> 
+					<span class="glyphicon glyphicon-th-large" aria-hidden="true"></span>
+				</button></li>
+                            </ul>
+                </div><!-- bs-example-navbar-collapse-1 -->
+    </nav>
+    <div id="wrapper">
+        <!-- Sidebar -->
 	{if $logged eq "yes"}
-        <!-- /. NAV TOP  -->
-        <nav class="navbar-default navbar-side" role="navigation">
-            <div class="sidebar-collapse">
-                <ul class="nav" id="main-menu">
-                    <li>
-                        <a href="/index.php" ><i class="fa fa-desktop"></i>Main Menu</a>
-                    </li>
-                    <li>
-                        <a href="/profile"><i class="fa fa-user"></i>My Profile</a>
-                    </li>
-                    <li>
-                        <a href="/logout"><i class="fa fa-sign-out"></i>Logout</a>
-                    </li>
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav nav-pills nav-stacked" id="menu">
+ 
 
+                <li>
+                    <a href="/"><span class="fa-stack fa-lg pull-left"><i class="fa fa-desktop fa-stack-1x "></i></span>Main Menu</a>
+                </li>
+                <li>
+                    <a href="/profile"> <span class="fa-stack fa-lg pull-left"><i class="fa fa-user fa-stack-1x "></i></span>My Profile</a>
+                </li>
+                <li>
+                    <a href="/logout"><span class="fa-stack fa-lg pull-left"><i class="fa fa-sign-out fa-stack-1x "></i></span>Log Out</a>
+                </li>
 
-                </ul>
-            </div>
-        </nav>
-        <!-- /. NAV SIDE  -->
+            </ul>
+        </div><!-- /#sidebar-wrapper -->
 	{/if}
-
-        <div id="page-wrapper" >
-            <div id="page-inner">
-		<br> 
-
-
-
-
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <div class="container-fluid xyz">

@@ -26,6 +26,7 @@ RewriteRule ^delete_historic_boat/([a-zA-Z0-9]+)/?$ index.php?section=delete_his
 RewriteRule ^edit_charter_status/([a-zA-Z0-9]+)/?$ index.php?section=edit_charter_status&statusID=$1 [NC,L]
 RewriteRule ^delete_charter_status/([a-zA-Z0-9]+)/?$ index.php?section=delete_charter_status&statusID=$1 [NC,L]
 RewriteRule ^contacts/([a-zA-Z0-9]+)/?$ index.php?section=contacts&contactID=$1 [NC,L]
+RewriteRule ^contact/([a-zA-Z0-9]+)/?$ index.php?section=contacts&contactID=$1 [NC,L]
 RewriteRule ^manage_contacts/([a-zA-Z0-9]+)/?$ index.php?section=manage_contacts&clear=yes [NC,L]
 # Three params
 # IE: search/12345/676767
@@ -34,3 +35,5 @@ RewriteRule ^edit_bunk/([a-zA-Z0-9]+)/([a-zA-Z0-9]+)/?$ index.php?section=edit_b
 RewriteRule ^delete_bunk/([a-zA-Z0-9]+)/([a-zA-Z0-9]+)/?$ index.php?section=delete_bunk&bunkID=$1&boatID=$2 [NC,L]
 RewriteRule ^edit_destination/([a-zA-Z0-9]+)/([a-zA-Z0-9]+)/?$ index.php?section=edit_destination&destinationID=$1&boatID=$2 [NC,L]
 RewriteRule ^delete_destination/([a-zA-Z0-9]+)/([a-zA-Z0-9]+)/?$ index.php?section=delete_destination&destinationID=$1&boatID=$2 [NC,L]
+RewriteRule ^contact/([a-zA-Z0-9]+)/([a-zA-Z0-9]+)/?$ index.php?section=contacts_part&part=$1&contactID=$2 [NC,L]
+

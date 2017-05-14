@@ -8,28 +8,28 @@
 <div class="well">
 	<div class="row pad-top">
 	        <div class="col-sm-2">First Name:</div>
-		<div class="col-sm-2"><input type="text" name="ct_first" class="form-control"></div>
+		<div class="col-sm-2"><input type="text" name="ct_first" class="form-control" onkeypress="if(event.keyCode==13) { search_contacts(this.form); }"></div>
 		<div class="col-sm-2">Last Name:</div>
-		<div class="col-sm-2"><input type="text" name="ct_last" class="form-control"></div>
+		<div class="col-sm-2"><input type="text" name="ct_last" class="form-control" onkeypress="if(event.keyCode==13) { search_contacts(this.form); }"></div>
 	</div>
 
         <div class="row pad-top">
 		<div class="col-sm-2">Middle Name:</div>
-		<div class="col-sm-2"><input type="text" name="ct_middle" class="form-control"></div>
+		<div class="col-sm-2"><input type="text" name="ct_middle" class="form-control" onkeypress="if(event.keyCode==13) { search_contacts(this.form); }"></div>
 		<div class="col-sm-2">Date Of Birth:</div>
 		<div class="col-sm-2"><input type="text" name="ct_dob" id="dob" class="form-control" readonly></div>
 	</div>
 
         <div class="row pad-top" id="h1" style="display:none">
 		<div class="col-sm-2">Phone:</div>
-		<div class="col-sm-2"><input type="text" name="ct_phone" class="form-control"></div>
+		<div class="col-sm-2"><input type="text" name="ct_phone" class="form-control" onkeypress="if(event.keyCode==13) { search_contacts(this.form); }"></div>
 		<div class="col-sm-2">Zip:</div>
-		<div class="col-sm-2"><input type="text" name="ct_zip" class="form-control"></div>
+		<div class="col-sm-2"><input type="text" name="ct_zip" class="form-control" onkeypress="if(event.keyCode==13) { search_contacts(this.form); }"></div>
 	</div>
 
         <div class="row pad-top">
 		<div class="col-sm-2">E-mail:</div>
-		<div class="col-sm-2"><input type="text" name="ct_email" class="form-control"></div>
+		<div class="col-sm-2"><input type="text" name="ct_email" class="form-control" onkeypress="if(event.keyCode==13) { search_contacts(this.form); }"></div>
 		<div class="col-sm-2">Country:</div>
 		<div class="col-sm-2">
 			<select name="ct_country" id="ct_country" onchange="filter_country(this.form)" onblur="filter_country(this.form)" class="form-control">
@@ -40,16 +40,16 @@
 
         <div class="row pad-top" id="h2" style="display:none">
 		<div class="col-sm-2">Contact ID:</div>
-		<div class="col-sm-2"><input type="number" name="ct_contactID" class="form-control"></div>
+		<div class="col-sm-2"><input type="number" name="ct_contactID" class="form-control" onkeypress="if(event.keyCode==13) { search_contacts(this.form); }"></div>
 		<div class="col-sm-2">City:</div>
-		<div class="col-sm-2"><input type="text" name="ct_city" class="form-control"></div>
+		<div class="col-sm-2"><input type="text" name="ct_city" class="form-control" onkeypress="if(event.keyCode==13) { search_contacts(this.form); }"></div>
 	</div>
 
         <div class="row pad-top">
 		<div class="col-sm-2">Address:</div>
-		<div class="col-sm-2"><input type="text" name="ct_address" class="form-control"></div>
+		<div class="col-sm-2"><input type="text" name="ct_address" class="form-control" onkeypress="if(event.keyCode==13) { search_contacts(this.form); }"></div>
 		<div class="col-sm-2" id="state_or_province1">Province:</div>
-		<div class="col-sm-2" id="state_or_province2"><input type="text" name="ct_province" class="form-control"></div>
+		<div class="col-sm-2" id="state_or_province2"><input type="text" name="ct_province" class="form-control" onkeypress="if(event.keyCode==13) { search_contacts(this.form); }"></div>
 	</div>
 
         <div class="row pad-top">
@@ -75,17 +75,11 @@
 
 <div class="well">
 	<div id="search_results">
-		Loading search results...
+		Click search to display contact search results. The search is limited to 50 records...
 	</div>
 </div>
 
 <script>
-
-$( document ).ready(function() {
-        search_contacts(this.form);
-});
-
-
 function filter_country(myform) {
         $.get('/ajax/filter_country.php',
         $(myform).serialize(),

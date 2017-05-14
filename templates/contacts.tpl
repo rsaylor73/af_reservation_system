@@ -5,8 +5,14 @@
 {$msg}
 <form name="myform" action="/" method="post">
 <input type="hidden" name="section" value="update_contact">
-<input type="hidden" name="part" value="contact">
+<input type="hidden" name="part" value="contacts">
 <input type="hidden" name="contactID" value="{$contactID}">
+
+<div class="row pad-top">
+	<div class="col-sm-4"><h3>{$first} {$middle} {$last}</h3></div>
+	<div class="col-sm-4"><h3>Contact ID : {$contactID}</h3></div>
+	<div class="col-sm-4"><h3>Created : {$date_created}</h3></div>
+</div>
 
 <ul class="nav nav-pills">
 	<li role="presentation" class="active"><a href="/contact/{$contactID}">Contact</a></li>
@@ -15,7 +21,7 @@
         <li role="presentation"><a href="/contact/history/{$contactID}">History</a></li>
 	<li role="presentation"><a href="/contact/notes/{$contactID}">Notes</a></li>
         <li role="presentation"><a href="/contact/cancels/{$contactID}">Cancels</a></li>
-        <li role="presentation"><a href="/contact/crs_rrs/{$contactID}">CRS/RRS</a></li>
+        <li role="presentation"><a href="/contact/crsrrs/{$contactID}">CRS/RRS</a></li>
 </ul>
 
 <div class="well">
@@ -36,7 +42,7 @@
 			<option>Rev.</option>
 		</select></div>
 		<div class="col-sm-3"><input type="text" name="first" value="{$first}" placeholder="First Name" required class="form-control"></div>
-                <div class="col-sm-3"><input type="text" name="middle" value="{$middle}" placeholder="Middle Name" required class="form-control"></div>
+                <div class="col-sm-3"><input type="text" name="middle" value="{$middle}" placeholder="Middle Name" class="form-control"></div>
                 <div class="col-sm-3"><input type="text" name="last" value="{$last}" placeholder="Last Name" required class="form-control"></div>
 	</div>
 
@@ -50,7 +56,7 @@
 	<div class="row pad-top">
 		<div class="col-sm-4"><input type="text" name="preferred_name" value="{$preferred_name}" class="form-control"></div>
                 <div class="col-sm-4">
-                	<select data-placeholder="Club Membership" name="club" multiple class="chosen-select form-control">
+                	<select data-placeholder="Club Membership" name="club[]" multiple class="chosen-select form-control">
                         	<option value=""></option>
                         	<option {$vip_checked} value="vip">VIP</option>
 			    	<option {$vipplus_checked} value="vip5">VIPplus</option>
@@ -102,10 +108,10 @@
 
         <div class="row pad-top">
 		<div class="col-sm-4">&nbsp;Gender&nbsp;&nbsp;
-			<input type="radio" name="gender" value="male" {$male}> male &nbsp;&nbsp;
-			<input type="radio" name="gender" value="female" {$female}> female
+			<input type="radio" name="sex" required value="male" {$male}> male &nbsp;&nbsp;
+			<input type="radio" name="sex" required value="female" {$female}> female
 		</div>
-		<div class="col-sm-4">&nbsp;Certification Verified? <input type="checkbox" name="certification" value="checked" {$certification}> Yes</div>
+		<div class="col-sm-4">&nbsp;Certification Verified? <input type="checkbox" name="certification_verified" value="checked" {$certification_verified}> Yes</div>
 		<div class="col-sm-4"><input type="text" name="email" value="{$email}" placeholder="E-mail address" class="form-control" required></div>
 	</div>
 
@@ -117,6 +123,7 @@
 				<option>Home</option>
 				<option>Work</option>
 				<option>Mobile</option>
+				<option>Fax</option>
 			</select>
 		</div>
 		<div class="col-sm-2"><input type="text" name="phone1" value="{$phone1}" class="form-control"></div>
@@ -127,6 +134,7 @@
                                 <option>Home</option>
                                 <option>Work</option>
                                 <option>Mobile</option>
+				<option>Fax</option>
                         </select>
                 </div>
                 <div class="col-sm-2"><input type="text" name="phone2" value="{$phone2}" class="form-control"></div>
@@ -137,16 +145,18 @@
                                 <option>Home</option>
                                 <option>Work</option>
                                 <option>Mobile</option>
+				<option>Fax</option>
                         </select>
                 </div>
                 <div class="col-sm-2"><input type="text" name="phone3" value="{$phone3}" class="form-control"></div>
 
                 <div class="col-sm-1">
-                        <select name="phone1_type" class="form-control">
+                        <select name="phone4_type" class="form-control">
                                 {if $phone4_type ne ""}<option selected>{$phone4_type}</option>{else}<option selected value=""></option>{/if}
                                 <option>Home</option>
                                 <option>Work</option>
                                 <option>Mobile</option>
+				<option>Fax</option>
                         </select>
                 </div>
                 <div class="col-sm-2"><input type="text" name="phone4" value="{$phone4}" class="form-control"></div>
