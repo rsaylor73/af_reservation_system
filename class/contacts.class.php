@@ -65,6 +65,7 @@ class contacts extends resellers {
 			if ($row['sex'] == "female") {
 				$data['female'] = "checked";
 			}
+
 	                $data['country'] = $this->list_country($row['countryID']);
 			$data['states'] = $this->list_states($row['state']);
 			$data['date_created'] = date("m/d/Y", strtotime($row['date_created']));
@@ -101,8 +102,29 @@ class contacts extends resellers {
 		// personal
 		if ($_GET['part'] == "personal") {
 			$template = "contacts_personal.tpl";
+                        $data['country_list'] = $this->list_country($data['nationality_countryID']);
+			$data['passport_exp'] = date("Y-m-d", strtotime($data['passport_exp']));
+			$data['date_of_birth'] = date("Y-m-d", strtotime($data['date_of_birth']));
 
+			if ($data['omit_from_future_mailings'] == "Y") {
+				$data['do_not_email_checked'] = "selected";
+			}
+			if ($data['donottext'] == "checked") {
+				$data['do_not_text_checked'] = "selected";
+			}
+			if ($data['dwc'] == "Y") {
+				$data['dwc_checked'] = "selected";
+			}
+			if ($data['deceased'] == "Y") {
+				$data['deceased_checked'] = "selected";
+			}
+			if ($data['donotbook'] == "Y") {
+				$data['donotbook_checked'] = "selected";
+			}
 
+			$tz  = new DateTimeZone('America/New_York');
+			$age = DateTime::createFromFormat('Y-m-d', $data['date_of_birth'], $tz)->diff(new DateTime('now', $tz))->y;
+			$data['age'] = $age;
 			$this->load_smarty($data,$template);
 		}
 
@@ -110,6 +132,8 @@ class contacts extends resellers {
 		if ($_GET['part'] == "emergency") {
 			$template = "contacts_emergency.tpl";
 
+			$data['emergency_country_list'] = $this->list_country($row['emergency_countryID']);
+                        $data['emergency2_country_list'] = $this->list_country($row['emergency2_countryID']);
 
                         $this->load_smarty($data,$template);
 		}
@@ -153,8 +177,15 @@ class contacts extends resellers {
 
 		$p = array(); // set the var to array
 		foreach ($_POST as $key=>$value) {
-			if ($key != "club") {
+			switch ($key) {
+				case "club":
+				case "options":
+				// do nothing
+				break;
+
+				default:
 				$p[$key] = $this->linkID->real_escape_string($value);
+				break;
 			}
 		}
 
@@ -194,10 +225,49 @@ class contacts extends resellers {
                         // Contacts : Tab 2
 			case "personal":
 
-                        print "<pre>";
-                        print_r($p);
-                        print "</pre>";
-			die;
+			unset($p['contactID']);
+			unset($p['section']);
+			unset($p['part']);
+
+			// set default options
+			$do_not_email = ",`omit_from_future_mailings` = ''";
+			$do_not_text = ",`donottext` = ''";
+			$dwc = ",`dwc` = ''";
+			$deceased = ",`deceased` = ''";
+			$donotbook = ",`donotbook` = ''";
+
+			if(is_array($_POST['options'])) {
+				foreach($_POST['options'] as $key2=>$value2) {
+					if ($value2 == "do_not_email") {
+						$do_not_email = ",`omit_from_future_mailings` = 'Y'";
+					}
+					if ($value2 == "do_not_text") {
+						$do_not_text = ",`donottext` = 'checked'";
+					}
+					if ($value2 == "dwc") {
+						$dwc = ",`dwc` = 'Y'";
+					}
+					if ($value2 == "deceased") {
+						$deceased = ",`deceased` = 'Y'";
+					}
+					if ($value2 == "donotbook") {
+						$donotbook = ",`donotbook` = 'Y'";
+					}
+				}
+
+			}
+
+			$p['passport_exp'] = str_replace("-","",$p['passport_exp']);
+			$p['date_of_birth'] = str_replace("-","",$p['date_of_birth']);
+
+			$sql = "UPDATE `contacts` SET `passport_number` = '$p[passport_number]', `nationality_countryID` = '$p[nationality_countryID]',
+			`passport_exp` = '$p[passport_exp]', `certification_number` = '$p[certification_number]', `certification_level` = '$p[certification_level]',
+			`certification_agency` = '$p[certification_agency]', `certification_date` = '$p[certification_date]', `date_of_birth` = '$p[date_of_birth]',
+			`occupation` = '$p[occupation]', `special_passenger_details` = '$p[special_passenger_details]' 
+			$do_not_email $do_not_text $dwc $deceased $donotbook
+			WHERE `contactID` = '$_POST[contactID]'";
+                        $redirect = "/contact/".$_POST['part']."/".$_POST['contactID'];
+
 
 			break;
 

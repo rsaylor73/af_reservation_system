@@ -24,6 +24,8 @@
         <li role="presentation"><a href="/contact/crsrrs/{$contactID}">CRS/RRS</a></li>
 </ul>
 
+{include file='contacts_modal_warning.tpl'}
+
 <div class="well">
         <div class="row pad-top">
                 <div class="col-sm-12"><h3>Contact Cancels</h3></div>

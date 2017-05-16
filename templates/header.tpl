@@ -11,7 +11,7 @@
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="/css/simple-sidebar.css" rel="stylesheet">
     <link href="/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet">
-
+    <link href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet">
     <link rel="stylesheet" href="/chosen.css">
 
     <link rel="stylesheet" type="text/css" href="/css/jquery-gmaps-latlon-picker.css"/>
@@ -63,13 +63,38 @@
 
 </script>
 {/literal}
+<!--<script src="/js/jquery-1.12.4.min.js"></script>-->
+<script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js" integrity="sha256-0YPKAwZP7Mp3ALMRVB2i8GXeEndvCq3eSl/WsAl1Ryk=" crossorigin="anonymous"></script>
+<script src="/js/jquery.cookie.js"></script>
+
+<style>
+.modal {
+  text-align: center;
+  padding: 0!important;
+}
+
+.modal:before {
+  content: '';
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+  margin-right: -4px;
+}
+
+.modal-dialog {
+  display: inline-block;
+  text-align: left;
+  vertical-align: middle;
+}
+</style>
 
 </head>
 <body>
     <nav class="navbar navbar-default no-margin">
     <!-- Brand and toggle get grouped for better mobile display -->
                 <div class="navbar-header fixed-brand">
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"  id="menu-toggle">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"  id="menu-toggle" onclick="js_toggle();">
                       <span class="glyphicon glyphicon-th-large" aria-hidden="true"></span>
                     </button>
                     <a class="navbar-brand" href="/"><img src="/assets/img/af-df_hdr_logo.png" height="64" /></a>
@@ -77,12 +102,31 @@
  
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                             <ul class="nav navbar-nav">
-                                <li class="active" ><button class="navbar-toggle collapse in" data-toggle="collapse" id="menu-toggle-2"> 
+                                <li class="active" ><button class="navbar-toggle collapse in" data-toggle="collapse" id="menu-toggle-2" onclick="js_toggle();"> 
 					<span class="glyphicon glyphicon-th-large" aria-hidden="true"></span>
 				</button></li>
                             </ul>
                 </div><!-- bs-example-navbar-collapse-1 -->
     </nav>
+
+   <script>
+   function js_toggle() {
+      var toggle = $.cookie("menu_toggle");
+
+      if (toggle == "off") {
+         $.cookie('menu_toggle', 'on');
+      }
+      if (toggle == "on") {
+         $.cookie('menu_toggle', 'off');
+      }
+
+      if (typeof toggle == 'undefined') {
+         $.cookie('menu_toggle','off');
+         var toggle = $.cookie("menu_toggle");
+      };
+   }
+   </script>
+
     <div id="wrapper">
         <!-- Sidebar -->
 	{if $logged eq "yes"}

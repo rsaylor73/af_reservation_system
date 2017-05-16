@@ -14,6 +14,8 @@
         <div class="col-sm-4"><h3>Created : {$date_created}</h3></div>
 </div>
 
+{include file='contacts_modal_warning.tpl'}
+
 <ul class="nav nav-pills">
         <li role="presentation"><a href="/contact/{$contactID}">Contact</a></li>
         <li role="presentation"><a href="/contact/personal/{$contactID}">Personal</a></li>

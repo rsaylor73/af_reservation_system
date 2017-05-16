@@ -16,9 +16,7 @@
         </div>
 
 
-    <script src="/js/jquery-1.12.4.min.js"></script>
 
-    <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js" integrity="sha256-0YPKAwZP7Mp3ALMRVB2i8GXeEndvCq3eSl/WsAl1Ryk=" crossorigin="anonymous"></script>
     <script src="/js/bootstrap.min.js"></script>
     <script src="/js/sidebar_menu.js"></script>
     <script src="/chosen.jquery.js" type="text/javascript"></script>
@@ -30,6 +28,40 @@
 <script>
 $(function() {
         $( "#dob" ).datepicker({ 
+                dateFormat: "yy-mm-dd",
+                changeMonth: true,
+                changeYear: true,
+                minDate: "-99Y", 
+                maxDate: "-1D",
+                yearRange: "-100:+0"
+        });
+
+});
+
+$(function() {
+        $( "#passport_exp" ).datepicker({ 
+                dateFormat: "yy-mm-dd",
+                changeMonth: true,
+                changeYear: true,
+                minDate: "0", 
+                maxDate: "+15Y"
+        });
+
+});
+
+$(function() {
+        $( "#certification_date" ).datepicker({ 
+                dateFormat: "yy-mm-dd",
+                changeMonth: true,
+                changeYear: true,
+                minDate: "-3Y", 
+                maxDate: "0"
+        });
+
+});
+
+$(function() {
+        $( "#date_of_birth" ).datepicker({ 
                 dateFormat: "yy-mm-dd",
                 changeMonth: true,
                 changeYear: true,
@@ -54,14 +86,15 @@ $(document).ready(function(){
 </script>
 {/if}
 
-{if $toggle_menu eq "off"}
 <script>
-$(document).ready(function(){
-  $("#wrapper").toggleClass("toggled-2");
-  $('#menu ul').hide();
-});
+var toggle = $.cookie("menu_toggle");
+if (toggle == "off") {
+	$(document).ready(function(){
+	  $("#wrapper").toggleClass("toggled-2");
+	  $('#menu ul').hide();
+	});
+}
 </script>
-{/if}
  
 
 

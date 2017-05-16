@@ -24,6 +24,8 @@
         <li role="presentation"><a href="/contact/crsrrs/{$contactID}">CRS/RRS</a></li>
 </ul>
 
+{include file='contacts_modal_warning.tpl'}
+
 <div class="well">
         <div class="row pad-top">
                 <div class="col-sm-12"><h3>Contact Personal</h3></div>
@@ -33,7 +35,7 @@
 		<div class="col-sm-3">Passport #:</div>
 		<div class="col-sm-3"><input type="text" name="passport_number" value="{$passport_number}" class="form-control"></div>
 		<div class="col-sm-3">Country Issued:</div>
-		<div class="col-sm-3"><select name="country_of_issue" class="form-control">{$passport_country}</select></div>
+		<div class="col-sm-3"><select name="nationality_countryID" class="form-control">{$country_list}</select></div>
 	</div>
 
         <div class="row pad-top">
@@ -46,14 +48,28 @@
 		<div class="col-sm-3">Certification #:</div>
 		<div class="col-sm-3"><input type="text" name="certification_number" value="{$certification_number}" class="form-control"></div>
 		<div class="col-sm-3">Certification Level:</div>
-		<div class="col-sm-3"><select name="certification_level" class="form-control">{$certification_level_list}</select></div>
+		<div class="col-sm-3"><select name="certification_level" class="form-control">
+			{if $certification_level ne ""}
+				<option selected value="{$certification_level}">{$certification_level} (Default)</option>
+			{else}
+				<option selected value="">Select</option>
+			{/if}
+			<option>Instructor</option>
+			<option>Advanced</option>
+                        <option>Open Water</option>
+			<option>Rescue</option>
+			<option>Master Scuba Diver</option>
+			<option>Divemaster</option>
+			<option>Non-Diver</option>
+			</select>
+		</div>
 	</div>
 
         <div class="row pad-top">
 		<div class="col-sm-3">Certification Agency:</div>
 		<div class="col-sm-3"><input type="text" name="certification_agency" value="{$certification_agency}" class="form-control"></div>
 		<div class="col-sm-3">Date Issued:</div>
-		<div class="col-sm-3"><input type="text" name="certification_date" id="certification_date" readonly class="form-control"></div>
+		<div class="col-sm-3"><input type="text" name="certification_date" id="certification_date" value="{$certification_date}" readonly class="form-control"></div>
 	</div>
 
         <div class="row pad-top">
@@ -68,8 +84,8 @@
                           </select>
 		</div>
 		<div class="col-sm-3">Date Of Birth:</div>
-		<div class="col-sm-2"><input type="text" name="date_of_birth" id="date_of_birth" readonly class="form-control"></div>
-		<div class="col-sm-1">(Age xx)</div>
+		<div class="col-sm-2"><input type="text" name="date_of_birth" id="date_of_birth" value="{$date_of_birth}" readonly class="form-control"></div>
+		<div class="col-sm-1">(Age {$age})</div>
 	</div>
 
         <div class="row pad-top">

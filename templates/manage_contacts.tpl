@@ -75,11 +75,16 @@
 
 <div class="well">
 	<div id="search_results">
-		Click search to display contact search results. The search is limited to 50 records...
+		Loading contacts...
 	</div>
 </div>
 
 <script>
+
+$( document ).ready(function() {
+        search_contacts(this.form);
+});
+
 function filter_country(myform) {
         $.get('/ajax/filter_country.php',
         $(myform).serialize(),
