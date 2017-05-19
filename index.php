@@ -29,6 +29,7 @@ switch ($section) {
 	case "edit_destination":
 	case "new_destination":
 	case "logout":
+	case "add_historic_reservation":
 	// The following items above will not display the header (do the same in the footer)
 	break;
 
@@ -63,10 +64,12 @@ if ($check == "FALSE") {
 }
 switch ($section) {
         case "edit_access":
-	case "edit_bunk":
-	case "new_bunk":
-	case "edit_destination":
-	case "new_destination":
+        case "edit_bunk":
+        case "new_bunk":
+        case "edit_destination":
+        case "new_destination":
+        case "logout":
+        case "add_historic_reservation":
         // The following items above will not display the footer (do the same in the header)
         break;
 

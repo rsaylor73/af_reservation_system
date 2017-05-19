@@ -26,6 +26,28 @@
         <li role="presentation"><a href="/contact/crsrrs/{$contactID}">CRS/RRS</a></li>
 </ul>
 
+   <!-- Modal -->
+   <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+       <div class="modal-dialog">
+           <div class="modal-content">
+               <div class="modal-header">
+                   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title"></h4>
+
+               </div>
+               <div class="modal-body"><div class="te"></div></div>
+               <div class="modal-footer">
+                   <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                   <button type="button" class="btn btn-primary">Save changes</button>
+               </div>
+           </div>
+           <!-- /.modal-content -->
+       </div>
+       <!-- /.modal-dialog -->
+   </div>
+   <!-- /.modal -->
+
+
 <div class="well">
 	<div class="well">
         <div class="row pad-top">
@@ -71,11 +93,20 @@
 
 	<div class="well">
         <div class="row pad-top">
-                <div class="col-sm-12"><h3>Imported Reservations <input type="button" value="Add Reservation" class="btn btn-success"></h3></div>
+                <div class="col-sm-12"><h3>Imported Reservations 
+
+                                <a data-toggle="modal" 
+                                style="text-decoration:none; color:#FFFFFF;"
+                                href="/add_historic_reservation/{$contactID}" 
+                                data-target="#myModal2" data-backdrop="static" data-keyboard="false" class="btn btn-success" 
+                                >Add Historic Reservation</a>
+
+		</h3></div>
         </div>
 
         <div class="row pad-top">
-		<div class="col-sm-3">
+		<div class="col-sm-1">&nbsp;</div>
+		<div class="col-sm-2">
 			<b>Res #</b>
 		</div>
                 <div class="col-sm-3">

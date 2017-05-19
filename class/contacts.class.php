@@ -186,6 +186,7 @@ class contacts extends resellers {
                         $imported = $this->objectToArray($imported); // This converts the StdObject to an array
 			if(is_array($imported)) {
 				foreach ($imported as $key=>$value) {
+					$id = $imported[$key]['id'];
 					$reservationID = $imported[$key]['reservationID'];
 					$travel_date = $imported[$key]['travel_date'];
 					$contact = $imported[$key]['contactID'];
@@ -194,7 +195,13 @@ class contacts extends resellers {
 					$source = $imported[$key]['source'];
 					$imported_reservations .= "
 					<div class=\"row pad-top\">
-						<div class=\"col-sm-3\">".$reservationID."</div>
+						<div class=\"col-sm-1\">
+							<a href=\"javascript:void(0)\"
+							onclick=\"if(confirm('You are about to delete $reservationID from the list of imported reservations. Click OK to continue.')) {
+							document.location.href='/contact/delete_imported/$id/".$data['contactID']."'}\">
+							<i class=\"fa fa-trash-o\" aria-hidden=\"true\"></i></a>
+						</div>
+						<div class=\"col-sm-2\">".$reservationID."</div>
 						<div class=\"col-sm-3\">".$travel_date."</div>
 						<div class=\"col-sm-3\">".$yacht."</div>
 						<div class=\"col-sm-3\">".$source."</div>
@@ -224,6 +231,26 @@ class contacts extends resellers {
 			}
 			$data['cancelled_primary'] = $cancelled_primary;
 
+			// reservations cancelled as a passenger
+			$reservation_cancelled_passenger = $this->reservation_cancelled_passenger($data['contactID']);
+			$reservation_cancelled_passenger = json_decode($reservation_cancelled_passenger);
+			$reservation_cancelled_passenger = $this->objectToArray($reservation_cancelled_passenger);
+			if (is_array($reservation_cancelled_passenger)) {
+				foreach ($reservation_cancelled_passenger as $key=>$value) {
+					$charterID = $reservation_cancelled_passenger[$key]['charterID'];
+					$reservationID = $reservation_cancelled_passenger[$key]['reservationID'];
+					$name = $reservation_cancelled_passenger[$key]['name'];
+					$charter_date = $reservation_cancelled_passenger[$key]['charter_date'];
+					$cancelled_passenger .= "
+                                        <div class=\"row pad-top\">
+						<div class=\"col-sm-3\">".$charterID."</div>
+                                                <div class=\"col-sm-3\">".$reservationID."</div>
+                                                <div class=\"col-sm-3\">".$name."</div>
+                                                <div class=\"col-sm-3\">".date("m/d/Y", strtotime($charter_date))."</div>
+                                        </div>";
+				}
+			}
+			$data['cancelled_passenger'] = $cancelled_passenger;
 
 
                         $this->load_smarty($data,$template);
@@ -252,6 +279,28 @@ class contacts extends resellers {
 
                         $this->load_smarty($data,$template);
 		}
+	}
+
+	/* This will delete a selected imported reservation then return to the history tab */
+	public function delete_imported() {
+                $this->security('manage_contacts',$_SESSION['user_typeID']);
+		$sql = "DELETE FROM `reservations_imported` WHERE `id` = '$_GET[id]'";
+		$result = $this->new_mysql($sql);
+	
+                if ($result == "true") {
+			$redirect = "/contact/history/".$_GET['contactID'];
+                        print '<div class="alert alert-success">The imported reservation was deleted. Loading please wait...</div>';
+                        ?>
+                        <script>
+                        setTimeout(function() {
+                              window.location.replace('<?=$redirect;?>')
+                        }
+                        ,2000);
+                        </script>
+                        <?php
+                } else {
+                        print '<div class="alert alert-success">The imported reservation failed to delete.</div>';
+                }
 	}
 
 	/* This will update the contact. There are 7 parts of the contact and each will have a different call */
