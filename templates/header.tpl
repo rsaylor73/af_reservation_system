@@ -13,6 +13,7 @@
     <link href="/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <link href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet">
     <link rel="stylesheet" href="/chosen.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
 
     <link rel="stylesheet" type="text/css" href="/css/jquery-gmaps-latlon-picker.css"/>
 
@@ -89,8 +90,18 @@
 }
 </style>
 
+<script>
+	// define angular module/app
+	var formApp = angular.module('formApp', []);
+
+	// create angular controller and pass in $scope and $http
+	//function formController($scope, $http) {
+	//	$scope.formData = {};
+	//}
+</script>
+
 </head>
-<body>
+<body ng-app="formApp">
     <nav class="navbar navbar-default no-margin">
     <!-- Brand and toggle get grouped for better mobile display -->
                 <div class="navbar-header fixed-brand">

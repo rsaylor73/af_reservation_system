@@ -31,5 +31,20 @@
                 <div class="col-sm-12"><h3>Contact Notes</h3></div>
         </div>
 
+	<div class="row pad-top">
+		<div class="col-sm-12"><h4>Staff Notes:</h4></div>
+	</div>
 
+        <div class="row pad-top">
+		<div class="col-sm-8">
+			<textarea name="staff_notes" rows="15" class="form-control">{$staff_notes}</textarea>
+		</div>
+	</div>
+
+        <div class="row pad-top">
+                <div class="col-sm-12">
+                        <input type="submit" value="Save" class="btn btn-success">&nbsp;&nbsp;
+                        <input type="button" value="Cancel" class="btn btn-warning" onclick="document.location.href='/manage_contacts'">
+                </div>
+        </div>
 </div>

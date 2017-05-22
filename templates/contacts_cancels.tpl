@@ -31,5 +31,55 @@
                 <div class="col-sm-12"><h3>Contact Cancels</h3></div>
         </div>
 
+        <div class="row pad-top">
+                <div class="col-sm-12"><h4>cancelled as a primary contact</h4></div>
+        </div>
+        <div class="row pad-top">
+                <div class="col-sm-3">
+                        <b>Charter #</b>
+                </div>
+                <div class="col-sm-3">
+                        <b>Reservation #</b>
+                </div>
+                <div class="col-sm-3">
+                        <b>Yacht</b>
+                </div>
+                <div class="col-sm-3">
+                        <b>Charter Date</b>
+                </div>
+        </div>
+        {$cancelled_primary}
+        {if $cancelled_primary eq ""}
+        <div class="row pad-top">
+                <div class="col-sm-12"><font color=blue>There are no cancelled reservations for this guest.</font></div>
+        </div>
+        {/if}
+
+
+        <div class="row pad-top">
+                <div class="col-sm-12"><h4>cancelled as a passenger contact</h4></div>
+        </div>
+
+        <div class="row pad-top">
+                <div class="col-sm-3">
+                        <b>Charter #</b>
+                </div>
+                <div class="col-sm-3">
+                        <b>Reservation #</b>
+                </div>
+                <div class="col-sm-3">
+                        <b>Yacht</b>
+                </div>
+                <div class="col-sm-3">
+                        <b>Charter Date</b>
+                </div>
+        </div>
+        {$cancelled_passenger}
+        {if $cancelled_passenger eq ""}
+        <div class="row pad-top">
+                <div class="col-sm-12"><font color=blue>There are no cancelled reservations for this guest.</font></div>
+        </div>
+        {/if}
 
 </div>
+

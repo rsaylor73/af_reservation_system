@@ -73,6 +73,14 @@ if ($_SESSION['logged'] == "TRUE") {
 		$state = "AND `c`.`state` LIKE '%$_GET[ct_state]%' AND `c`.`state` IS NOT NULL";
 	}
 
+	if ($_GET['ct_contactID'] != "") {
+		$contact = "AND `c`.`contactID` = '$_GET[ct_contactID]'";
+	}
+
+	if ($_GET['ct_city'] != "") {
+		$city = "AND `c`.`city` LIKE '%$_GET[ct_city]%'";
+	}
+
 	if (is_array($_GET['ct_club'])) {
 		foreach ($_GET['ct_club'] as $key=>$value) {
 			if ($value == "VIP") {
@@ -136,6 +144,8 @@ if ($_SESSION['logged'] == "TRUE") {
 		$vip
 		$vipplus
 		$seven
+		$contact
+		$city
 	LIMIT 50
 	";
 

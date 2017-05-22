@@ -132,5 +132,20 @@ class charters extends boats {
                 $this->charter_status($msg);
 
 	}
+
+	/* This will allow the user to create a new charter */
+	public function create_new_charter() {
+                $this->security('create_new_charter',$_SESSION['user_typeID']);
+		$sql = "SELECT `boatID`,`name` FROM `boats` WHERE `status` = 'Active' ORDER BY `name` ASC";
+		$result = $this->new_mysql($sql);
+		while ($row = $result->fetch_assoc()) {
+			$option .= "<option value=\"$row[boatID]\">$row[name]</option>";
+		}
+		$data['option'] = $option;
+
+		$template = "create_new_charter.tpl";
+		$this->load_smarty($data,$template);
+	}
+
 }
 ?>

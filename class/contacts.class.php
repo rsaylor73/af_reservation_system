@@ -28,6 +28,12 @@ class contacts extends resellers {
 		$this->load_smarty($data,$template);
 	}
 
+	/* This will generate a random secure password */
+	public function random_password() {
+		$pwd = bin2hex(openssl_random_pseudo_bytes(4));
+		return($pwd);
+	}
+
 	/* This will allow the user to view and update the contact profile */
 	public function contacts() {
 		$this->security('manage_contacts',$_SESSION['user_typeID']);
@@ -269,6 +275,48 @@ class contacts extends resellers {
 			$template = "contacts_cancels.tpl";
 
 
+                        // reservations cancelled as primary contact
+                        $reservation_cancelled_primary = $this->reservation_cancelled_primary($data['contactID']);
+                        $reservation_cancelled_primary = json_decode($reservation_cancelled_primary);
+                        $reservation_cancelled_primary = $this->objectToArray($reservation_cancelled_primary);
+                        if(is_array($reservation_cancelled_primary)) {
+                                foreach($reservation_cancelled_primary as $key=>$value) {
+                                        $charterID = $reservation_cancelled_primary[$key]['charterID'];
+                                        $reservationID = $reservation_cancelled_primary[$key]['reservationID'];
+                                        $name = $reservation_cancelled_primary[$key]['name'];
+                                        $charter_date = $reservation_cancelled_primary[$key]['charter_date'];
+                                        $cancelled_primary .= "
+                                        <div class=\"row pad-top\">
+                                                <div class=\"col-sm-3\">".$charterID."</div>
+                                                <div class=\"col-sm-3\">".$reservationID."</div>
+                                                <div class=\"col-sm-3\">".$name."</div>
+                                                <div class=\"col-sm-3\">".date("m/d/Y", strtotime($charter_date))."</div>
+                                        </div>";
+                                }
+                        }
+                        $data['cancelled_primary'] = $cancelled_primary;
+
+                        // reservations cancelled as a passenger
+                        $reservation_cancelled_passenger = $this->reservation_cancelled_passenger($data['contactID']);
+                        $reservation_cancelled_passenger = json_decode($reservation_cancelled_passenger);
+                        $reservation_cancelled_passenger = $this->objectToArray($reservation_cancelled_passenger);
+                        if (is_array($reservation_cancelled_passenger)) {
+                                foreach ($reservation_cancelled_passenger as $key=>$value) {
+                                        $charterID = $reservation_cancelled_passenger[$key]['charterID'];
+                                        $reservationID = $reservation_cancelled_passenger[$key]['reservationID'];
+                                        $name = $reservation_cancelled_passenger[$key]['name'];
+                                        $charter_date = $reservation_cancelled_passenger[$key]['charter_date'];
+                                        $cancelled_passenger .= "
+                                        <div class=\"row pad-top\">
+                                                <div class=\"col-sm-3\">".$charterID."</div>
+                                                <div class=\"col-sm-3\">".$reservationID."</div>
+                                                <div class=\"col-sm-3\">".$name."</div>
+                                                <div class=\"col-sm-3\">".date("m/d/Y", strtotime($charter_date))."</div>
+                                        </div>";
+                                }
+                        }
+                        $data['cancelled_passenger'] = $cancelled_passenger;
+
                         $this->load_smarty($data,$template);
 		}
 
@@ -432,6 +480,7 @@ class contacts extends resellers {
                         // Contacts : Tab 4
 			case "history":
 
+			// nothing to update on this tab
                         print "<pre>";
                         print_r($p);
                         print "</pre>";
@@ -442,16 +491,19 @@ class contacts extends resellers {
                         // Contacts : Tab 5
 			case "notes":
 
-                        print "<pre>";
-                        print_r($p);
-                        print "</pre>";
-			die;
+                        unset($p['contactID']);
+                        unset($p['section']);
+                        unset($p['part']);
+
+			$sql = "UPDATE `contacts` SET `staff_notes` = '$p[staff_notes]' WHERE `contactID` = '$_POST[contactID]'";
+                        $redirect = "/contact/".$_POST['part']."/".$_POST['contactID'];
 
 			break;
 
                         // Contacts : Tab 6
 			case "cancels":
 
+			// nothing to update on this tab
                         print "<pre>";
                         print_r($p);
                         print "</pre>";
@@ -460,12 +512,15 @@ class contacts extends resellers {
 			break;
 
                         // Contacts : Tab 7
-			case "crs_rrs":
+			case "crsrrs":
 
-                        print "<pre>";
-                        print_r($p);
-                        print "</pre>";
-			die;
+                        unset($p['contactID']);
+                        unset($p['section']);
+                        unset($p['part']);
+
+			$sql = "UPDATE `contacts` SET `uuname` = '$p[uuname]', `contact_type` = '$p[contact_type]', `reseller_agentID` = '$p[reseller_agentID]',
+			`reseller_position` = '$p[reseller_position]', `verification_code` = '$p[verification_code]' WHERE `contactID` = '$_POST[contactID]'";
+                        $redirect = "/contact/".$_POST['part']."/".$_POST['contactID'];
 
 			break;
 		}

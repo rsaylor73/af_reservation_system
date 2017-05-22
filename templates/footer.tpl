@@ -1,4 +1,6 @@
-﻿            </div>
+﻿<br><br><br>
+
+            </div>
         </div>
         <!-- /#page-content-wrapper -->
     </div>
@@ -71,6 +73,18 @@ $(function() {
         });
 
 });
+
+$(function() {
+        $( "#charter_date" ).datepicker({ 
+                dateFormat: "yy-mm-dd",
+                changeMonth: true,
+                changeYear: true,
+                minDate: "0", 
+                maxDate: "+15Y"
+        });
+
+});
+
 
 </script>
 
