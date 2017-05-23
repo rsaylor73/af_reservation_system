@@ -5,19 +5,16 @@
 <div class="row pad-top">
 	<div class="col-sm-3">Select Yacht:</div>
 	<div class="col-sm-3">
-		<select name="yacht" class="form-control" 
-		onchange="document.getElementById('charter_date').value=''"
-		onblur="document.getElementById('charter_date').value=''"
+		<select name="boatID" class="form-control" 
+		onchange="clear_form();";
+		onblur="clear_form();";
 		required>
 		<option selected value="">Select</option>
 		{$option}
 		</select>
 	</div>
-</div>
-
-<div class="row pad-top">
 	<div class="col-sm-3">Select Embark Date:</div>
-	<div class="col-sm-3"><input type="text" name="charter_date" class="form-control" required readonly id="charter_date" 
+	<div class="col-sm-3"><input type="text" name="charter_date" class="form-control" required id="charter_date" 
 	onchange="check_charter(this.form)" onblur="check_charter(this.form)"
 	placeholder="Click to Select"></div>
 
@@ -26,6 +23,11 @@
 <div id="check_charter"></div>
 
 <script>
+	function clear_form() {
+		document.getElementById('charter_date').value='';
+		$("#check_charter").empty();
+	}
+
         function check_charter(myform) {
                 $.get('/ajax/check_charter.php',
                 $(myform).serialize(),
