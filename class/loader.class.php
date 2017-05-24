@@ -18,6 +18,8 @@ class loader extends reservations {
                         $this->$module();
                 } elseif (method_exists('charters',$module)) {
                         $this->$module();
+                } elseif (method_exists('inventory',$module)) {
+			$this->$module();
                 } elseif (method_exists('boats',$module)) {
                         $this->$module();
                 } elseif (method_exists('bunks',$module)) {

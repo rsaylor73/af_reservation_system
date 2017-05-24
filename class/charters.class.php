@@ -1,7 +1,7 @@
 <?php
-include PATH."/class/boats.class.php";
+include PATH."/class/inventory.class.php";
 
-class charters extends boats {
+class charters extends inventory {
 
 	/* This will display a list of charter statuses that can be edited */
 	public function charter_status($msg='') {
@@ -145,6 +145,57 @@ class charters extends boats {
 
 		$template = "create_new_charter.tpl";
 		$this->load_smarty($data,$template);
+	}
+
+	/* This will save the new charter */
+	public function save_new_charter() {
+                $this->security('create_new_charter',$_SESSION['user_typeID']);
+
+		$start_date = date("Ymd", strtotime($_POST['charter_date']));
+
+		$sql = "SELECT `charter_rate` AS 'base_rate' FROM `boats` WHERE `boatID` = '$_POST[boatID]'";
+		$result = $this->new_mysql($sql);
+		while ($row = $result->fetch_assoc()) {
+			$base_rate = $row['base_rate'];
+		}
+
+		// check if charter exists
+		$sql = "SELECT `charterID`,`start_date`,`boatID` FROM `charters` WHERE `start_date` = '$start_date' AND `boatID` = '$_POST[boatID]' LIMIT 1";
+		$result = $this->new_mysql($sql);
+		while ($row = $result->fetch_assoc()) {
+			$msg = "Charter $row[charterID] already exists with the same date and yacht selected.";
+			$this->error($msg);
+		}
+
+		$sql = "INSERT INTO `charters` (`start_date`,`statusID`,`boatID`,`nights`,`base_rate`,`add_on_price`,`status_commentID`,`add_on_price_commissionable`,
+		`overriding_comment`,`destinationID`,`itinerary`,`embarkment`,`disembarkment`,`destination`) VALUES ('$start_date','$_POST[status]','$_POST[boatID]',
+		'$_POST[nights]','$base_rate','$_POST[add_on_price]','$_POST[status_comment]','$_POST[add_on_price_commissionable]','$_POST[overriding_comment]',
+		'$_POST[kbyg]','$_POST[itinerary]','$_POST[embarkment]','$_POST[disembarkment]','$_POST[destination]')";
+		$result = $this->new_mysql($sql);
+		if ($result == "TRUE") {
+			$charterID = $this->linkID->insert_id;
+
+			if ($_POST['inventory'] == "yes") {
+				$inventory = $this->create_inventory($charterID);
+				$inv_msg = " A total of $inventory bunks was added. ";
+			}
+
+                        print '<div class="alert alert-success">Charter '.$charterID.' was created. '.$inv_msg.' Loading in 4 seconds please wait...</div>';
+                        ?>
+                        <script>
+                        setTimeout(function() {
+                              window.location.replace('/')
+                        }
+                        ,8000);
+                        </script>
+                        <?php
+
+
+		} else {
+			$msg = "The charter failed to create.";
+			$this->error($msg);
+		}
+
 	}
 
 }

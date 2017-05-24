@@ -13,6 +13,16 @@ class common extends destinations {
 		$this->load_smarty($data,$template);
 	}
 
+	/* This will handle error messages */
+	public function error($msg) {
+
+	        print '<div class="alert alert-danger">'.$msg.'</div>';
+		print "<br>The process has stopped. Please click on main menu to return to the dashboard.<br>";
+		$template = 'footer.tpl';
+		$this->load_smarty(null,$template);
+		die;
+	}
+
 	// This will set the security of each module //
 	public function security($method,$user_typeID) {
 		switch ($user_typeID) {

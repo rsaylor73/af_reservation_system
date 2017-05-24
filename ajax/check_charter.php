@@ -54,8 +54,8 @@ if ($_SESSION['logged'] == "TRUE") {
 			$status .= "<option value=\"$row2[statusID]\">$row2[name]</option>";
 		}
 
-		// get KBYG/destination/port
-		$destination = "<option selected value=\"\">Select</option>";
+		// get KBYG port
+		$kbyg = "<option selected value=\"\">Select</option>";
 		$sql2 = "SELECT `destinationID`,`code`,`description`,`latitude`,`longitude` FROM `destinations` WHERE `boatID` = '$_GET[boatID]' AND `status` = 'Active' AND `code` != ''
 		ORDER BY `description` ASC";
 		$result2 = $core->new_mysql($sql2);
@@ -64,8 +64,49 @@ if ($_SESSION['logged'] == "TRUE") {
 			if (($row2['latitude'] == "") or ($row2['longitude'] == "")) {
 				$error = " : Missing Latitude or Longitude";
 			}
-			$destination .= "<option value=\"$row2[destinationID]\">$row2[code] : $row2[description]</option>";
+			$kbyg .= "<option value=\"$row2[destinationID]\">$row2[code] : $row2[description]</option>";
 		}
+
+		// itinerary
+		$itinerary = "<option selected value=\"\">Select</option>";
+		$sql2 = "SELECT `itinerary` FROM `itinerary` WHERE `boatID` = '$_GET[boatID]' ORDER BY `itinerary` ASC";
+                $result2 = $core->new_mysql($sql2);
+                while ($row2 = $result2->fetch_assoc()) {
+			$itinerary .= "<option>$row2[itinerary]</option>";
+		}
+
+		// destination
+		$destination = "<option selected value=\"\">Select</option>";
+		$sql2 = "
+	        SELECT
+        		`d`.`destination`
+            	FROM
+                	`new_destinations` d
+	        WHERE
+               		`d`.`boatID` = '$_GET[boatID]'
+
+	        ORDER BY `d`.`destination` ASC
+		";
+                $result2 = $core->new_mysql($sql2);
+                while ($row2 = $result2->fetch_assoc()) {
+			$destination .= "<option>$row2[destination]</option>";
+		}
+
+		// embarkment
+		$embarkment = "<option selected value=\"\">Select</option>";
+		$sql2 = "SELECT `embarkment` FROM `embarkment` WHERE `boatID` = '$_GET[boatID]' AND `embarkment` != '' ORDER BY `embarkment` ASC";
+                $result2 = $core->new_mysql($sql2);
+                while ($row2 = $result2->fetch_assoc()) {
+			$embarkment .= "<option>$row2[embarkment]</option>";
+		}
+
+		// disembarkment
+		$disembarkment = "<option selected value=\"\">Select</option>";
+                $sql2 = "SELECT `disembarkment` FROM `disembarkment` WHERE `boatID` = '$_GET[boatID]' AND `disembarkment` != '' ORDER BY `disembarkment` ASC";
+                $result2 = $core->new_mysql($sql2);
+                while ($row2 = $result2->fetch_assoc()) {
+                        $disembarkment .= "<option>$row2[disembarkment]</option>";
+                }
 
 		print "
 		<div class=\"row pad-top\">
@@ -97,8 +138,22 @@ if ($_SESSION['logged'] == "TRUE") {
                 <div class=\"row pad-top\">
 			<div class=\"col-sm-3\">Overriding Comment:</div>
 			<div class=\"col-sm-3\"><input type=\"text\" name=\"overriding_comment\" placeholder=\"Will override comment selection\" class=\"form-control\"></div>
-			<div class=\"col-sm-3\">KBYG/Destination:</div>
-			<div class=\"col-sm-3\"><select name=\"destination\" class=\"form-control\" required>$destination</select></div>
+			<div class=\"col-sm-3\">KBYG:</div>
+			<div class=\"col-sm-3\"><select name=\"kbyg\" class=\"form-control\" required>$kbyg</select></div>
+		</div>
+
+                <div class=\"row pad-top\">
+			<div class=\"col-sm-3\">Itinerary:</div>
+			<div class=\"col-sm-3\"><select name=\"itinerary\" required class=\"form-control\">$itinerary</select></div>
+			<div class=\"col-sm-3\">Destination:</div>
+			<div class=\"col-sm-3\"><select name=\"destination\" required class=\"form-control\">$destination</select></div>
+		</div>
+
+		<div class=\"row pad-top\">
+			<div class=\"col-sm-3\">Embarkment:</div>
+			<div class=\"col-sm-3\"><select name=\"embarkment\" required class=\"form-control\">$embarkment</select></div>
+			<div class=\"col-sm-3\">Disembarkment:</div>
+			<div class=\"col-sm-3\"><select name=\"disembarkment\" required class=\"form-control\">$disembarkment</select></div>
 		</div>
 
                 <div class=\"row pad-top\">
