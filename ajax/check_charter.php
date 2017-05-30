@@ -47,12 +47,7 @@ if ($_SESSION['logged'] == "TRUE") {
 		}
 
 		// get status
-		$status = "<option value=\"\">Select</option>";
-		$sql2 = "SELECT `statusID`,`name` FROM `statuses` WHERE `status` = 'Active' AND `name` != '' ORDER BY `name` ASC";
-		$result2 = $core->new_mysql($sql2);
-		while ($row2 = $result2->fetch_assoc()) {
-			$status .= "<option value=\"$row2[statusID]\">$row2[name]</option>";
-		}
+		$status = $core->get_charter_status();
 
 		// get KBYG port
 		$kbyg = "<option selected value=\"\">Select</option>";

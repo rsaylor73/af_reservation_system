@@ -14,12 +14,14 @@ class common extends destinations {
 	}
 
 	/* This will handle error messages */
-	public function error($msg) {
+	public function error($msg,$extra='') {
 
 	        print '<div class="alert alert-danger">'.$msg.'</div>';
-		print "<br>The process has stopped. Please click on main menu to return to the dashboard.<br>";
-		$template = 'footer.tpl';
-		$this->load_smarty(null,$template);
+		if ($extra == '') {
+			print "<br>The process has stopped. Please click on main menu to return to the dashboard.<br>";
+			$template = 'footer.tpl';
+			$this->load_smarty(null,$template);
+		}
 		die;
 	}
 

@@ -86,6 +86,44 @@ $(function() {
 });
 
 
+$(function() {
+	$( "#date1" ).datepicker({
+		dateFormat: "dd-M-yy",
+		changeMonth: true,
+		changeYear: true,
+		minDate: "-15Y",
+		maxDate: "+15Y",
+		onSelect: function (date) {
+			var date1 = $('#date1').datepicker('getDate');
+			date1.setDate(date1.getDate() + 10);
+			var date2 = $('#date1').datepicker('getDate');
+			date2.setDate(date2.getDate() + 182);
+			$('#date2').datepicker('setDate', date2);
+			//sets minDate to dt1 date + 1
+			$('#date2').datepicker('option', 'minDate', date1);
+		}
+	});
+});
+
+$(function() {
+	$( "#date2" ).datepicker({
+		dateFormat: "dd-M-yy",
+		changeMonth: true,
+		changeYear: true,
+		minDate: "+10D",
+		maxDate: "+15Y",
+		onClose: function () {
+			var dt1 = $('#date1').datepicker('getDate');
+			var dt2 = $('#date2').datepicker('getDate');
+			//check to prevent a user from entering a date below date of dt1
+			if (dt2 <= dt1) {
+				var minDate = $('#date2').datepicker('option', 'minDate');
+				$('#date2').datepicker('setDate', minDate);
+			}
+		} 
+	});
+});
+
 </script>
 
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
