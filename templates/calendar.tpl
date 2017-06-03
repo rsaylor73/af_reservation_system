@@ -12,6 +12,16 @@
     <link href="/css/simple-sidebar.css" rel="stylesheet">
     <link href="/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <link href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet">
+
+    <style>
+    .alignleft {
+	float: left;
+    }
+    .alignright {
+	float: right;
+    }
+    </style>
+
 </head>
 <body>
 {$html}

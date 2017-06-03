@@ -14,7 +14,17 @@ class charters extends inventory {
 				$start = date("Ymd", strtotime($_GET['lc_date1']));
 				$end = date("Ymd", strtotime($_GET['lc_date2']));
 				$boatID = $value;
-				$html .= $this->paint_calendar($boatID,$start,$end);
+				// check if year laps
+				$y1 = date("Y", strtotime($start));
+				$y2 = date("Y", strtotime($end));
+				if ($y1 != $y2) {
+					$new_end = $y1."1231";
+					$new_start = $y2."0101";
+					$html .= $this->paint_calendar($boatID,$start,$new_end);
+					$html .= $this->paint_calendar($boatID,$new_start,$end);
+				} else {
+					$html .= $this->paint_calendar($boatID,$start,$end);
+				}
 			}
 
 			$data['html'] = $html;
@@ -30,7 +40,8 @@ class charters extends inventory {
 		$sql = "SELECT `name` FROM `boats` WHERE `boatID` = '$boatID'";
 		$result = $this->new_mysql($sql);
 		while ($row = $result->fetch_assoc()) {
-			$output = "<div class=\"row top-buffer\"><div class=\"col-sm-8\" align=\"center\"><h4>$row[name]</h4></div></div>";
+			$y = date("Y", strtotime($start));
+			$output = "<div class=\"row top-buffer\"><div class=\"col-sm-12\" align=\"center\"><h4>$row[name] :: $y</h4></div></div>";
 		}
 
 		// get # charters
@@ -49,18 +60,31 @@ class charters extends inventory {
                 while ($row = $result->fetch_assoc()) {
 			$i++;
 		}
+
+		if ($i % 2 == 0) {
+			$n = "even";
+		} else {
+			$n = "odd";
+		}
+
 		@$left = floor($i/2);
 		$right = $i - $left;
+
+		// if the number is odd we want the left side to be longer
+		if ($n == "odd") {
+			$left = $left + 1;
+			$right = $right - 1;
+		}
 
 		$left_side = $this->paint_side($boatID,$start,$end,'0',$left);
 		$right_side = $this->paint_side($boatID,$start,$end,$left,$right);
 
 		$output .= '
 		<div class="row top-buffer">
-			<div class="col-sm-5">
+			<div class="col-sm-6">
 				'.$left_side.'
 			</div>
-			<div class="col-sm-5">
+			<div class="col-sm-6">
 				'.$right_side.'
 			</div>
 		</div>
@@ -70,18 +94,23 @@ class charters extends inventory {
 	}
 
 	private function paint_side($boatID,$start,$end,$limit1,$limit2) {
-		$b = 'style="border:1px solid #cecece; height:48px !important;"';
+		$b = 'style="border:1px solid #cecece; height:68px !important;"';
 
 		$sql = "
 		SELECT
 			`c`.`charterID`,
 			DATE_FORMAT(`c`.`start_date`, '%b %e') AS 'start_date',
-			DATE_FORMAT(DATE_ADD(`c`.`start_date`, interval `c`.`nights` DAY), '%b %e') AS 'end_date' 
+			DATE_FORMAT(DATE_ADD(`c`.`start_date`, interval `c`.`nights` DAY), '%b %e') AS 'end_date',
+			`c`.`group1`,
+			`c`.`group2`,
+			`s`.`name` AS 'status_name'
 		FROM
-			`charters` c
+			`charters` c,
+			`statuses` s
 		WHERE
 			`c`.`boatID` = '$boatID'
 			AND `c`.`start_date` BETWEEN '$start' AND '$end'
+			AND `c`.`statusID` = `s`.`statusID`
 
 		ORDER BY `c`.`start_date`
 
@@ -90,19 +119,216 @@ class charters extends inventory {
 		$result = $this->new_mysql($sql);
 		$counter = $limit1 + 1;
 		while ($row = $result->fetch_assoc()) {
+			$words = str_word_count($row['status_name']);
+			if ($words > 1) {
+				$first = "";
+				$words_array = explode(" ",$row['status_name']);
+				foreach($words_array as $key=>$value) {
+					$first .= substr($value,0,1);
+				}
+				$status_name = $first;
+			} else {
+				$status_name = $row['status_name'];
+			}
+
+			// general note the OLD database produces double and does not
+			// calculate very well. When subtracting will product a
+			// - 1.2343432423e or something like that. The fix is
+			// to set the type as string then allow php to do normal
+			// calculation - Robert Saylor
+
+			$total_charter = $this->charter_value($row['charterID']);
+			$total_charter = floor($total_charter*100)/100;
+
+			settype($total_charter,"string");
+
+			$total_payments = $this->charter_payment($row['charterID']);
+			$total_payments = floor($total_payments*100)/100;
+
+			settype($total_payments,"string");
+
+			$total_due = $total_charter - $total_payments;
+			$total_due = floor($total_due*100)/100;
+			settype($total_due,"string");
+
+			if ($total_due < "1") {
+				$total_due = "0";
+			}
+
+
+			$charter_dates = $this->objectToArray(json_decode($this->get_charter_days($row['charterID'])));
+			$days = $charter_dates['days'];
+			$first_date = $charter_dates['first'];
+			$last_date = $charter_dates['last'];
+			$code = $charter_dates['code'];
+
+			$space = $this->objectToArray(json_decode($this->get_charter_space($row['charterID'])));
+			if ($space['free'] == "0") { $space['free'] = ""; }
+			$total_pax = $this->get_charter_pax($row['charterID']);
+
 			$html .= '
 			<div class="row">
 				<div class="col-sm-1" '.$b.'><h4><center>'.$counter.'</center></h4></div>
-				<div class="col-sm-4" '.$b.'>'.$row['start_date'].' - '.$row['end_date'].'<br><br></div>
-				<div class="col-sm-1" '.$b.'>TBD</div>
-				<div class="col-sm-1" '.$b.'>TBD</div>
-				<div class="col-sm-2" '.$b.'>TBD</div>
+				<div class="col-sm-5" '.$b.'>
+					'.$row['start_date'].' - '.$row['end_date'].'<br>
+					'.$status_name.' - '.$row['group1'].' - '.$row['group2'].'<br>
+					$ '.$total_charter.' / $ '.$total_due.'&nbsp;
+					<p class="alignright">'.$code.'</p>
+					<br>
+				</div>
+				<div class="col-sm-2" '.$b.'>'.$days.'<br>'.$first_date.'<br>'.$last_date.'</div>
+				<div class="col-sm-2" '.$b.'><br>'.$space['paid'].'<br>'.$space['free'].'</div>
+				<div class="col-sm-2" '.$b.'><br>'.$total_pax.'</div>
 			</div>
 			';
 			$counter++;
 		}
 
 		return($html);
+	}
+
+	/* This will return the number of booked and tentative on a charter */
+	private function get_charter_pax($charterID) {
+		$sql = "SELECT `status` FROM `inventory` WHERE `charterID` = '$charterID' AND `status` IN ('booked','tentative')";
+		$result = $this->new_mysql($sql);
+		$total = "0";
+		while ($row = $result->fetch_assoc()) {
+			$total++;
+		}
+		return($total);
+	}
+
+	/* This will determin the number of paid and the number of free space on a charter */
+	private function get_charter_space($charterID) {
+		$sql = "
+		SELECT
+			`i`.`bunk_price`,
+			`i`.`manual_discount`,
+			`i`.`DWC_discount`
+
+		FROM
+			`inventory` i
+
+		WHERE
+			`i`.`charterID` = '$charterID'
+			AND `i`.`status` IN ('booked','tentative')
+		";
+		$free = "0";
+		$paid = "0";
+		$result = $this->new_mysql($sql);
+		while ($row = $result->fetch_assoc()) {
+			$discount = $row['manual_discount'] + $row['DWC_discount'];
+			if ($discount >= $row['bunk_price']) {
+				$free++;
+			} else {
+				$paid++;
+			}
+		}
+		$data['paid'] = $paid;
+		$data['free'] = $free;
+		return(json_encode($data));
+	}
+
+	/* This will return the charter days, start and end date */
+	private function get_charter_days($charterID) {
+		$today = date("Ymd");
+		$sql = "
+		SELECT
+			DATEDIFF(`c`.`start_date`,'$today') AS 'days',
+			`d`.`code`,
+			DATE_FORMAT(MIN(`r`.`reservation_date`), '%m/%d/%y') AS 'first',
+			DATE_FORMAT(MAX(`r`.`reservation_date`), '%m/%d/%y') AS 'last'
+		FROM
+			`charters` c,
+			`destinations` d,
+			`reservations` r
+
+		WHERE
+			`c`.`charterID` = '$charterID'
+			AND `c`.`destinationID` = `d`.`destinationID`
+			AND `c`.`charterID` = `r`.`charterID`
+		";
+		$result = $this->new_mysql($sql);
+		while ($row = $result->fetch_assoc()) {
+			foreach ($row as $key=>$value) {
+				$data[$key] = $value;
+			}
+		}
+		return(json_encode($data));
+	}
+
+	/* This will return the payments of the charter */
+	private function charter_payment($charterID) {
+		$sql = "
+		SELECT
+			SUM(`p`.`payment_amount`) AS 'payment_amount'
+
+		FROM
+			`reservations` r,
+			`reservation_payments` p
+
+		WHERE
+			`r`.`charterID` = '$charterID'
+			AND `r`.`show_as_suspended` = '0'
+			AND `r`.`reservationID` = `p`.`reservationID`
+			AND `p`.`payment_type` IN ('Check','Credit Card','Wire','Elite Credit Card','Check','Credit','Payment','Online - CC','AF Check')
+		";
+		$result = $this->new_mysql($sql);
+		while ($row = $result->fetch_assoc()) {
+			$amount = $row['payment_amount'];
+		}
+		return($amount);
+	}
+
+	/* This will return the value of the charter */
+	private function charter_value($charterID) {
+		$sql = "
+		SELECT
+			`i`.`charterID`,
+			`i`.`bunk`,
+			`i`.`reservationID`,
+			`i`.`bunk_price`,
+			`i`.`DWC_discount`,
+			`i`.`voucher`,
+			`i`.`manual_discount`,
+			`c`.`add_on_price`,
+			`c`.`add_on_price_commissionable`,
+			`i`.`commission_at_time_of_booking`
+
+		FROM
+			`inventory` i,
+			`charters` c
+
+		WHERE
+			`i`.`charterID` = '$charterID'
+			AND `i`.`status` IN ('booked','tentative')
+			AND `i`.`charterID` = `c`.`charterID`
+
+		ORDER BY `i`.`bunk` ASC
+		";
+		$result = $this->new_mysql($sql);
+		while ($row = $result->fetch_assoc()) {
+			//print "R: $row[reservationID] | C: $charterID<br>";
+
+			$discount = $row['DWC_discount'] + $row['manual_discount'] + $row['voucher'];
+			$sale = $row['bunk_price'] + $row['add_on_price_commissionable'];
+
+			$amount = $sale - $discount;
+
+			//print "$sale - $discount = $amount<br>";
+
+			$comm = "0";
+			$comm_amount = "0";
+			if ($row['commission_at_time_of_booking'] > 0) {
+				$comm = $row['commission_at_time_of_booking'] / 100;
+				$comm_amount = $amount * $comm;
+			}
+			//print "Total : $amount - $comm_amount + $row[add_on_price]<br><br>";
+			//print "<hr>";
+			$total = $amount - $comm_amount + $row['add_on_price'];
+			$total_charter = $total_charter + $total;
+		}
+		return($total_charter);
 	}
 
 	/* This will search charters */

@@ -55,7 +55,7 @@
 
                 <div class="row pad-top">
 			<div class="col-sm-6">
-				<input type="submit" value="View Calendar" class="btn btn-info">&nbsp;&nbsp;
+				<input type="submit" onclick="locate_charter(this.form)" value="View Calendar" class="btn btn-info">&nbsp;&nbsp;
 				<input type="button" value="Search" class="btn btn-success" onclick="locate_charter(this.form)">&nbsp;&nbsp;
 				<input type="button" value="Clear Results" class="btn btn-warning" onclick="document.location.href='/locate_charter/clear'">
 			</div>
