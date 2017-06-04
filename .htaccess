@@ -32,6 +32,7 @@ RewriteRule ^manage_contacts/([a-zA-Z0-9]+)/?$ index.php?section=manage_contacts
 RewriteRule ^locate_charter/([a-zA-Z0-9]+)/?$ index.php?section=locate_charter&clear=yes [NC,L]
 RewriteRule ^add_historic_reservation/([a-zA-Z0-9]+)/?$ index.php?section=add_historic_reservation&contactID=$1 [NC,L]
 RewriteRule ^edit_charter/([a-zA-Z0-9]+)/?$ index.php?section=edit_charter&charterID=$1 [NC,L]
+RewriteRule ^view_charter/([a-zA-Z0-9]+)/?$ index.php?section=view_charter&charterID=$1 [NC,L]
 
 # Three params
 # IE: search/12345/676767

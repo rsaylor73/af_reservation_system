@@ -3,6 +3,145 @@ include PATH."/class/inventory.class.php";
 
 class charters extends inventory {
 
+	/* This allows the user to view the charter details */
+	public function view_charter() {
+                $this->security('locate_charter',$_SESSION['user_typeID']);
+		$sql = "
+		SELECT
+			`i`.`bunk`,
+			`bk`.`description`,
+			`bk`.`cabin_type`,
+			`i`.`donotmove_passenger`,
+			`i`.`status`,
+			`i`.`passengerID`,
+			`i`.`reservationID`,
+			`i`.`bunk_price` + `c`.`add_on_price` + `c`.`add_on_price_commissionable` AS 'price'
+
+		FROM
+			`inventory` i,
+			`bunks` bk,
+			`boats` b,
+			`charters` c
+
+		WHERE
+			`i`.`charterID` = '$_GET[charterID]'
+			AND `i`.`charterID` = `c`.`charterID`
+			AND `c`.`boatID` = `b`.`boatID`
+			AND `c`.`boatID` = `bk`.`boatID`
+			AND `i`.`bunk` = CONCAT(`b`.`abbreviation`,'-',`bk`.`cabin`,`bk`.`bunk`)
+
+		ORDER BY `i`.`bunk` ASC
+		";
+		$result = $this->new_mysql($sql);
+		while ($row = $result->fetch_assoc()) {
+			$contact = "";
+			if ($row['passengerID'] > 0) {
+				$sql2 = "SELECT `first`,`last` FROM `contacts` WHERE `contactID` = '$row[passengerID]'";
+	 	                $result2 = $this->new_mysql($sql2);
+				while ($row2 = $result2->fetch_assoc()) {
+					$contact = "$row2[first] $row2[last]";
+				}
+			}
+			$reservation = "None";
+			$link = "";
+			if ($row['reservationID'] > 0) {
+				$reservation = $row['reservationID'];
+				$link = " onclick=document.location.href='/reservations/$reservation'";
+			}
+
+			$dnm = "";
+			if ($row['donotmove_passenger'] == "1") {
+				$dnm = "X";
+			}
+
+			$bunk_details .= "
+			<tr $link>
+				<td>$row[bunk]</td>
+				<td>$row[description]</td>
+				<td>$row[cabin_type]</td>
+                                <td>$dnm</td>
+                                <td>$row[status]</td>
+                                <td>$contact</td>
+                                <td>$reservation</td>
+                                <td>$ ".number_format($row['price'],2,'.',',')."</td>
+			</tr>";
+		}
+
+		$sql = "
+		SELECT
+			`b`.`name`,
+			DATE_FORMAT(`c`.`start_date`, '%m/%d/%Y') AS 'start_date',
+			DATE_FORMAT(DATE_ADD(`c`.`start_date`, INTERVAL `c`.`nights` DAY), '%m/%d/%Y') AS 'end_date',
+			`d`.`description`,
+			`c`.`itinerary`,
+			`s`.`name` AS 'status_name',
+			`sc`.`comment`,
+			`c`.`group1`,
+			`c`.`group2`,
+			`c`.`nights`,
+			`c`.`embarkment`,
+			`c`.`disembarkment`
+			
+		FROM
+			`charters` c,
+			`boats` b,
+			`destinations` d,
+			`statuses` s,
+			`status_comments` sc
+			
+
+		WHERE
+			`c`.`charterID` = '$_GET[charterID]'
+			AND `c`.`boatID` = `b`.`boatID`
+			AND `c`.`destinationID` = `d`.`destinationID`
+			AND `c`.`statusID` = `s`.`statusID`
+			AND `c`.`status_commentID` = `sc`.`status_commentID`
+		";
+                $result = $this->new_mysql($sql);
+                while ($row = $result->fetch_assoc()) {
+			$data['name'] = $row['name'];
+			$data['start_date'] = $row['start_date'];
+			$data['end_date'] = $row['end_date'];
+			$data['description'] = $row['description'];
+			$data['itinerary'] = $row['itinerary'];
+			$data['status_name'] = $row['status_name'];
+			$data['comment'] = $row['comment'];
+			$data['group1'] = $row['group1'];
+			$data['group2'] = $row['group2'];
+			$data['nights'] = $row['nights'];
+			$data['embarkment'] = $row['embarkment'];
+			$data['disembarkment'] = $row['disembarkment'];
+		}
+
+		$sql = "
+		SELECT
+			COUNT(`inventory`.`inventoryID`) AS 'capacity',
+			COUNT(CASE WHEN `inventory`.`status` = 'booked' THEN `inventory`.`status` END) AS 'booked',
+			COUNT(CASE WHEN `inventory`.`status` = 'tentative' THEN `inventory`.`status` END) AS 'tentative',
+			COUNT(CASE WHEN `inventory`.`status` = 'avail' THEN `inventory`.`status` END) AS 'avail'
+
+		FROM
+			`inventory`
+
+		WHERE
+			`charterID` = '$_GET[charterID]'
+		";
+                $result = $this->new_mysql($sql);
+                while ($row = $result->fetch_assoc()) {
+			$data['capacity'] = $row['capacity'];
+			$data['booked'] = $row['booked'];
+			$data['tentative'] = $row['tentative'];
+			$data['avail'] = $row['avail'];
+		}
+
+		$data['charterID'] = $_GET['charterID'];
+		$data['bunk_details'] = $bunk_details;
+
+		$template = "view_charter.tpl";
+		$this->load_smarty($data,$template);
+	}
+
+
 	/* This will generate the calendar from locate charters */
 	public function calendar() {
                 $this->security('locate_charter',$_SESSION['user_typeID']);
@@ -371,8 +510,8 @@ class charters extends inventory {
 
 		
 		if ($_SESSION['lc_date1'] == "") {
-			$data['date1'] = date("Y-m-d");
-			$data['date2'] = date("Y-m-d", strtotime($data['date1'] . "+1 month"));
+			$data['date1'] = date("d-M-Y");
+			$data['date2'] = date("d-M-Y", strtotime($data['date1'] . "+1 month"));
 		} else {
 			$data['date1'] = $_SESSION['lc_date1'];
 			$data['date2'] = $_SESSION['lc_date2'];
