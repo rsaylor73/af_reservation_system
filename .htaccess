@@ -33,6 +33,7 @@ RewriteRule ^locate_charter/([a-zA-Z0-9]+)/?$ index.php?section=locate_charter&c
 RewriteRule ^add_historic_reservation/([a-zA-Z0-9]+)/?$ index.php?section=add_historic_reservation&contactID=$1 [NC,L]
 RewriteRule ^edit_charter/([a-zA-Z0-9]+)/?$ index.php?section=edit_charter&charterID=$1 [NC,L]
 RewriteRule ^view_charter/([a-zA-Z0-9]+)/?$ index.php?section=view_charter&charterID=$1 [NC,L]
+RewriteRule ^new_reservation/([a-zA-Z0-9]+)/?$ index.php?section=new_reservation&charterID=$1 [NC,L]
 
 # Three params
 # IE: search/12345/676767
@@ -42,5 +43,9 @@ RewriteRule ^delete_bunk/([a-zA-Z0-9]+)/([a-zA-Z0-9]+)/?$ index.php?section=dele
 RewriteRule ^edit_destination/([a-zA-Z0-9]+)/([a-zA-Z0-9]+)/?$ index.php?section=edit_destination&destinationID=$1&boatID=$2 [NC,L]
 RewriteRule ^delete_destination/([a-zA-Z0-9]+)/([a-zA-Z0-9]+)/?$ index.php?section=delete_destination&destinationID=$1&boatID=$2 [NC,L]
 RewriteRule ^contact/([a-zA-Z0-9]+)/([a-zA-Z0-9]+)/?$ index.php?section=contacts_part&part=$1&contactID=$2 [NC,L]
+RewriteRule ^view_charter/([a-zA-Z0-9]+)/([a-zA-Z0-9]+)/?$ index.php?section=view_charter&charterID=$1&complete=$2 [NC,L]
+
+
+# Four params
 RewriteRule ^contact/delete_imported/([a-zA-Z0-9]+)/([a-zA-Z0-9]+)/?$ index.php?section=delete_imported&id=$1&contactID=$2 [NC,L]
 

@@ -3,6 +3,82 @@ include PATH."/class/charters.class.php";
 
 class reservations extends charters {
 
+	/* This will allow the user to create a new reservation */
+	public function new_reservation() {
+		$this->security('new_reservation',$_SESSION['user_typeID']);
+
+		// get charter info
+		$sql = "
+		SELECT
+			`b`.`name`,
+			DATE_FORMAT(`c`.`start_date`, '%m/%d/%Y') AS 'start_date',
+                        DATE_FORMAT(DATE_ADD(`c`.`start_date`, INTERVAL `c`.`nights` DAY), '%m/%d/%Y') AS 'end_date',
+			`c`.`nights`
+		FROM
+			`charters` c,
+			`boats` b
+
+		WHERE
+			`c`.`charterID` = '$_GET[charterID]'
+			AND `c`.`boatID` = `b`.`boatID`
+		";
+		$result = $this->new_mysql($sql);
+		while ($row = $result->fetch_assoc()) {
+			foreach ($row as $key=>$value) {
+				$data[$key] = $value;
+			}
+		}
+
+		// get AF active agents
+		$options = "<option value=\"\">Select</option>";
+		$bookers = $this->objectToArray(json_decode($this->get_agents()));
+		foreach ($bookers as $obj=>$userdata) {
+			foreach ($userdata as $key=>$value) {
+				if ($key == "userID") {
+					$userID = $value;
+				}
+				if ($key == "first") {
+					$first = $value;
+				}
+				if ($key == "last") {
+					$last = $value;
+				}
+			}
+			$options .= "<option value=\"$userID\">$first $last</option>";
+			
+		}
+		$data['options'] = $options;
+		$data['charterID'] = $_GET['charterID'];
+		$template = "new_reservation.tpl";
+		$this->load_smarty($data,$template);
+	}
+
+	private function get_agents() {
+		$sql = "
+		SELECT
+			`u`.`userID`,
+			`u`.`first`,
+			`u`.`last`
+		FROM
+			`users` u
+		WHERE
+			`u`.`user_typeID` IN ('1','2','3')
+			AND `u`.`status` = 'Active'
+			AND `u`.`userID` NOT IN ('1','176','150')
+
+		ORDER BY `last` ASC, `first` ASC
+		";
+		$counter = "0";
+		$result = $this->new_mysql($sql);
+		while ($row = $result->fetch_assoc()) {
+			foreach($row as $key=>$value) {
+				$data[$counter][$key] = $value;
+			}
+			$counter++;
+		}
+		return(json_encode($data));
+	}
+
 	/* This will add a new historic reservation to the contact */
 	public function add_historic_reservation() {
                 $this->security('manage_contacts',$_SESSION['user_typeID']);

@@ -6,6 +6,33 @@ class charters extends inventory {
 	/* This allows the user to view the charter details */
 	public function view_charter() {
                 $this->security('locate_charter',$_SESSION['user_typeID']);
+
+		// get charter date
+		$sql = "SELECT `start_date`,`boatID` FROM `charters` WHERE `charterID` = '$_GET[charterID]'";
+		$result = $this->new_mysql($sql);
+		while ($row = $result->fetch_assoc()) {
+			$date = $row['start_date'];
+			$boatID = $row['boatID'];
+		}
+		$date1 = date("Ymd", strtotime($date . "- 10 DAY"));
+		$date2 = date("Ymd", strtotime($date . "+ 10 DAY"));
+
+		$sql = "SELECT `charterID` FROM `charters` WHERE `boatID` = '$boatID' AND `start_date` BETWEEN '$date1' AND '$date2' ORDER BY `start_date` ASC";
+                $result = $this->new_mysql($sql);
+                while ($row = $result->fetch_assoc()) {
+			$charters[] = $row['charterID'];
+		}
+
+		foreach ($charters as $key=>$value) {
+			if ($value == $_GET['charterID']) {
+				$n1 = $key - 1;
+				$n2 = $key + 1;
+				$data['previous'] = $charters[$n1];
+				$data['next'] = $charters[$n2];
+			}
+		}
+		// get current charter info
+
 		$sql = "
 		SELECT
 			`i`.`bunk`,
@@ -15,7 +42,9 @@ class charters extends inventory {
 			`i`.`status`,
 			`i`.`passengerID`,
 			`i`.`reservationID`,
-			`i`.`bunk_price` + `c`.`add_on_price` + `c`.`add_on_price_commissionable` AS 'price'
+			`i`.`bunk_price` + `c`.`add_on_price` + `c`.`add_on_price_commissionable` AS 'price',
+			`bk`.`cabin`,
+			`bk`.`bunk` AS 'room'
 
 		FROM
 			`inventory` i,
@@ -32,6 +61,7 @@ class charters extends inventory {
 
 		ORDER BY `i`.`bunk` ASC
 		";
+		$i = "0";
 		$result = $this->new_mysql($sql);
 		while ($row = $result->fetch_assoc()) {
 			$contact = "";
@@ -50,22 +80,46 @@ class charters extends inventory {
 			}
 
 			$dnm = "";
+			//$dnm_class = " draggable ";
+			//$dnm_class = " sortable ";
+			$dnm_class = "";
 			if ($row['donotmove_passenger'] == "1") {
 				$dnm = "X";
+				$dnm_class = " dnm ";
 			}
 
+			$i++;
 			$bunk_details .= "
-			<tr $link>
+			<tr class=\"sectionsid $dnm_class \" id=\"$row[bunk]\"";
+			$bunk_details .= ">
 				<td>$row[bunk]</td>
 				<td>$row[description]</td>
 				<td>$row[cabin_type]</td>
                                 <td>$dnm</td>
                                 <td>$row[status]</td>
                                 <td>$contact</td>
-                                <td>$reservation</td>
+                                <td $link>$reservation</td>
                                 <td>$ ".number_format($row['price'],2,'.',',')."</td>
 			</tr>";
+			$bunks_array .= '"'.$row['cabin'].$row['room'].'",';	
+			if ($row['status'] == "avail") {
+				$data['new_reservation'] = "yes";
+			}
+			/*
+                        $bunk_details .= "
+                        <div class=\"row $dnm_class\">
+                                <div class=\"col-sm-2\">$row[bunk]</div>
+                                <div class=\"col-sm-3\">$row[description]</div>
+                                <div class=\"col-sm-1\">$dnm</div>
+                                <div class=\"col-sm-1\">$row[status]</div>
+                                <div class=\"col-sm-2\">$contact</div>
+                                <div class=\"col-sm-1\">$reservation</div>
+                                <div class=\"col-sm-2\">$ ".number_format($row['price'],2,'.',',')."</div>
+                        </div>";
+			*/
 		}
+		$bunks_array = substr($bunks_array,0,-1);
+		$data['bunks_array'] = $bunks_array;
 
 		$sql = "
 		SELECT
@@ -136,10 +190,124 @@ class charters extends inventory {
 
 		$data['charterID'] = $_GET['charterID'];
 		$data['bunk_details'] = $bunk_details;
-
+		if ($_GET['complete'] == "complete") {
+			$data['complete'] = $_GET['complete'];
+		}
 		$template = "view_charter.tpl";
 		$this->load_smarty($data,$template);
 	}
+
+	/* This will get inventory info to swap a bunk */
+	public function get_inventory_swap($charterID,$bunk) {
+                $this->security('locate_charter',$_SESSION['user_typeID']);
+
+		$sql = "
+		SELECT
+		        `i`.`inventoryID`,
+		        `i`.`passengerID`,
+			`i`.`reservationID`,
+		        `i`.`manual_discount`,
+		        `i`.`DWC_discount`,
+		        `i`.`voucher`,
+		        `i`.`commission_at_time_of_booking`,
+		        `i`.`liability_date`,
+		        `i`.`status`,
+		        `i`.`manual_discount_reason`,
+		        `i`.`general_discount_reason`,
+		        `i`.`voucher_reason`,
+		        `i`.`rental_equipment`,
+		        `i`.`course`,
+		        `i`.`other_rental`,
+		        `i`.`login_key`,
+		        `i`.`certification_level`,
+		        `i`.`certification_date`,
+		        `i`.`certification_agency`,
+		        `i`.`certification_number`,
+		        `i`.`nitrox_agency`,
+		        `i`.`nitrox_number`,
+		        `i`.`nitrox_date`,
+		        `i`.`dive_insurance`,
+		        `i`.`dive_insurance_co`,
+		        `i`.`dive_insurance_other`,
+		        `i`.`dive_insurance_number`,
+		        `i`.`dive_insurance_date`,
+		        `i`.`equipment_insurance`,
+		        `i`.`equipment_policy`,
+		        `i`.`trip_insurance`,
+		        `i`.`trip_insurance_co`,
+		        `i`.`trip_insurance_other`,
+		        `i`.`trip_insurance_number`,
+		        `i`.`trip_insurance_date`,
+		        `i`.`application_complete`,
+		        `i`.`medical_email`
+
+		    FROM 
+		        `inventory` i,
+		        `boats` b,
+		        `charters` c
+
+		    WHERE 
+		        `i`.`charterID` = '$charterID'
+		        AND `i`.`charterID` = `c`.`charterID`
+		        AND `c`.`boatID` = `b`.`boatID`
+		        AND `i`.`bunk` = CONCAT(`b`.`abbreviation`,'-','$bunk')
+		";
+		$result = $this->new_mysql($sql);
+		while ($row = $result->fetch_assoc()) {
+			foreach ($row as $key=>$value) {
+				$data[$key] = $value;
+			}
+		}
+		return(json_encode($data));
+	}
+
+        /* This will swap data from the inventory with new data provided for swapping a bunk */
+        public function update_inventory_swap($inventoryID,$data) {
+                $this->security('locate_charter',$_SESSION['user_typeID']);
+
+		$sql = "UPDATE `inventory` SET
+		`passengerID` = '$data[passengerID]',
+		`reservationID` = '$data[reservationID]',
+		`manual_discount` = '$data[manual_discount]',
+		`DWC_discount` = '$data[DWC_discount]',
+		`voucher` = '$data[voucher]',
+		`commission_at_time_of_booking` = '$data[commission_at_time_of_booking]',
+		`liability_date` = '$data[liability_date]',
+		`status` = '$data[status]',
+		`manual_discount_reason` = '$data[manual_discount_reason]',
+		`general_discount_reason` = '$data[general_discount_reason]',
+		`voucher_reason` = '$data[voucher_reason]',
+		`rental_equipment` = '$data[rental_equipment]',
+		`course` = '$data[course]',
+		`other_rental` = '$data[other_rental]',
+		`login_key` = '$data[login_key]',
+		`certification_level` = '$data[certification_level]',
+		`certification_date` = '$data[certification_date]',
+		`certification_agency` = '$data[certification_agency]',
+		`certification_number` = '$data[certification_number]',
+		`nitrox_agency` = '$data[nitrox_agency]',
+		`nitrox_number` = '$data[nitrox_number]',
+		`nitrox_date` = '$data[nitrox_date]',
+		`dive_insurance` = '$data[dive_insurance]',
+		`dive_insurance_co` = '$data[dive_insurance_co]',
+		`dive_insurance_other` = '$data[dive_insurance_other]',
+		`dive_insurance_number` = '$data[dive_insurance_number]',
+		`dive_insurance_date` = '$data[dive_insurance_date]',
+		`equipment_insurance` = '$data[equipment_insurance]',
+		`equipment_policy` = '$data[equipment_policy]',
+		`trip_insurance` = '$data[trip_insurance]',
+		`trip_insurance_co` = '$data[trip_insurance_co]',
+		`trip_insurance_other` = '$data[trip_insurance_other]',
+		`trip_insurance_number` = '$data[trip_insurance_number]',
+		`trip_insurance_date` = '$data[trip_insurance_date]',
+		`application_complete` = '$data[application_complete]',
+		`medical_email` = '$data[medical_email]'
+
+		WHERE `inventoryID` = '$inventoryID'
+		";
+		//print "$sql<br><br>";
+		$result = $this->new_mysql($sql);
+        }
 
 
 	/* This will generate the calendar from locate charters */
