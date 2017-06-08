@@ -115,6 +115,7 @@ class common extends destinations {
 				if ($new_row != "") {
 					$html .= "</div>";
 					$html .= '<div class="row"><div class="col-lg-12 "><div class="alert alert-info">&nbsp;</div></div></div>';
+					$counter = 0;
 				}
 				$html .= "<div class=\"row text-center pad-top\">";
 				$new_row = $row['row'];

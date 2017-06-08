@@ -15,27 +15,27 @@
 	<div class="stepwizard col-sm-12">
 		<div class="stepwizard-row setup-panel">
 			<div class="stepwizard-step">
-				<a href="javascript:void(0)" type="button" id="step1" class="btn btn-primary btn-circle" disabled="disabled">1</a>
+				<a href="javascript:void(0)" type="button" id="step1" class="btn btn-primary btn-circle">1</a>
 				<p>Booker</p>
 			</div>
 			<div class="stepwizard-step">
-				<a href="javascript:void(0)" type="button" id="step2" class="btn btn-default btn-circle" disabled="disabled">2</a>
+				<a href="javascript:void(0)" type="button" id="step2" class="btn btn-default btn-circle">2</a>
 				<p>Reseller</p>
 			</div>
-			<div class="stepwizard-step">
-				<a href="javascript:void(0)" type="button" id="step3" class="btn btn-default btn-circle" disabled="disabled">3</a>
-				<p>Agent</p>
-			</div>
                         <div class="stepwizard-step">
-                                <a href="javascript:void(0)" type="button" id="step4" class="btn btn-default btn-circle" disabled="disabled">4</a>
+                                <a href="javascript:void(0)" type="button" id="step3" class="btn btn-default btn-circle">3</a>
+                                <p>Agent</p>
+                        </div>
+                        <div class="stepwizard-step">
+                                <a href="javascript:void(0)" type="button" id="step4" class="btn btn-default btn-circle">4</a>
                                 <p>Contact</p>
                         </div>
                         <div class="stepwizard-step">
-                                <a href="javascript:void(0)" type="button" id="step5" class="btn btn-default btn-circle" disabled="disabled">5</a>
+                                <a href="javascript:void(0)" type="button" id="step5" class="btn btn-default btn-circle">5</a>
                                 <p>Stateroom</p>
                         </div>
                         <div class="stepwizard-step">
-                                <a href="javascript:void(0)" type="button" id="step6" class="btn btn-default btn-circle" disabled="disabled">6</a>
+                                <a href="javascript:void(0)" type="button" id="step6" class="btn btn-default btn-circle">6</a>
                                 <p>Passenger</p>
                         </div>
 		</div>
@@ -43,7 +43,7 @@
 </div>
 <div id="interactive">
 	<input type="hidden" name="reservation_sourceID" value="23">
-
+	<input type="hidden" name="charterID" value="{$charterID}">
 	<div class="row pad-top">
 		<div class="col-sm-12"><h4>Booking Agent</h4></div>
 	</div>

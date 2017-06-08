@@ -9,24 +9,27 @@ if ($_SESSION['logged'] == "TRUE") {
 
 	?>
 	<script>
-		document.getElementById('step1').classList.remove('btn-primary');
-                document.getElementById('step2').classList.remove('btn-default');
-                document.getElementById('step1').classList.add('btn-default');
-                document.getElementById('step2').classList.add('btn-primary');
+		document.getElementById('step2').classList.remove('btn-primary');
+                document.getElementById('step3').classList.remove('btn-default');
+                document.getElementById('step2').classList.add('btn-default');
+                document.getElementById('step3').classList.add('btn-primary');
 
 	</script>
 	<?php
 
+	print "<pre>";
+	print_r($_GET);
+	print "</pre>";
+
+/*
 	foreach ($_GET as $key=>$value) {
 		$data[$key] = $value;
 	}
 
-        $data['country'] = $core->list_country(null);
-        $data['state'] = $core->list_states(null);
 
-	$template = "new_reservation_step2.tpl";
+	$template = "new_reservation_step3.tpl";
 	$core->load_smarty($data,$template);
-
+*/
 
 } else {
         $msg = "Your session has expired. Please log back in.";
