@@ -88,14 +88,23 @@ if ($_SESSION['logged'] == "TRUE") {
 			$g[$key] = urlencode($value);
 		}
 
-		$search_results .= "
-		<tr onclick=\"step3($row[resellerID],'$g[reservation_sourceID]','$g[charterID]','$g[userID]','$g[reservation_type]',this.form)\">
+		$found = "0";
+		$sql2 = "SELECT `reseller_agentID` FROM `reseller_agents` WHERE `resellerID` = '$row[resellerID]' AND `status` = 'Active'";
+		$result2 = $core->new_mysql($sql2);
+		while ($row2 = $result2->fetch_assoc()) {
+			$found = "1";
+		}
+
+		if ($found == "1") {
+			$search_results .= "
+			<tr onclick=\"step3($row[resellerID],'$g[reservation_sourceID]','$g[charterID]','$g[userID]','$g[reservation_type]',this.form)\">
 			<td>$row[type]</td>
 			<td>$row[company]</td>
 			<td>$row[state]$row[province]</td>
 			<td>$row[commission]</td>
 			<td>$row[status]</td>
-		</tr>";
+			</tr>";
+		}
 	}
 	$data['search_results'] = $search_results;
 	$core->load_smarty($data,$template);

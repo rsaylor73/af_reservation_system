@@ -16,19 +16,19 @@
 		<div class="stepwizard-row setup-panel">
 			<div class="stepwizard-step">
 				<a href="javascript:void(0)" type="button" id="step1" class="btn btn-primary btn-circle">1</a>
-				<p>Booker</p>
+				<p>Booker&nbsp;&nbsp;&nbsp;</p>
 			</div>
 			<div class="stepwizard-step">
 				<a href="javascript:void(0)" type="button" id="step2" class="btn btn-default btn-circle">2</a>
-				<p>Reseller</p>
+				<p>Reseller&nbsp;</p>
 			</div>
                         <div class="stepwizard-step">
                                 <a href="javascript:void(0)" type="button" id="step3" class="btn btn-default btn-circle">3</a>
-                                <p>Agent</p>
+                                <p>Agent&nbsp;&nbsp;&nbsp;&nbsp;</p>
                         </div>
                         <div class="stepwizard-step">
                                 <a href="javascript:void(0)" type="button" id="step4" class="btn btn-default btn-circle">4</a>
-                                <p>Contact</p>
+                                <p>Contact&nbsp;&nbsp;</p>
                         </div>
                         <div class="stepwizard-step">
                                 <a href="javascript:void(0)" type="button" id="step5" class="btn btn-default btn-circle">5</a>
@@ -42,6 +42,7 @@
 	</div>
 </div>
 <div id="interactive">
+	<div class="well">
 	<input type="hidden" name="reservation_sourceID" value="23">
 	<input type="hidden" name="charterID" value="{$charterID}">
 	<div class="row pad-top">
@@ -67,6 +68,7 @@
 			<input type="button" value="Continue to Step 2" class="btn btn-primary" onclick="step2(this.form)" id="continue" disabled>
 		</div>
 		<div class="col-sm-6">&nbsp;</div>
+	</div>
 	</div>
 </div>
 

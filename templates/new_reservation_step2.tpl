@@ -3,9 +3,10 @@
 <input type="hidden" name="userID" value="{$userID}">
 <input type="hidden" name="reservation_type" value="{$reservation_type}">
 
+<div class="well">
 <div class="row pad-top">
 	<div class="col-sm-12">
-		<h4>Company Reseller</h4>
+		<h4>Reseller</h4>
 	</div>
 </div>
 
@@ -42,6 +43,7 @@
 
 <div class="row pad-top">
 	<div class="col-sm-12"><input type="button" onclick="search_reseller(this.form)" value="Search" class="btn btn-success"></div>
+</div>
 </div>
 
 <div id="search_results">
