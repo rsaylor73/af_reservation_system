@@ -15,27 +15,27 @@
 	<div class="stepwizard col-sm-12">
 		<div class="stepwizard-row setup-panel">
 			<div class="stepwizard-step">
-				<a href="javascript:void(0)" type="button" id="step1" class="btn btn-primary btn-circle">1</a>
+				<input type="button" id="s1" class="btn btn-primary btn-circle" value="1" onclick="document.location.href='/new_reservation/{$charterID}/1'" {$tab1}>
 				<p>Booker&nbsp;&nbsp;&nbsp;</p>
 			</div>
 			<div class="stepwizard-step">
-				<a href="javascript:void(0)" type="button" id="step2" class="btn btn-default btn-circle">2</a>
+                                <input type="button" id="s2" class="btn btn-default btn-circle" value="2" onclick="document.location.href='/new_reservation/{$charterID}/2'" {$tab2}>
 				<p>Reseller&nbsp;</p>
 			</div>
                         <div class="stepwizard-step">
-                                <a href="javascript:void(0)" type="button" id="step3" class="btn btn-default btn-circle">3</a>
+                                <input type="button" id="s3" class="btn btn-default btn-circle" value="3" onclick="document.location.href='/new_reservation/{$charterID}/3'" {$tab3}>
                                 <p>Agent&nbsp;&nbsp;&nbsp;&nbsp;</p>
                         </div>
                         <div class="stepwizard-step">
-                                <a href="javascript:void(0)" type="button" id="step4" class="btn btn-default btn-circle">4</a>
+                                <input type="button" id="s4" class="btn btn-default btn-circle" value="4" onclick="document.location.href='/new_reservation/{$charterID}/4'" {$tab4}>
                                 <p>Contact&nbsp;&nbsp;</p>
                         </div>
                         <div class="stepwizard-step">
-                                <a href="javascript:void(0)" type="button" id="step5" class="btn btn-default btn-circle">5</a>
+                                <input type="button" id="s5" class="btn btn-default btn-circle" value="5" onclick="document.location.href='/new_reservation/{$charterID}/5'" {$tab5}>
                                 <p>Stateroom</p>
                         </div>
                         <div class="stepwizard-step">
-                                <a href="javascript:void(0)" type="button" id="step6" class="btn btn-default btn-circle">6</a>
+                                <input type="button" id="s6" class="btn btn-default btn-circle" value="6" onclick="document.location.href='/new_reservation/{$charterID}/6'" {$tab6}>
                                 <p>Passenger</p>
                         </div>
 		</div>
@@ -65,7 +65,7 @@
 	<div class="row pad-top">
 		<div class="col-sm-6">
 			<input type="button" value="Cancel" class="btn btn-warning" onclick="document.location.href='/view_charter/{$charterID}'">&nbsp;
-			<input type="button" value="Continue to Step 2" class="btn btn-primary" onclick="step2(this.form)" id="continue" disabled>
+			<input type="button" value="Continue to Step 2" class="btn btn-primary" onclick="step2(this.form)" id="continue" {$continue}>
 		</div>
 		<div class="col-sm-6">&nbsp;</div>
 	</div>

@@ -44,7 +44,7 @@ RewriteRule ^edit_destination/([a-zA-Z0-9]+)/([a-zA-Z0-9]+)/?$ index.php?section
 RewriteRule ^delete_destination/([a-zA-Z0-9]+)/([a-zA-Z0-9]+)/?$ index.php?section=delete_destination&destinationID=$1&boatID=$2 [NC,L]
 RewriteRule ^contact/([a-zA-Z0-9]+)/([a-zA-Z0-9]+)/?$ index.php?section=contacts_part&part=$1&contactID=$2 [NC,L]
 RewriteRule ^view_charter/([a-zA-Z0-9]+)/([a-zA-Z0-9]+)/?$ index.php?section=view_charter&charterID=$1&complete=$2 [NC,L]
-
+RewriteRule ^new_reservation/([a-zA-Z0-9]+)/([a-zA-Z0-9]+)/?$ index.php?section=new_reservation&charterID=$1&tab=$2 [NC,L]
 
 # Four params
 RewriteRule ^contact/delete_imported/([a-zA-Z0-9]+)/([a-zA-Z0-9]+)/?$ index.php?section=delete_imported&id=$1&contactID=$2 [NC,L]

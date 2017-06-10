@@ -7,6 +7,11 @@ $smarty->error_reporting = E_ALL & ~E_NOTICE;
 if ($_SESSION['logged'] == "TRUE") {
 	$core->security('new_reservation',$_SESSION['user_typeID']);
 
+        // build history
+        $charter = $_GET['charterID'];
+        $_SESSION['c'][$charter]['step2'] = 'complete';
+        $_SESSION['c'][$charter]['resellerID'] = $_GET['resellerID'];
+
 	?>
 	<script>
 		document.getElementById('step2').classList.remove('btn-primary');

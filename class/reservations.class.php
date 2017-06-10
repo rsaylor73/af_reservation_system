@@ -6,6 +6,44 @@ class reservations extends charters {
 	/* This will allow the user to create a new reservation */
 	public function new_reservation() {
 		$this->security('new_reservation',$_SESSION['user_typeID']);
+		// load current tab
+		if ($_GET['tab'] != "") {
+			$data['tab'] = $_GET['tab'];
+		}
+
+                $data['tab1'] = "disabled";
+                $data['tab2'] = "disabled";
+                $data['tab3'] = "disabled";
+		$data['tab4'] = "disabled";
+		$data['tab5'] = "disabled";
+		$data['tab6'] = "disabled";
+
+		// history
+		$charter = $_GET['charterID'];
+
+		if ($_SESSION['c'][$charter]['step1'] == "complete") {
+			$data['tab1'] = "";
+		}
+                if ($_SESSION['c'][$charter]['step2'] == "complete") {
+                        $data['tab2'] = "";
+                }
+                if ($_SESSION['c'][$charter]['step3'] == "complete") {
+                        $data['tab3'] = "";
+                }
+                if ($_SESSION['c'][$charter]['step4'] == "complete") {
+                        $data['tab4'] = "";
+                }
+                if ($_SESSION['c'][$charter]['step5'] == "complete") {
+                        $data['tab5'] = "";
+                }
+                if ($_SESSION['c'][$charter]['step6'] == "complete") {
+                        $data['tab6'] = "";
+                }
+
+
+
+		// end history
+
 
 		// get charter info
 		$sql = "
@@ -29,6 +67,7 @@ class reservations extends charters {
 			}
 		}
 
+		$data['continue'] = "disabled";
 		// get AF active agents
 		$options = "<option value=\"\">Select</option>";
 		$bookers = $this->objectToArray(json_decode($this->get_agents()));
@@ -44,7 +83,13 @@ class reservations extends charters {
 					$last = $value;
 				}
 			}
-			$options .= "<option value=\"$userID\">$first $last</option>";
+			$charter = $_GET['charterID'];
+			if ($userID == $_SESSION['c'][$charter]['userID']) {
+				$data['continue'] = "";
+				$options .= "<option selected value=\"$userID\">$first $last</option>";
+			} else {
+                                $options .= "<option value=\"$userID\">$first $last</option>";
+			}
 			
 		}
 		$data['options'] = $options;

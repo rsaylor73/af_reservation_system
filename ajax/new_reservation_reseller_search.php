@@ -7,6 +7,24 @@ $smarty->error_reporting = E_ALL & ~E_NOTICE;
 if ($_SESSION['logged'] == "TRUE") {
         $core->security('new_reservation',$_SESSION['user_typeID']);
 
+        if ($_GET['ajax'] != "1") {
+                foreach($_SESSION as $key=>$value) { 
+                        if(preg_match("/c_/",$key)) {
+                                $_GET[$key] = $value;
+                        }
+                }
+        } 
+
+        if ($_GET['ajax'] == "1") {
+                foreach ($_GET as $key=>$value) {
+                        if ($key != "ajax") {
+                                if(preg_match("/c_/",$key)) {
+                                        $_SESSION[$key] = $value;
+                                }
+                        }
+                }
+        }
+
 	foreach($_GET as $key=>$value) {
 		$data[$key] = $value;
 	}
@@ -27,33 +45,33 @@ if ($_SESSION['logged'] == "TRUE") {
 			`resellers` r,
 			`reseller_types` t
 		WHERE
-			`r`.`resellerID` = '$_GET[resellerID]'
+			`r`.`resellerID` = '$_GET[c_resellerID]'
 			AND `r`.`reseller_typeID` = `t`.`reseller_typeID`
 
 		LIMIT 1
 		";
 
 	} else {
-		if ($_GET['company'] != "") {
-			$company = "AND `r`.`company` LIKE '%$_GET[company]%'";
+		if ($_GET['c_company'] != "") {
+			$company = "AND `r`.`company` LIKE '%$_GET[c_company]%'";
 		}
-		if ($_GET['name'] != "") {
-			$name = "AND CONCAT(`r`.`first`,' ',`r`.`last`) LIKE '%$_GET[name]%'";
+		if ($_GET['c_name'] != "") {
+			$name = "AND CONCAT(`r`.`first`,' ',`r`.`last`) LIKE '%$_GET[c_name]%'";
 		}
-		if ($_GET['status'] != "All") {
-			$status = "AND `r`.`status` = '$_GET[status]'";
+		if ($_GET['c_status'] != "All") {
+			$status = "AND `r`.`status` = '$_GET[c_status]'";
 		}
-		if ($_GET['city'] != "") {
-			$city = "AND `r`.`city` LIKE '%$_GET[city]%'";
+		if ($_GET['c_city'] != "") {
+			$city = "AND `r`.`city` LIKE '%$_GET[c_city]%'";
 		}
-		if (($_GET['state'] != "") && ($_GET['country'] == "2")) {
-			$state = "AND `r`.`state` LIKE '%$_GET[state]%'";
+		if (($_GET['c_state'] != "") && ($_GET['c_country'] == "2")) {
+			$state = "AND `r`.`state` LIKE '%$_GET[c_state]%'";
 		}
-                if (($_GET['state'] != "") && ($_GET['country'] != "2")) {
-                        $state = "AND `r`.`province` LIKE '%$_GET[state]%'";
+                if (($_GET['c_state'] != "") && ($_GET['c_country'] != "2")) {
+                        $state = "AND `r`.`province` LIKE '%$_GET[c_state]%'";
 		}
-		if ($_GET['country'] != "") {
-			$country = "AND `r`.`countryID` = '$_GET[country]'";
+		if ($_GET['c_country'] != "") {
+			$country = "AND `r`.`countryID` = '$_GET[c_country]'";
 		}
 
                 $sql = "
@@ -84,9 +102,6 @@ if ($_SESSION['logged'] == "TRUE") {
 	}
 	$result = $core->new_mysql($sql);
 	while ($row = $result->fetch_assoc()) {
-		foreach($_GET as $key=>$value) {
-			$g[$key] = urlencode($value);
-		}
 
 		$found = "0";
 		$sql2 = "SELECT `reseller_agentID` FROM `reseller_agents` WHERE `resellerID` = '$row[resellerID]' AND `status` = 'Active'";
@@ -97,7 +112,7 @@ if ($_SESSION['logged'] == "TRUE") {
 
 		if ($found == "1") {
 			$search_results .= "
-			<tr onclick=\"step3($row[resellerID],'$g[reservation_sourceID]','$g[charterID]','$g[userID]','$g[reservation_type]',this.form)\">
+			<tr onclick=\"step3($row[resellerID],'$_GET[reservation_sourceID]','$_GET[charterID]','$_GET[userID]','$_GET[reservation_type]',this.form)\">
 			<td>$row[type]</td>
 			<td>$row[company]</td>
 			<td>$row[state]$row[province]</td>
