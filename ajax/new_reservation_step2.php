@@ -14,7 +14,7 @@ if ($_SESSION['logged'] == "TRUE") {
 
 		document.getElementById('s1').classList.remove('btn-primary');
                 document.getElementById('s2').classList.remove('btn-default');
-                document.getElementById('s1').classList.add('btn-default');
+                document.getElementById('s1').classList.add('btn-success');
                 document.getElementById('s2').classList.add('btn-primary');
 
 	</script>
@@ -22,7 +22,7 @@ if ($_SESSION['logged'] == "TRUE") {
 
 	// build history
 	$charter = $_GET['charterID'];
-	$_SESSION['c'][$charter]['step1'] = 'complete';
+	$_SESSION['c'][$charter]['s1'] = 'complete';
 	$_SESSION['c'][$charter]['userID'] = $_GET['userID'];
 
 

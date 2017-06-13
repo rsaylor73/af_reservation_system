@@ -7,6 +7,38 @@
 <input type="hidden" name="reseller_agentID" value="{$reseller_agentID}">
 <br>
 
+{if $contact_details ne ""}
+<div class="well">
+        <div class="row pad-top">
+                <div class="col-sm-12">
+                        <h4>Selected Contact</h4>
+                </div>
+        </div>
+        <div class="row pad-top">
+                <div class="col-sm-12">
+                        <div class="alert alert-success"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i>&nbsp;
+The contact listed below is the current selected contact for this reservation. If you wish to change the contact you may select the reseller agent or use the contact search form.
+			</div>
+                </div>
+        </div>
+        <div class="row pad-top">
+                <div class="col-sm-12">
+                        <table class="table table-striped table-hover">
+                                <tr>
+                                        <td><b>Name</b></td>
+                                        <td><b>City</b></td>
+                                        <td><b>Phone</b></td>
+                                        <td><b>Email</b></td>
+                                </tr>
+                                {$contact_details}
+                        </table>
+                </div>
+        </div>
+</div>
+
+
+{/if}
+
 {if $agent_results ne ""}
 <div class="well">
 	<div class="row pad-top">

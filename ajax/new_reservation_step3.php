@@ -8,16 +8,32 @@ if ($_SESSION['logged'] == "TRUE") {
 	$core->security('new_reservation',$_SESSION['user_typeID']);
 
         // build history
-        $charter = $_GET['charterID'];
-        $_SESSION['c'][$charter]['step2'] = 'complete';
-        $_SESSION['c'][$charter]['resellerID'] = $_GET['resellerID'];
+	if (($_GET['charterID'] == '') && ($_GET['resellerID'] == '')) {
+		$charter = $_SESSION['charterID'];
+		$_GET['charterID'] = $_SESSION['charterID'];
+		$_GET['resellerID'] = $_SESSION['c'][$charter]['resellerID'];
+		$_GET['reservation_sourceID'] = $_SESSION['c'][$charter]['reservation_sourceID'];
+		$_GET['userID'] = $_SESSION['c'][$charter]['userID'];
+		$_GET['reservation_type'] = $_SESSION['c'][$charter]['reservation_type'];
+
+	} else {
+	        $charter = $_GET['charterID'];
+	        $_SESSION['c'][$charter]['s2'] = 'complete';
+	        $_SESSION['c'][$charter]['resellerID'] = $_GET['resellerID'];
+		$_SESSION['c'][$charter]['reservation_sourceID'] = $_GET['reservation_sourceID'];
+		$_SESSION['c'][$charter]['userID'] = $_GET['userID'];
+		$_SESSION['c'][$charter]['reservation_type'] = $_GET['reservation_type'];
+	}
+
 
 	?>
 	<script>
-		document.getElementById('step2').classList.remove('btn-primary');
-                document.getElementById('step3').classList.remove('btn-default');
-                document.getElementById('step2').classList.add('btn-default');
-                document.getElementById('step3').classList.add('btn-primary');
+                document.getElementById('s2').disabled = false;
+
+		document.getElementById('s2').classList.remove('btn-primary');
+                document.getElementById('s3').classList.remove('btn-default');
+                document.getElementById('s2').classList.add('btn-success');
+                document.getElementById('s3').classList.add('btn-primary');
 
 	</script>
 	<?php

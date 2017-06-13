@@ -7,12 +7,17 @@ $smarty->error_reporting = E_ALL & ~E_NOTICE;
 if ($_SESSION['logged'] == "TRUE") {
         $core->security('new_reservation',$_SESSION['user_typeID']);
 
+
         if ($_GET['ajax'] != "1") {
                 foreach($_SESSION as $key=>$value) { 
                         if(preg_match("/c_/",$key)) {
                                 $_GET[$key] = $value;
                         }
                 }
+		$_GET['charterID'] = $_SESSION['charterID'];
+		$_GET['reservation_sourceID'] = $_SESSION['reservation_sourceID'];
+		$_GET['userID'] = $_SESSION['userID'];
+		$_GET['reservation_type'] = $_SESSION['reservation_type'];
         } 
 
         if ($_GET['ajax'] == "1") {
@@ -23,6 +28,10 @@ if ($_SESSION['logged'] == "TRUE") {
                                 }
                         }
                 }
+		$_SESSION['charterID'] = $_GET['charterID'];
+		$_SESSION['reservation_sourceID'] = $_GET['reservation_sourceID'];
+		$_SESSION['userID'] = $_GET['userID'];
+		$_SESSION['reservation_type'] = $_GET['reservation_type'];
         }
 
 	foreach($_GET as $key=>$value) {

@@ -7,12 +7,18 @@ $smarty->error_reporting = E_ALL & ~E_NOTICE;
 if ($_SESSION['logged'] == "TRUE") {
         $core->security('new_reservation',$_SESSION['user_typeID']);
 
+	$charter = $_GET['charterID'];
+        $_SESSION['c'][$charter]['s4'] = 'complete';
+	$_SESSION['c'][$charter]['contactID'] = $_GET['contactID'];
+
         ?>
         <script>
-                document.getElementById('step4').classList.remove('btn-primary');
-                document.getElementById('step5').classList.remove('btn-default');
-                document.getElementById('step4').classList.add('btn-default');
-                document.getElementById('step5').classList.add('btn-primary');
+                document.getElementById('s4').disabled = false;
+
+                document.getElementById('s4').classList.remove('btn-primary');
+                document.getElementById('s5').classList.remove('btn-default');
+                document.getElementById('s4').classList.add('btn-success');
+                document.getElementById('s5').classList.add('btn-primary');
 
         </script>
         <?php

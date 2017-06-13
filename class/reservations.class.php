@@ -6,38 +6,114 @@ class reservations extends charters {
 	/* This will allow the user to create a new reservation */
 	public function new_reservation() {
 		$this->security('new_reservation',$_SESSION['user_typeID']);
-		// load current tab
-		if ($_GET['tab'] != "") {
-			$data['tab'] = $_GET['tab'];
-		}
+
 
                 $data['tab1'] = "disabled";
+		$data['tab1_color'] = "primary";
                 $data['tab2'] = "disabled";
+		$data['tab2_color'] = "default";
                 $data['tab3'] = "disabled";
-		$data['tab4'] = "disabled";
-		$data['tab5'] = "disabled";
-		$data['tab6'] = "disabled";
+		$data['tab3_color'] = "default";
+                $data['tab4'] = "disabled";
+		$data['tab4_color'] = "default";
+                $data['tab5'] = "disabled";
+		$data['tab5_color'] = "default";
+                $data['tab6'] = "disabled";
+		$data['tab6_color'] = "default";
+
+		// load current tab
+		switch ($_GET['tab']) {
+			case "1":
+			$data['tab1'] = "";
+			$data['tab1_color'] = "success";
+			break;
+
+			case "2":
+                        $data['tab1'] = "";
+                        $data['tab1_color'] = "success";
+                        $data['tab2'] = "";
+                        $data['tab2_color'] = "success";
+			$data['tab2_click'] = "yes";
+                        break;
+
+                        case "3":
+                        $data['tab1'] = "";
+                        $data['tab1_color'] = "success";                        
+                        $data['tab2'] = "";
+                        $data['tab2_color'] = "success";
+                        $data['tab3'] = "";
+                        $data['tab3_color'] = "success";
+			$data['tab3_click'] = "yes";
+                        break;
+
+                        case "4":
+                        $data['tab1'] = "";
+                        $data['tab1_color'] = "success";
+                        $data['tab2'] = "";
+                        $data['tab2_color'] = "success";                        
+                        $data['tab3'] = "";
+                        $data['tab3_color'] = "success";
+                        $data['tab4'] = "";
+                        $data['tab4_color'] = "success";
+			$data['tab4_click'] = "yes";
+                        break;
+
+                        case "5":
+                        $data['tab1'] = "";
+                        $data['tab1_color'] = "success";
+                        $data['tab2'] = "";
+                        $data['tab2_color'] = "success";
+                        $data['tab3'] = "";
+                        $data['tab3_color'] = "success";                        
+                        $data['tab4'] = "";
+                        $data['tab4_color'] = "success";
+                        $data['tab5'] = "";
+                        $data['tab5_color'] = "success";
+                        break;
+
+                        case "6":
+                        $data['tab1'] = "";
+                        $data['tab1_color'] = "success";
+                        $data['tab2'] = "";
+                        $data['tab2_color'] = "success";
+                        $data['tab3'] = "";
+                        $data['tab3_color'] = "success";
+                        $data['tab4'] = "";
+                        $data['tab4_color'] = "success";                        
+                        $data['tab5'] = "";
+                        $data['tab5_color'] = "success";
+                        $data['tab6'] = "";
+                        $data['tab6_color'] = "success";
+                        break;
+		}
+
 
 		// history
 		$charter = $_GET['charterID'];
 
-		if ($_SESSION['c'][$charter]['step1'] == "complete") {
-			$data['tab1'] = "";
+		if ($_SESSION['c'][$charter]['s1'] == "complete") {
+                        $data['tab1'] = "";
+                        $data['tab1_color'] = "success";
 		}
-                if ($_SESSION['c'][$charter]['step2'] == "complete") {
+                if ($_SESSION['c'][$charter]['s2'] == "complete") {
                         $data['tab2'] = "";
+                        $data['tab2_color'] = "success";
                 }
-                if ($_SESSION['c'][$charter]['step3'] == "complete") {
+                if ($_SESSION['c'][$charter]['s3'] == "complete") {
                         $data['tab3'] = "";
+                        $data['tab3_color'] = "success";
                 }
-                if ($_SESSION['c'][$charter]['step4'] == "complete") {
+                if ($_SESSION['c'][$charter]['s4'] == "complete") {
                         $data['tab4'] = "";
+                        $data['tab4_color'] = "success";
                 }
-                if ($_SESSION['c'][$charter]['step5'] == "complete") {
+                if ($_SESSION['c'][$charter]['s5'] == "complete") {
                         $data['tab5'] = "";
+                        $data['tab5_color'] = "success";
                 }
-                if ($_SESSION['c'][$charter]['step6'] == "complete") {
+                if ($_SESSION['c'][$charter]['s6'] == "complete") {
                         $data['tab6'] = "";
+                        $data['tab6_color'] = "success";
                 }
 
 

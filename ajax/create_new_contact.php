@@ -7,14 +7,11 @@ $smarty->error_reporting = E_ALL & ~E_NOTICE;
 if ($_SESSION['logged'] == "TRUE") {
         $core->security('new_reservation',$_SESSION['user_typeID']);
 
-	print "Test Create new contact<br>";
-
-	print "<pre>";
-	print_r($_GET);
-	print "</pre>";
-
-
-
+	foreach ($_GET as $key=>$value) {
+		$data[$key] = $value;
+	}
+	$template = "create_new_contact.tpl";
+	$core->load_smarty($data,$template);
 
 } else {
         $msg = "Your session has expired. Please log back in.";

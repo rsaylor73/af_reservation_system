@@ -15,27 +15,27 @@
 	<div class="stepwizard col-sm-12">
 		<div class="stepwizard-row setup-panel">
 			<div class="stepwizard-step">
-				<input type="button" id="s1" class="btn btn-primary btn-circle" value="1" onclick="document.location.href='/new_reservation/{$charterID}/1'" {$tab1}>
+				<input type="button" id="s1" class="btn btn-{$tab1_color} btn-circle" value="1" onclick="document.location.href='/new_reservation/{$charterID}/1'" {$tab1}>
 				<p>Booker&nbsp;&nbsp;&nbsp;</p>
 			</div>
 			<div class="stepwizard-step">
-                                <input type="button" id="s2" class="btn btn-default btn-circle" value="2" onclick="document.location.href='/new_reservation/{$charterID}/2'" {$tab2}>
+                                <input type="button" id="s2" class="btn btn-{$tab2_color} btn-circle" value="2" onclick="document.location.href='/new_reservation/{$charterID}/2'" {$tab2}>
 				<p>Reseller&nbsp;</p>
 			</div>
                         <div class="stepwizard-step">
-                                <input type="button" id="s3" class="btn btn-default btn-circle" value="3" onclick="document.location.href='/new_reservation/{$charterID}/3'" {$tab3}>
+                                <input type="button" id="s3" class="btn btn-{$tab3_color} btn-circle" value="3" onclick="document.location.href='/new_reservation/{$charterID}/3'" {$tab3}>
                                 <p>Agent&nbsp;&nbsp;&nbsp;&nbsp;</p>
                         </div>
                         <div class="stepwizard-step">
-                                <input type="button" id="s4" class="btn btn-default btn-circle" value="4" onclick="document.location.href='/new_reservation/{$charterID}/4'" {$tab4}>
+                                <input type="button" id="s4" class="btn btn-{$tab4_color} btn-circle" value="4" onclick="document.location.href='/new_reservation/{$charterID}/4'" {$tab4}>
                                 <p>Contact&nbsp;&nbsp;</p>
                         </div>
                         <div class="stepwizard-step">
-                                <input type="button" id="s5" class="btn btn-default btn-circle" value="5" onclick="document.location.href='/new_reservation/{$charterID}/5'" {$tab5}>
+                                <input type="button" id="s5" class="btn btn-{$tab5_color} btn-circle" value="5" onclick="document.location.href='/new_reservation/{$charterID}/5'" {$tab5}>
                                 <p>Stateroom</p>
                         </div>
                         <div class="stepwizard-step">
-                                <input type="button" id="s6" class="btn btn-default btn-circle" value="6" onclick="document.location.href='/new_reservation/{$charterID}/6'" {$tab6}>
+                                <input type="button" id="s6" class="btn btn-{$tab6_color} btn-circle" value="6" onclick="document.location.href='/new_reservation/{$charterID}/6'" {$tab6}>
                                 <p>Passenger</p>
                         </div>
 		</div>
@@ -76,6 +76,25 @@
 </form>
 
 <script>
+
+{if $tab2_click eq "yes"}
+$( document ).ready(function() {
+       tab2(this.form);
+}); 
+{/if}
+
+{if $tab3_click eq "yes"}
+$( document ).ready(function() {
+       tab3(this.form);
+}); 
+{/if}
+
+{if $tab4_click eq "yes"}
+$( document ).ready(function() {
+       tab4(this.form);
+}); 
+{/if}
+
 function step2(myform) {
         $.get('/ajax/new_reservation_step2.php',
         $(myform).serialize(),
@@ -83,4 +102,30 @@ function step2(myform) {
                 $("#interactive").html(php_msg);
         });
 }
+
+function tab2(myform) {
+        $.get('/ajax/new_reservation_step2.php',
+        $(myform).serialize(),
+        function(php_msg) {     
+                $("#interactive").html(php_msg);
+        });
+}
+
+function tab3(myform) {
+        $.get('/ajax/new_reservation_step3.php',
+        $(myform).serialize(),
+        function(php_msg) {     
+                $("#interactive").html(php_msg);
+        });
+}
+
+function tab4(myform) {
+        $.get('/ajax/new_reservation_step4.php',
+        $(myform).serialize(),
+        function(php_msg) {     
+                $("#interactive").html(php_msg);
+        });
+}
+
+
 </script>
