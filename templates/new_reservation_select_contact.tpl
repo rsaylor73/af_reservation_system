@@ -82,7 +82,7 @@ The contact listed below is the current selected contact for this reservation. I
 	<div class="row pad-top">
 		<div class="col-sm-3">Middle Name:</div>
 		<div class="col-sm-3"><input type="text" name="middle" class="form-control"></div>
-		<div class="col-sm-3">DOB:</div>
+		<div class="col-sm-3">DOB: (YYYY-MM-DD)</div>
 		<div class="col-sm-3"><input type="text" name="dob" id="dob" class="form-control"></div>
 	</div>
 	<div class="row pad-top">

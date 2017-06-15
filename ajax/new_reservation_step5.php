@@ -22,11 +22,51 @@ if ($_SESSION['logged'] == "TRUE") {
 
         </script>
         <?php
+	$ses = session_id();
 
-	print "<pre>";
-	print_r($_GET);
-	print "</pre>";
+	$sql = "
+	SELECT
+		`i`.`bunk`,
+		`i`.`inventoryID`,
+		`i`.`timestamp`,
+		`i`.`sessionID`,
+		`i`.`status`,
+		`i`.`bunk_price` + `c`.`add_on_price_commissionable` + `c`.`add_on_price` AS 'bunk_price'
+	FROM
+		`inventory` i,
+		`boats` b,
+		`charters` c
 
+	WHERE
+		`i`.`charterID` = '$_GET[charterID]'
+		AND `i`.`charterID` = `c`.`charterID`
+		AND `c`.`boatID` = `b`.`boatID`
+		AND `i`.`status` = 'avail'
+
+	ORDER BY `i`.`bunk` ASC
+	";
+
+	$result = $core->new_mysql($sql);
+	while ($row = $result->fetch_assoc()) {
+		$disabled = "";
+		$status = $row['status'];
+		if (($row['timestamp'] != "") && ($row['sessionID'] != $ses)) {
+			$disabled = "disabled";
+			$status = "Locked";
+		}
+		$bunks .= "<tr><td>$row[bunk]</td><td>$status</td><td>$ ".number_format($row['bunk_price'],2,'.',',')."</td>
+		<td><input type=\"button\" value=\"Add Bunk\" class=\"btn btn-primary\" $disabled>";
+	}
+	$data['bunks'] = $bunks;
+	foreach ($_GET as $key=>$value) {
+		$data[$key] = $value;
+	}
+
+	// 2020/10/10 12:34:56
+	$timeleft = date("Y/m/d H:i:s", strtotime(" +45 minutes"));
+	$data['timeleft'] = $timeleft;
+	$template = "new_reservation_staterooms.tpl";
+	$core->load_smarty($data,$template);
 
 } else {
         $msg = "Your session has expired. Please log back in.";
