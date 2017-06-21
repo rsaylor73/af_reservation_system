@@ -8,6 +8,23 @@ class reservations extends charters {
 		$this->security('new_reservation',$_SESSION['user_typeID']);
 
 
+	        // check if all bunks assigned
+		$ses = session_id();
+		$charter = $_SESSION['charterID'];
+	        $sql = "SELECT `inventoryID` FROM `inventory` WHERE `charterID` = '$charter' AND `timestamp` > '0' AND `sessionID` = '$ses'";
+	        $result = $this->new_mysql($sql);
+	        while ($row = $result->fetch_assoc()) {
+	                $inv = $row['inventoryID'];
+	                $_SESSION['c'][$charter][$inv] = "";
+	        }
+	        ?>
+	        <script>
+	        document.getElementById('checkout').disabled=true;
+	        </script>
+	        <?php   
+	        // end check
+
+
                 $data['tab1'] = "disabled";
 		$data['tab1_color'] = "primary";
                 $data['tab2'] = "disabled";
@@ -69,6 +86,7 @@ class reservations extends charters {
                         $data['tab4_color'] = "success";
                         $data['tab5'] = "";
                         $data['tab5_color'] = "success";
+                        $data['tab5_click'] = "yes";
                         break;
 
                         case "6":
@@ -170,6 +188,7 @@ class reservations extends charters {
 		}
 		$data['options'] = $options;
 		$data['charterID'] = $_GET['charterID'];
+		$_SESSION['charterID'] = $_GET['charterID'];
 		$template = "new_reservation.tpl";
 		$this->load_smarty($data,$template);
 	}

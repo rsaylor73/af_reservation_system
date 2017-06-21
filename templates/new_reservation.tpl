@@ -65,7 +65,7 @@
 	<div class="row pad-top">
 		<div class="col-sm-6">
 			<input type="button" value="Cancel" class="btn btn-warning" onclick="document.location.href='/view_charter/{$charterID}'">&nbsp;
-			<input type="button" value="Continue to Step 2" class="btn btn-primary" onclick="step2(this.form)" id="continue" {$continue}>
+			<input type="button" value="Next" class="btn btn-primary" onclick="step2(this.form)" id="continue" {$continue}>
 		</div>
 		<div class="col-sm-6">&nbsp;</div>
 	</div>
@@ -92,6 +92,12 @@ $( document ).ready(function() {
 {if $tab4_click eq "yes"}
 $( document ).ready(function() {
        tab4(this.form);
+}); 
+{/if}
+
+{if $tab5_click eq "yes"}
+$( document ).ready(function() {
+       tab5(this.form);
 }); 
 {/if}
 
@@ -127,5 +133,12 @@ function tab4(myform) {
         });
 }
 
+function tab5(myform) {
+        $.get('/ajax/new_reservation_step5.php',
+        $(myform).serialize(),
+        function(php_msg) {     
+                $("#interactive").html(php_msg);
+        });
+}
 
 </script>

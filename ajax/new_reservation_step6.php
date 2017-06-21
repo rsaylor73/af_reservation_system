@@ -33,12 +33,74 @@ if ($_SESSION['logged'] == "TRUE") {
         </script>
 
         <?php
+        $ses = session_id();
 
-	print "<pre>";
-	print_r($_GET);
-	print "</pre>";
+	$sql = "
+	SELECT
+		`i`.`inventoryID`,
+		`i`.`bunk`,
+		`i`.`timestamp`
+
+	FROM
+		`inventory` i
+
+	WHERE
+		`i`.`timestamp` != ''
+		AND `i`.`charterID` = '$_GET[charterID]'
+		AND `i`.`status` = 'avail'
+
+	ORDER BY `i`.`bunk` ASC
+	";
+	$result = $core->new_mysql($sql);
+	while ($row = $result->fetch_assoc()) {
+
+		$timeleft = date("Y/m/d H:i:s", $row['timestamp']);
 
 
+		$output .= "
+		<div class=\"well\">
+			<div class=\"row pad-top\">
+				<div class=\"col-sm-2\"><b>Bunk:</b></div>
+				<div class=\"col-sm-2\"><b>$row[bunk]</b></div>
+				<div class=\"col-sm-2\"><b>Timeleft:</b></div>
+				<div class=\"col-sm-2\"><span id=\"clock".$row['inventoryID']."\"></span></div>
+			</div>
+			<div class=\"row pad-top\">
+				<div class=\"col-sm-12\">
+					<div id=\"pax_$row[inventoryID]\">
+						<input type=\"button\" value=\"Search Passenger\" class=\"btn btn-primary\" onclick=\"search_pax('$row[inventoryID]')\">
+					</div>
+				</div>
+			</div>
+		</div>
+		";
+
+                $output .= "
+                <script>
+                $('#clock".$row['inventoryID']."').countdown('$timeleft')
+                .on('update.countdown', function(event) {
+                  var format = '%H:%M:%S';
+                  if(event.offset.totalDays > 0) {
+                    format = '%-d day%!d ' + format;
+                  }
+                  if(event.offset.weeks > 0) {
+                    format = '%-w week%!w ' + format;
+                  }
+                  $(this).html(event.strftime(format));
+                })
+                .on('finish.countdown', function(event) {
+                  $(this).html('<font color=red>The inventory is at risk of another customer or agent booking</font>')
+                    .parent().addClass('disabled');
+                
+                });
+                </script>
+                ";
+
+	}
+	$data['output'] = $output;
+
+	$template = "new_reservation_assign_pax.tpl";
+	$core->load_smarty($data,$template);
 
 } else {
         $msg = "Your session has expired. Please log back in.";

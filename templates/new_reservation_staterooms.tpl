@@ -16,7 +16,7 @@
 	</div>
 
 	<div class="row pad-top">
-		<div class="col-sm-6">
+		<div class="col-sm-6" id="left_side">
 			<table class="table table-striped">
 				<tr>
 					<td><b>Bunk</b></td>
@@ -28,50 +28,83 @@
 			</table>
 		</div>
 
-                <div class="col-sm-6">
+                <div class="col-sm-6" id="right_side">
                         <table class="table table-striped">
                                 <tr>
+					<td width="20">&nbsp;</td>
                                         <td><b>Bunk</b></td>
                                         <td><b>Status</b></td>
                                         <td><b>Price</b></td>
-                                        <td>&nbsp;</td>
+                                        <td><b>Time Left</b></td>
                                 </tr>
-                        {$pending}
+                        {$bunksright}
+			{if $bunksright eq ""}
+				<tr><td colspan="5"><font color="blue">Please select a stateroom to continue.</font></td></tr>
+				<script>
+					document.getElementById('gotopax').disabled=true;
+				</script>
+			{/if}
+			{if $bunksright ne ""}
+			<script>
+                                        document.getElementById('gotopax').disabled=false;
+			</script>
+			{/if}
                         </table>
                 </div>
 	</div>
 
-	<div class="row pad-top">
-		<div class="col-sm-12">
-			<div class="countdown">
-				<b><font color="blue">The inventory is locked to all other users for the next:<b></font>
-				<span id="clock"></span> <font color=blue><b>minutes</b></font>
-			</div>
-		</div>
-	</div>
 
 	<div class="row pad-top">
 		<div class="col-sm-12">
-			<input type="button" value="Continue To Next Step" class="btn btn-success">
+			<input type="button" id="gotopax" value="Continue To Next Step" class="btn btn-success" onclick="goto_passengers(this.form)">
 		</div>
 	</div>
 </div>
 
 <script>
-$('#clock').countdown('{$timeleft}')
-.on('update.countdown', function(event) {
-  var format = '%H:%M:%S';
-  if(event.offset.totalDays > 0) {
-    format = '%-d day%!d ' + format;
-  }
-  if(event.offset.weeks > 0) {
-    format = '%-w week%!w ' + format;
-  }
-  $(this).html(event.strftime(format));
-})
-.on('finish.countdown', function(event) {
-  $(this).html('This offer has expired!')
-    .parent().addClass('disabled');
 
-});
+
+function quick_book(inventoryID,charterID,resellerID,reseller_agentID,reservation_sourceID,reservation_type,userID,myform) {
+        $.get('/ajax/new_reservation_quickbook.php?inventoryID='+inventoryID+'&charterID='+charterID+'&resellerID='+resellerID+'&reseller_agentID='+reseller_agentID+'&reservation_sourceID='+reservation_sourceID+'&userID='+userID+'&reservation_type='+reservation_type,
+        $(myform).serialize(), // nothing to really serialize cause the form is lost on the 3rd jQuery layer
+        function(php_msg) {     
+                $("#left_side").html(php_msg);
+        });
+	right_side(inventoryID,charterID,resellerID,reseller_agentID,reservation_sourceID,reservation_type,userID,myform);
+}
+
+function delete_bunk(inventoryID,charterID,resellerID,reseller_agentID,reservation_sourceID,reservation_type,userID,deletebunk,myform) {
+        $.get('/ajax/new_reservation_getpending.php?inventoryID='+inventoryID+'&charterID='+charterID+'&resellerID='+resellerID+'&reseller_agentID='+reseller_agentID+'&reservation_sourceID='+reservation_sourceID+'&userID='+userID+'&reservation_type='+reservation_type+'&deletebunk='+deletebunk,
+        $(myform).serialize(), // nothing to really serialize cause the form is lost on the 3rd jQuery layer
+        function(php_msg) {     
+                $("#right_side").html(php_msg);
+        });
+        refresh_left(inventoryID,charterID,resellerID,reseller_agentID,reservation_sourceID,reservation_type,userID,myform);
+}
+
+function refresh_left(inventoryID,charterID,resellerID,reseller_agentID,reservation_sourceID,reservation_type,userID,myform) {
+        $.get('/ajax/new_reservation_refresh_left.php?charterID='+charterID+'&resellerID='+resellerID+'&reseller_agentID='+reseller_agentID+'&reservation_sourceID='+reservation_sourceID+'&userID='+userID+'&reservation_type='+reservation_type,
+        $(myform).serialize(), // nothing to really serialize cause the form is lost on the 3rd jQuery layer
+        function(php_msg) {     
+                $("#left_side").html(php_msg);
+        });
+        right_side(inventoryID,charterID,resellerID,reseller_agentID,reservation_sourceID,reservation_type,userID,myform);
+}
+
+
+function right_side(inventoryID,charterID,resellerID,reseller_agentID,reservation_sourceID,reservation_type,userID,myform) {
+        $.get('/ajax/new_reservation_getpending.php?inventoryID='+inventoryID+'&charterID='+charterID+'&resellerID='+resellerID+'&reseller_agentID='+reseller_agentID+'&reservation_sourceID='+reservation_sourceID+'&userID='+userID+'&reservation_type='+reservation_type,
+        $(myform).serialize(), // nothing to really serialize cause the form is lost on the 3rd jQuery layer
+        function(php_msg) {     
+                $("#right_side").html(php_msg);
+        });
+}
+
+function goto_passengers(myform) {
+        $.get('/ajax/new_reservation_step6.php',
+        $(myform).serialize(),
+        function(php_msg) {     
+                $("#interactive").html(php_msg);
+        });
+}
 </script>
