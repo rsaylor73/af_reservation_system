@@ -1,0 +1,4 @@
+Installed spomky-labs/jose via composer to be used with API
+https://github.com/Spomky-Labs/jose
+
+

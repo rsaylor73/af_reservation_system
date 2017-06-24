@@ -24,6 +24,9 @@
         <li role="presentation"><a href="/contact/notes/{$contactID}">Notes</a></li>
         <li role="presentation"><a href="/contact/cancels/{$contactID}">Cancels</a></li>
         <li role="presentation"><a href="/contact/crsrrs/{$contactID}">CRS/RRS</a></li>
+	{if $reservationID ne ""}
+	        <li role="presentation"><a href="/reservations/{$reservationID}">Back To Reservation {$reservationID}</a></li>
+	{/if}
 </ul>
 
    <!-- Modal -->

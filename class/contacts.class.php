@@ -257,7 +257,9 @@ class contacts extends resellers {
 				}
 			}
 			$data['cancelled_passenger'] = $cancelled_passenger;
-
+			if ($_GET['reservationID'] != "") {
+				$data['reservationID'] = $_GET['reservationID'];
+			}
 
                         $this->load_smarty($data,$template);
 		}

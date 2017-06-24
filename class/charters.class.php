@@ -3,6 +3,46 @@ include PATH."/class/inventory.class.php";
 
 class charters extends inventory {
 
+	/* This will return percent charter booked, bunks left, res pax count */
+	public function get_charter_stats($charterID,$reservationID) {
+                $this->security('reservations',$_SESSION['user_typeID']);
+
+		$sql = "
+                SELECT
+                        COUNT(`inventory`.`inventoryID`) AS 'capacity',
+                        COUNT(CASE WHEN `inventory`.`status` = 'booked' THEN `inventory`.`status` END) AS 'booked',
+                        COUNT(CASE WHEN `inventory`.`status` = 'tentative' THEN `inventory`.`status` END) AS 'tentative',
+                        COUNT(CASE WHEN `inventory`.`status` = 'avail' THEN `inventory`.`status` END) AS 'avail'
+
+                FROM
+                        `inventory`
+
+                WHERE
+                        `charterID` = '$charterID'
+                ";
+		$result = $this->new_mysql($sql);
+		while ($row = $result->fetch_assoc()) {
+			$data['booked'] = $row['booked'];
+			$data['tentative'] = $row['tentative'];
+			$data['avail'] = $row['avail'];
+		}
+
+		$sql = "SELECT COUNT(`inventoryID`) AS 'pax' FROM `inventory` WHERE `reservationID` = '$reservationID'";
+                $result = $this->new_mysql($sql);
+                while ($row = $result->fetch_assoc()) {
+			$data['pax'] = $row['pax'];
+		}
+
+		$sql = "SELECT `add_on_price` + `add_on_price_commissionable` AS 'add_on' FROM `charters` WHERE `charterID` = '$charterID'";
+                $result = $this->new_mysql($sql);
+                while ($row = $result->fetch_assoc()) {
+			$data['add_on'] = $row['add_on'];
+		}
+
+		return(json_encode($data));
+
+	}
+
 	/* This allows the user to view the charter details */
 	public function view_charter() {
                 $this->security('locate_charter',$_SESSION['user_typeID']);

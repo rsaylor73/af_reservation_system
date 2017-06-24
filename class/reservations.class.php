@@ -3,10 +3,101 @@ include PATH."/class/charters.class.php";
 
 class reservations extends charters {
 
+	/* This will allow the user to view a reservation */
+	public function reservations() {
+                $this->security('reservations',$_SESSION['user_typeID']);
+
+		$sql = "
+		SELECT
+			`r`.`reservationID`,
+			`r`.`group_name`,
+                        CONCAT(`u`.`first`,' ',`u`.`last`) AS 'booker_name',
+			`u`.`email` AS 'booker_email',
+			`r`.`reservation_type`,
+			`ra`.`first` AS 'ra_first',
+			`ra`.`last` AS 'ra_last',
+			`ra`.`email` AS 'ra_email',
+			`ra`.`status` AS 'ra_status',
+			`ra`.`waiver` AS 'ra_waiver',
+                        `rs`.`resellerID`,
+                        `rs`.`company`,
+                        `rs`.`commission`,
+                        `rt`.`type`,
+			`ch`.`charterID`,
+			`b`.`name` AS 'boat_name',
+			DATE_FORMAT(`ch`.`start_date`, '%m/%d/%Y') AS 'start_date',
+                        DATE_FORMAT(DATE_ADD(`ch`.`start_date`, INTERVAL `ch`.`nights` DAY), '%m/%d/%Y') AS 'end_date',
+			`ch`.`nights`,
+			`c`.`contactID`,
+			`c`.`first` AS 'c_first',
+			`c`.`middle` AS 'c_middle',
+			`c`.`last` AS 'c_last',
+			`c`.`address1` AS 'c_address1',
+			`c`.`address2` AS 'c_address2',
+			`c`.`city` AS 'c_city',
+			`c`.`state` AS 'c_state',
+			`c`.`province` AS 'c_province',
+			`c`.`zip` AS 'c_zip',
+			`c`.`email` AS 'c_email',
+			`c`.`countryID`,
+			`cn`.`country`,
+			`c`.`phone1_type`,
+			`c`.`phone1`,
+			`c`.`phone2_type`,
+			`c`.`phone2`,
+			`c`.`phone3_type`,
+			`c`.`phone3`,
+			`c`.`phone4_type`,
+			`c`.`phone4`
+
+		FROM
+			`reservations` r,
+			`users` u,
+                        `reseller_agents` ra,
+                        `resellers` rs,
+                        `reseller_types` rt,
+			`charters` ch,
+			`boats` b,
+			`contacts` c
+
+                LEFT JOIN `countries` cn ON `c`.`countryID` = `cn`.`countryID`          
+
+		WHERE
+			`r`.`reservationID` = '$_GET[reservationID]'
+			AND `r`.`userID` = `u`.`userID`
+			AND `r`.`reseller_agentID` = `ra`.`reseller_agentID`
+                        AND `ra`.`resellerID` = `rs`.`resellerID`
+                        AND `rs`.`reseller_typeID` = `rt`.`reseller_typeID`
+			AND `r`.`charterID` = `ch`.`charterID`
+			AND `ch`.`boatID` = `b`.`boatID`
+			AND `r`.`reservation_contactID` = `c`.`contactID`
+		";
+
+		$result = $this->new_mysql($sql);
+		while ($row = $result->fetch_assoc()) {
+			foreach ($row as $key=>$value) {
+				$data[$key] = $value;
+			}
+
+			$charter_data = $this->objectToArray(json_decode($this->get_charter_stats($row['charterID'],$row['reservationID'])));
+			$data['booked'] = $charter_data['booked'];
+			$data['tentative'] = $charter_data['tentative'];
+			$data['avail'] = $charter_data['avail'];
+			$data['pax'] = $charter_data['pax'];		
+			$data['add_on'] = $charter_data['add_on'];
+
+			$total = $charter_data['booked'] + $charter_data['avail'] + $charter_data['tentative'];
+			@$data['percent_booked'] = floor(($charter_data['avail'] / $total)*100);
+
+		}
+
+		$template = "reservations.tpl";
+		$this->load_smarty($data,$template);
+	}
+
 	/* This will allow the user to create a new reservation */
 	public function new_reservation() {
 		$this->security('new_reservation',$_SESSION['user_typeID']);
-
 
 	        // check if all bunks assigned
 		$ses = session_id();

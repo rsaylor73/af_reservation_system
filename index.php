@@ -5,6 +5,14 @@ include "include/settings.php";
 include "include/templates.php";
 $smarty->error_reporting = E_ALL & ~E_NOTICE;
 
+/* The following is called via composer */
+require_once __DIR__.'/vendor/autoload.php';
+
+/* This will be used to generate a bearer token API */
+use Jose\Factory\JWEFactory;
+use Jose\Factory\JWKFactory;
+/* end composer plugin */
+
 // init
 $section = "";
 
