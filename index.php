@@ -5,14 +5,6 @@ include "include/settings.php";
 include "include/templates.php";
 $smarty->error_reporting = E_ALL & ~E_NOTICE;
 
-/* The following is called via composer */
-require_once __DIR__.'/vendor/autoload.php';
-
-/* This will be used to generate a bearer token API */
-use Jose\Factory\JWEFactory;
-use Jose\Factory\JWKFactory;
-/* end composer plugin */
-
 // init
 $section = "";
 
@@ -31,6 +23,7 @@ if ($_POST['section'] != "") {
 }
 
 switch ($section) {
+	case "api_get_token":
 	case "edit_access":
 	case "edit_bunk":
 	case "new_bunk":
@@ -53,26 +46,36 @@ if ($section == "login") {
 	die;
 }
 
-$check = $core->check_login();
-if ($check == "FALSE") {
-	switch ($section) {
-		case "forgotpassword":
-		$smarty->display('forgotpassword.tpl');
-		break;
-
-		default:
-		$smarty->display('login.tpl');
-		break;
-	}
-} else {
-        if ($section == "") {
-		$core->load_module('dashboard');
-        }
-        if ($section != "") {
-                $core->load_module($section);
-        }
-}
 switch ($section) {
+	case "api_get_token":
+		$core->load_module($section);
+	break;
+
+	default:
+	$check = $core->check_login();
+	if ($check == "FALSE") {
+		switch ($section) {
+			case "forgotpassword":
+			$smarty->display('forgotpassword.tpl');
+			break;
+
+			default:
+			$smarty->display('login.tpl');
+			break;
+		}
+	} else {
+	        if ($section == "") {
+			$core->load_module('dashboard');
+	        }
+	        if ($section != "") {
+	                $core->load_module($section);
+	        }
+	}
+	break;
+}
+
+switch ($section) {
+	case "api_get_token":
         case "edit_access":
         case "edit_bunk":
         case "new_bunk":
