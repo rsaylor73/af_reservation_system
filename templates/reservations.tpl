@@ -1,25 +1,12 @@
 <h2><a href="/">Main Menu</a> : Reservations</h2>
 
 {$msg}
-<form name="myform">
-<input type="hidden" name="reservationID" value="{$reservationID}">
 
 <div class="row pad-top">
         <div class="col-sm-12"><h3><a href="/resellers/{$resellerID}" target=_blank>{$company}</a> - {$boat_name} ({$start_date} to {$end_date})</h3></div>
 </div>
 
-<ul class="nav nav-pills">
-        <li role="presentation" class="active"><a href="#">Details</a></li>
-        <li role="presentation" class=""><a href="#">Guests</a></li>
-        <li role="presentation" class=""><a href="#">Dollars</a></li>
-        <li role="presentation" class=""><a href="#">Notes</a></li>
-        <li role="presentation" class=""><a href="#">Options</a></li>
-        <li role="presentation" class=""><a href="#">Airline</a></li>
-        <li role="presentation" class=""><a href="#">Hotel</a></li>
-        <li role="presentation" class=""><a href="#">AAT</a></li>
-        <li role="presentation" class=""><a href="#">Itinerary</a></li>
-        <li role="presentation" class=""><a href="#">Cancel</a></li>
-</ul>
+{include file="reservation_navigation.tpl"}
 
 <div class="well">
 	<div class="well">
@@ -58,7 +45,10 @@
 			</div>
 			<div class="col-sm-2">{$reservation_type}</div>
 			<div class="col-sm-2">{$reservationID}</div>
-			<div class="col-sm-2">TBD</div>
+			<div class="col-sm-2">
+				{if $ra_waiver eq "No"}<font color=red><b>{$ra_waiver}</b></font>{/if}
+				{if $ra_waiver eq "Yes"}<font color=green><b>{$ra_waiver}</b></font>{/if}
+			</div>
 		</div>
 	</div>
 
@@ -83,7 +73,7 @@
 		</div>
 
                 <div class="row pad-top">
-			<div class="col-sm-2">{$resellerID}</div>
+			<div class="col-sm-2"><span id="cb" onclick="data-clipboard-action='copy'>{$resellerID}</span></div>
 			<div class="col-sm-4"><a href="mailto:{$ra_email}">{$ra_first} {$ra_last}</a></div>
 			<div class="col-sm-2">{$company}</div>
 			<div class="col-sm-2">{$type}</div>

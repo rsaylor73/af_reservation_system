@@ -15,7 +15,14 @@
 
 		<div class="row top-buffer">
 			<div class="col-sm-6">Row:</div>
-			<div class="col-sm-6"><input type="number" name="row" value="{$row}" placeholder="Leave blank if none" class="form-control"></div>
+			<div class="col-sm-6"><select name="row" class="form-control">
+				<option {$m0} value="0">Reservations</option>
+				<option {$m1} value="1">Admin</option>
+				<option {$m2} value="2">Admin Reports</option>
+				<option {$m3} value="3">Yacht Owner/Crew</option>
+                                <option {$m4} value="99">Non Menu Items</option>
+
+			</select></div>
 		</div>
 
 		<div class="row top-buffer">

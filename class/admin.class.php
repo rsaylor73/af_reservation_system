@@ -13,17 +13,17 @@ class admin extends contacts {
 	// This allows the admin to add access modals //
 	public function manage_access($msg='') {
                 $this->security('admin_menu',$_SESSION['user_typeID']);
-		$sql = "SELECT `actionID`,`action`,`rank`,`row`,`method`,`icon`,`new_link` FROM `actions` ORDER BY `row` ASC, `rank` ASC, `action` ASC";
+		$sql = "SELECT `actionID`,`action`,`rank`,`row`,`method`,`icon`,`new_link` FROM `actions` WHERE `row` IN ('0','1','2','3','4','5') ORDER BY `row` ASC, `rank` ASC, `action` ASC";
 		$result = $this->new_mysql($sql);
+                $menu_headers = array('0'=>'Reservations','1'=>'Admin','2'=>'Admin Reports','3'=>'Yacht Owner/Crew');
+
 		while ($row = $result->fetch_assoc()) {
-			if (($this_row == "") && ($this_row2 == "")) {
-				$html .= "<tr><td colspan=\"5\"><h2>Non Menu Items</h2></td></tr>";
-				$this_row2 = "1";
+			$counter = $row['row'];
+                        if ($this_row != $row['row']) {
+                                $html .= "<tr><td colspan=\"5\"><h2>".$menu_headers[$counter]."</h2></td></tr>";
+                                $this_row = $row['row'];
 			}
-			if ($this_row != $row['row']) {
-				$html .= "<tr><td colspan=\"5\"><h2>Row $row[row]</h2></td></tr>";
-				$this_row = $row['row'];
-			}
+
 			$html .= "<tr><td>$row[action]</td><td>$row[method]</td><td>$row[icon]</td><td>$row[new_link]</td>
 			<td>
 
@@ -34,6 +34,22 @@ class admin extends contacts {
                      	>Edit</a>
 
 			</td>";
+		}
+
+                $sql = "SELECT `actionID`,`action`,`rank`,`row`,`method`,`icon`,`new_link` FROM `actions` WHERE `row` = '' OR `row` IS NULL ORDER BY `row` ASC, `rank` ASC, `action` ASC";
+                $result = $this->new_mysql($sql);
+                $html .= "<tr><td colspan=\"5\"><h2>Non Menu Items</h2></td></tr>";
+                while ($row = $result->fetch_assoc()) {
+                        $html .= "<tr><td>$row[action]</td><td>$row[method]</td><td>$row[icon]</td><td>$row[new_link]</td>
+                        <td>
+
+                        <a data-toggle=\"modal\" 
+                        style=\"text-decoration:none; color:#FFFFFF;\"
+                        href=\"edit_access/$row[actionID]\" 
+                        data-target=\"#myModal2\" data-backdrop=\"static\" data-keyboard=\"false\" class=\"btn btn-primary\" 
+                        >Edit</a>
+
+                        </td>";
 		}
 
 		$template = "manage_access.tpl";
@@ -53,6 +69,29 @@ class admin extends contacts {
 			foreach ($row as $key=>$value) {
 				$data[$key] = $value;
 			}
+			switch ($row['row']) {
+				case "0":
+				$m0 = "selected";
+				break;
+				case "1":
+				$m1 = "selected";
+				break;
+				case "2":
+				$m2 = "selected";
+				break;
+				case "3":
+				$m3 = "selected";
+				break;
+				default:
+				$m4 = "selected";
+				break;
+			}
+			$data['m0'] = $m0;
+                        $data['m1'] = $m1;
+                        $data['m2'] = $m2;
+                        $data['m3'] = $m3;
+                        $data['m4'] = $m4;
+
 		}
 
 		// get access

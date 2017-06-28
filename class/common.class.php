@@ -65,8 +65,15 @@ class common extends destinations {
 	}
 
 	// This will get the dashboard icons //
-	public function paint_screen($sql_pre="AND `actions`.`row` != '5'") {
+	public function paint_screen($sql_pre="AND `actions`.`row` NOT IN ('3','4','5','99')") {
 		switch ($_SESSION['user_typeID']) {
+			// Yacht Owner/Crew
+			case "4":
+			case "5":
+
+			break;
+
+			// admin
 			case "3":
 			$sql = "
                         SELECT
@@ -87,7 +94,9 @@ class common extends destinations {
                         ";
 			break;
 
-			default:
+			// user and manager
+			case "1":
+			case "2":
 			$sql = "
 			SELECT
 				`actions`.`action` AS 'title',
@@ -109,16 +118,20 @@ class common extends destinations {
 			";
 			break;
 		}
+
+		$menu_headers = array('0'=>'Reservations','1'=>'Admin','2'=>'Admin Reports');
 		$result = $this->new_mysql($sql);
 		while ($row = $result->fetch_assoc()) {
 			if ($new_row != $row['row']) {
 				if ($new_row != "") {
 					$html .= "</div>";
-					$html .= '<div class="row"><div class="col-lg-12 "><div class="alert alert-info">&nbsp;</div></div></div>';
+					//$html .= '<div class="row"><div class="col-lg-12 "><div class="alert alert-info">&nbsp;'.$row['row'].'</div></div></div>';
 					$counter = 0;
 				}
-				$html .= "<div class=\"row text-center pad-top\">";
-				$new_row = $row['row'];
+                                $new_row = $row['row'];
+				$html .= "
+				<div class=\"row\"><div class=\"col-lg-12\"><div class=\"alert alert-info\">&nbsp;<h4>".$menu_headers[$new_row]."</h4></div></div></div>
+				<div class=\"row text-center pad-top\">";
 			}
 
 			if ($row['icon'] == "") {

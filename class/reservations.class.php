@@ -85,6 +85,7 @@ class reservations extends charters {
 			$data['avail'] = $charter_data['avail'];
 			$data['pax'] = $charter_data['pax'];		
 			$data['add_on'] = $charter_data['add_on'];
+			$data['t1'] = "active";
 
 			$total = $charter_data['booked'] + $charter_data['avail'] + $charter_data['tentative'];
 			@$data['percent_booked'] = floor(($charter_data['avail'] / $total)*100);
@@ -94,6 +95,242 @@ class reservations extends charters {
 		$template = "reservations.tpl";
 		$this->load_smarty($data,$template);
 	}
+
+	/* This will pull the header for reservations tab 2 - 10 */
+	private function get_reservations_headers($reservationID) {
+                $sql = "
+                SELECT
+                        DATE_FORMAT(`ch`.`start_date`, '%m/%d/%Y') AS 'start_date',
+                        DATE_FORMAT(DATE_ADD(`ch`.`start_date`, INTERVAL `ch`.`nights` DAY), '%m/%d/%Y') AS 'end_date',
+                        `b`.`name` AS 'boat_name',
+                        `rs`.`company`,
+                        `rs`.`resellerID`
+                FROM
+                        `reservations` r,
+			`charters` ch,
+                        `reseller_agents` ra,
+                        `resellers` rs,
+			`boats` b
+		WHERE
+                        `r`.`reservationID` = '$reservationID'
+                        AND `r`.`reseller_agentID` = `ra`.`reseller_agentID`
+                        AND `ra`.`resellerID` = `rs`.`resellerID`
+                        AND `r`.`charterID` = `ch`.`charterID`
+                        AND `ch`.`boatID` = `b`.`boatID`
+                ";
+		$result = $this->new_mysql($sql);
+		while ($row = $result->fetch_assoc()) {
+			foreach ($row as $key=>$value) {
+				$data[$key] = $value;
+			}
+		}
+		return(json_encode($data));
+	}
+
+	/* This is the 2nd tab on the manage reservation */
+	public function reservations_guests() {
+                $this->security('reservations',$_SESSION['user_typeID']);
+		$data['t2'] = "active";
+		$data['reservationID'] = $_GET['reservationID'];
+
+		/* This will get the data for the top of the tab */
+		$reservation_headers = json_decode($this->get_reservations_headers($_GET['reservationID']));
+		$data['start_date'] = $reservation_headers->start_date;
+		$data['end_date'] = $reservation_headers->end_date;
+		$data['boat_name'] = $reservation_headers->boat_name;
+		$data['company'] = $reservation_headers->company;
+		$data['resellerID'] = $reservation_headers->resellerID;
+		/* End top of tab */
+
+                // get inventory
+                $sql = "
+                SELECT
+                        `i`.`inventoryID`,
+                        `i`.`bunk`,
+                        `i`.`passengerID`,
+                        `i`.`charterID`,
+                        `i`.`reservationID`,
+                        `i`.`login_key` AS 'loginkey',
+                        `c`.`first`,
+                        `c`.`middle`,
+                        `c`.`last`
+                FROM
+                        `inventory` i,
+                        `contacts` c
+                WHERE
+                        `i`.`reservationID` = '$_GET[reservationID]'
+                        AND `i`.`passengerID` = `c`.`contactID`
+
+                ORDER BY `i`.`bunk` ASC
+                ";
+                $result = $this->new_mysql($sql);
+                while ($row = $result->fetch_assoc()) {
+                        $id = $row['passengerID'];
+                        foreach ($row as $key=>$value) {
+                                $data['guests'][$id][$key] = $value;
+                        }
+                }
+
+                //print "<pre>";
+                //print_r($data['guests']);
+                //print "</pre>";
+
+		$template = "reservations_guests.tpl";
+		$this->load_smarty($data,$template);
+	}
+
+	/* This is the 3rd tab */
+	public function reservations_dollars() {
+                $this->security('reservations',$_SESSION['user_typeID']);
+                $data['t3'] = "active";
+                $data['reservationID'] = $_GET['reservationID'];
+
+                /* This will get the data for the top of the tab */
+                $reservation_headers = json_decode($this->get_reservations_headers($_GET['reservationID']));
+                $data['start_date'] = $reservation_headers->start_date;
+                $data['end_date'] = $reservation_headers->end_date;
+                $data['boat_name'] = $reservation_headers->boat_name;
+                $data['company'] = $reservation_headers->company;
+                $data['resellerID'] = $reservation_headers->resellerID;
+                /* End top of tab */
+
+                $template = "reservations_dollars.tpl";
+                $this->load_smarty($data,$template);
+	}
+
+        /* This is the 4th tab */
+        public function reservations_notes() {
+                $this->security('reservations',$_SESSION['user_typeID']);
+                $data['t4'] = "active";
+                $data['reservationID'] = $_GET['reservationID'];
+
+                /* This will get the data for the top of the tab */
+                $reservation_headers = json_decode($this->get_reservations_headers($_GET['reservationID']));
+                $data['start_date'] = $reservation_headers->start_date;
+                $data['end_date'] = $reservation_headers->end_date;
+                $data['boat_name'] = $reservation_headers->boat_name;
+                $data['company'] = $reservation_headers->company;
+                $data['resellerID'] = $reservation_headers->resellerID;
+                /* End top of tab */
+
+                $template = "reservations_notes.tpl";
+                $this->load_smarty($data,$template);
+        }
+
+        /* This is the 5th tab */
+        public function reservations_options() {
+                $this->security('reservations',$_SESSION['user_typeID']);
+                $data['t5'] = "active";
+                $data['reservationID'] = $_GET['reservationID'];
+
+                /* This will get the data for the top of the tab */
+                $reservation_headers = json_decode($this->get_reservations_headers($_GET['reservationID']));
+                $data['start_date'] = $reservation_headers->start_date;
+                $data['end_date'] = $reservation_headers->end_date;
+                $data['boat_name'] = $reservation_headers->boat_name;
+                $data['company'] = $reservation_headers->company;
+                $data['resellerID'] = $reservation_headers->resellerID;
+                /* End top of tab */
+
+                $template = "reservations_options.tpl";
+                $this->load_smarty($data,$template);
+        }
+
+        /* This is the 6th tab */
+        public function reservations_airline() {
+                $this->security('reservations',$_SESSION['user_typeID']);
+                $data['t6'] = "active";
+                $data['reservationID'] = $_GET['reservationID'];
+
+                /* This will get the data for the top of the tab */
+                $reservation_headers = json_decode($this->get_reservations_headers($_GET['reservationID']));
+                $data['start_date'] = $reservation_headers->start_date;
+                $data['end_date'] = $reservation_headers->end_date;
+                $data['boat_name'] = $reservation_headers->boat_name;
+                $data['company'] = $reservation_headers->company;
+                $data['resellerID'] = $reservation_headers->resellerID;
+                /* End top of tab */
+
+                $template = "reservations_airline.tpl";
+                $this->load_smarty($data,$template);
+        }
+
+        /* This is the 7th tab */
+        public function reservations_hotel() {
+                $this->security('reservations',$_SESSION['user_typeID']);
+                $data['t7'] = "active";
+                $data['reservationID'] = $_GET['reservationID'];
+
+                /* This will get the data for the top of the tab */
+                $reservation_headers = json_decode($this->get_reservations_headers($_GET['reservationID']));
+                $data['start_date'] = $reservation_headers->start_date;
+                $data['end_date'] = $reservation_headers->end_date;
+                $data['boat_name'] = $reservation_headers->boat_name;
+                $data['company'] = $reservation_headers->company;
+                $data['resellerID'] = $reservation_headers->resellerID;
+                /* End top of tab */
+
+                $template = "reservations_hotel.tpl";
+                $this->load_smarty($data,$template);
+        }
+
+        /* This is the 8th tab */
+        public function reservations_aat() {
+                $this->security('reservations',$_SESSION['user_typeID']);
+                $data['t8'] = "active";
+                $data['reservationID'] = $_GET['reservationID'];
+
+                /* This will get the data for the top of the tab */
+                $reservation_headers = json_decode($this->get_reservations_headers($_GET['reservationID']));
+                $data['start_date'] = $reservation_headers->start_date;
+                $data['end_date'] = $reservation_headers->end_date;
+                $data['boat_name'] = $reservation_headers->boat_name;
+                $data['company'] = $reservation_headers->company;
+                $data['resellerID'] = $reservation_headers->resellerID;
+                /* End top of tab */
+
+                $template = "reservations_aat.tpl";
+                $this->load_smarty($data,$template);
+        }
+
+        /* This is the 9th tab */
+        public function reservations_itinerary() {
+                $this->security('reservations',$_SESSION['user_typeID']);
+                $data['t9'] = "active";
+                $data['reservationID'] = $_GET['reservationID'];
+
+                /* This will get the data for the top of the tab */
+                $reservation_headers = json_decode($this->get_reservations_headers($_GET['reservationID']));
+                $data['start_date'] = $reservation_headers->start_date;
+                $data['end_date'] = $reservation_headers->end_date;
+                $data['boat_name'] = $reservation_headers->boat_name;
+                $data['company'] = $reservation_headers->company;
+                $data['resellerID'] = $reservation_headers->resellerID;
+                /* End top of tab */
+
+                $template = "reservations_itinerary.tpl";
+                $this->load_smarty($data,$template);
+        }
+
+        /* This is the 10th tab */
+        public function reservations_cancel() {
+                $this->security('reservations',$_SESSION['user_typeID']);
+                $data['t10'] = "active";
+                $data['reservationID'] = $_GET['reservationID'];
+
+                /* This will get the data for the top of the tab */
+                $reservation_headers = json_decode($this->get_reservations_headers($_GET['reservationID']));
+                $data['start_date'] = $reservation_headers->start_date;
+                $data['end_date'] = $reservation_headers->end_date;
+                $data['boat_name'] = $reservation_headers->boat_name;
+                $data['company'] = $reservation_headers->company;
+                $data['resellerID'] = $reservation_headers->resellerID;
+                /* End top of tab */
+
+                $template = "reservations_cancel.tpl";
+                $this->load_smarty($data,$template);
+        }
+
 
 	/* This will allow the user to create a new reservation */
 	public function new_reservation() {
