@@ -153,13 +153,29 @@ class reservations extends charters {
                         `i`.`login_key` AS 'loginkey',
                         `c`.`first`,
                         `c`.`middle`,
-                        `c`.`last`
+                        `c`.`last`,
+                        `g`.`general`,
+                        `g`.`travel`,
+                        `g`.`emcontact`,
+                        `g`.`requests`,
+                        `g`.`rentals`,
+                        `g`.`activities`,
+                        `g`.`diving`,
+                        `g`.`insurance`,
+                        `g`.`waiver`,
+                        `g`.`policy`,
+                        `g`.`confirmation`,
+                        `g`.`options`
                 FROM
-                        `inventory` i,
-                        `contacts` c
+                        `inventory` i
+
+                JOIN contacts c ON i.passengerID = c.contactID
+                INNER JOIN guestform_status g ON 
+                        i.charterID = g.charterID
+                        AND c.contactID = g.passengerID
+
                 WHERE
                         `i`.`reservationID` = '$_GET[reservationID]'
-                        AND `i`.`passengerID` = `c`.`contactID`
 
                 ORDER BY `i`.`bunk` ASC
                 ";
