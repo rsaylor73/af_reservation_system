@@ -44,6 +44,16 @@ RewriteRule ^reservations_hotel/([a-zA-Z0-9]+)/?$ index.php?section=reservations
 RewriteRule ^reservations_aat/([a-zA-Z0-9]+)/?$ index.php?section=reservations_aat&reservationID=$1 [NC,L]
 RewriteRule ^reservations_itinerary/([a-zA-Z0-9]+)/?$ index.php?section=reservations_itinerary&reservationID=$1 [NC,L]
 RewriteRule ^reservations_cancel/([a-zA-Z0-9]+)/?$ index.php?section=reservations_cancel&reservationID=$1 [NC,L]
+RewriteRule ^stateroom/([a-zA-Z0-9]+)/?$ index.php?section=stateroom_overview&inventoryID=$1 [NC,L]
+RewriteRule ^stateroom_requests/([a-zA-Z0-9]+)/?$ index.php?section=stateroom_requests&inventoryID=$1 [NC,L]
+RewriteRule ^stateroom_diving/([a-zA-Z0-9]+)/?$ index.php?section=stateroom_diving&inventoryID=$1 [NC,L]
+RewriteRule ^stateroom_insurance/([a-zA-Z0-9]+)/?$ index.php?section=stateroom_insurance&inventoryID=$1 [NC,L]
+RewriteRule ^stateroom_travel/([a-zA-Z0-9]+)/?$ index.php?section=stateroom_travel&inventoryID=$1 [NC,L]
+RewriteRule ^stateroom_rentals/([a-zA-Z0-9]+)/?$ index.php?section=stateroom_rentals&inventoryID=$1 [NC,L]
+RewriteRule ^stateroom_requests/([a-zA-Z0-9]+)/?$ index.php?section=stateroom_requests&inventoryID=$1 [NC,L]
+RewriteRule ^stateroom_supplement/([a-zA-Z0-9]+)/?$ index.php?section=stateroom_supplement&inventoryID=$1 [NC,L]
+RewriteRule ^stateroom_survey/([a-zA-Z0-9]+)/?$ index.php?section=stateroom_survey&inventoryID=$1 [NC,L]
+
 
 
 # Three params

@@ -3,9 +3,161 @@ include PATH."/class/users.class.php";
                 
 class bunks extends users {
 
+	/* This function will pass basic details to each stateroom tab */
+	private function stateroom_header($inventoryID) {
+		$sql = "
+		SELECT
+			`i`.`inventoryID`,
+			`i`.`reservationID`,
+			`i`.`passengerID`,
+			`i`.`bunk`,
+			`c`.`first`,
+			`c`.`middle`,
+			`c`.`last`,
+			DATE_FORMAT(`ch`.`start_date`, '%m/%d/%Y') AS 'charter_date'
+
+		FROM
+			`inventory` i
+
+		# ANSI 92 query
+		LEFT JOIN `charters` ch ON `i`.`charterID` = `ch`.`charterID`
+		LEFT JOIN `contacts` c ON `i`.`passengerID` = `c`.`contactID`
+
+		WHERE
+			`i`.`inventoryID` = '$inventoryID'
+		";
+		$result = $this->new_mysql($sql);
+		while ($row = $result->fetch_assoc()) {
+			foreach ($row as $key=>$value) {
+				$json[$key] = $value;
+			}
+		}
+		return json_encode($json);		
+	} // private function stateroom_header($inventoryID)
+
+	/* This allows the agent to review the customer's GIS entries and to confirm them */
+	public function stateroom_overview() {
+		$this->security('reservations',$_SESSION['user_typeID']);
+		$json_data = $this->objectToArray(json_decode($this->stateroom_header($_GET['inventoryID'])));
+		foreach($json_data as $key=>$value) {
+			$data[$key] = $value;
+		}
+
+		$data['s1'] = "active";
+
+		$template = "stateroom_overview.tpl";
+		$dir = "/stateroom_bunk";
+		$this->load_smarty($data,$template,$dir);
+	}
+
+	/* Stateroom tab 2 */
+	public function stateroom_requests() {
+		$this->security('reservations',$_SESSION['user_typeID']);
+		$json_data = $this->objectToArray(json_decode($this->stateroom_header($_GET['inventoryID'])));
+		foreach($json_data as $key=>$value) {
+			$data[$key] = $value;
+		}
+
+		$data['s2'] = "active";
+
+		$template = "stateroom_requests.tpl";
+		$dir = "/stateroom_bunk";
+		$this->load_smarty($data,$template,$dir);
+	}
+
+	/* Stateroom tab 3 */
+	public function stateroom_diving() {
+		$this->security('reservations',$_SESSION['user_typeID']);
+		$json_data = $this->objectToArray(json_decode($this->stateroom_header($_GET['inventoryID'])));
+		foreach($json_data as $key=>$value) {
+			$data[$key] = $value;
+		}
+
+		$data['s3'] = "active";
+
+		$template = "stateroom_diving.tpl";
+		$dir = "/stateroom_bunk";
+		$this->load_smarty($data,$template,$dir);
+	}
+
+	/* Stateroom tab 4 */
+	public function stateroom_insurance() {
+		$this->security('reservations',$_SESSION['user_typeID']);
+		$json_data = $this->objectToArray(json_decode($this->stateroom_header($_GET['inventoryID'])));
+		foreach($json_data as $key=>$value) {
+			$data[$key] = $value;
+		}
+
+		$data['s4'] = "active";
+
+		$template = "stateroom_insurance.tpl";
+		$dir = "/stateroom_bunk";
+		$this->load_smarty($data,$template,$dir);
+	}
+
+	/* Stateroom tab 5 */
+	public function stateroom_travel() {
+		$this->security('reservations',$_SESSION['user_typeID']);
+		$json_data = $this->objectToArray(json_decode($this->stateroom_header($_GET['inventoryID'])));
+		foreach($json_data as $key=>$value) {
+			$data[$key] = $value;
+		}
+
+		$data['s5'] = "active";
+
+		$template = "stateroom_travel.tpl";
+		$dir = "/stateroom_bunk";
+		$this->load_smarty($data,$template,$dir);
+	}
+
+	/* Stateroom tab 6 */
+	public function stateroom_rentals() {
+		$this->security('reservations',$_SESSION['user_typeID']);
+		$json_data = $this->objectToArray(json_decode($this->stateroom_header($_GET['inventoryID'])));
+		foreach($json_data as $key=>$value) {
+			$data[$key] = $value;
+		}
+
+		$data['s6'] = "active";
+
+		$template = "stateroom_rentals.tpl";
+		$dir = "/stateroom_bunk";
+		$this->load_smarty($data,$template,$dir);
+	}
+
+	/* Stateroom tab 7 */
+	public function stateroom_supplement() {
+		$this->security('reservations',$_SESSION['user_typeID']);
+		$json_data = $this->objectToArray(json_decode($this->stateroom_header($_GET['inventoryID'])));
+		foreach($json_data as $key=>$value) {
+			$data[$key] = $value;
+		}
+
+		$data['s7'] = "active";
+
+		$template = "stateroom_supplement.tpl";
+		$dir = "/stateroom_bunk";
+		$this->load_smarty($data,$template,$dir);
+	}
+
+	/* Stateroom tab 8 */
+	public function stateroom_survey() {
+		$this->security('reservations',$_SESSION['user_typeID']);
+		$json_data = $this->objectToArray(json_decode($this->stateroom_header($_GET['inventoryID'])));
+		foreach($json_data as $key=>$value) {
+			$data[$key] = $value;
+		}
+
+		$data['s8'] = "active";
+
+		$template = "stateroom_survey.tpl";
+		$dir = "/stateroom_bunk";
+		$this->load_smarty($data,$template,$dir);
+	}
+
 	/* This allows the user to manage bunks for the boat */
 	public function manage_bunks($msg='') {
-                $this->security('manage_boats',$_SESSION['user_typeID']);
+		$this->security('manage_boats',$_SESSION['user_typeID']);
 		$template = "manage_bunks.tpl";
 		$sql = "
 		SELECT

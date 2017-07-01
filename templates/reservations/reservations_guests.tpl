@@ -1,7 +1,7 @@
 {* Colors *}
-{assign var="green" value="#2a7548"}
-{assign var="yellow" value="#ada72e"}
-{assign var="red" value="#872735"}
+{assign var="green" value="#1fa856"}
+{assign var="yellow" value="#ccc322"}
+{assign var="red" value="#ba1f34"}
 
 
 <h2><a href="/">Main Menu</a> : Reservations</h2>
@@ -40,7 +40,7 @@
         {foreach $guests as $passengers}
         <div class="row pad-top row-striped">
                 <div class="col-sm-2">{$passengers.first} {$passengers.middle} {$passengers.last}</div>
-                <div class="col-sm-2">{$passengers.bunk}</div>
+                <div class="col-sm-2"><a href="/stateroom/{$passengers.inventoryID}">{$passengers.bunk}</a></div>
                 <div class="col-sm-8">
                         <div class="row">
                                 <div class="col-sm-1">
@@ -86,7 +86,10 @@
                                 </a>
                                 {elseif $passengers.waiver eq "2"}
                                 <!-- //green-->
+                                <a href="/pdf/{$passengers.passengerID}_{$passengers.charterID}.pdf"
+                                target="_blank"
                                 <i class="fa fa-check-square fa-2x" style="color:{$green}" aria-hidden="true"></i>
+                                </a>
                                 {else $passengers.waiver eq ""}
                                 <!-- //red-->
                                 <i class="fa fa-exclamation-triangle fa-2x" style="color:{$red}" aria-hidden="true"></i>
