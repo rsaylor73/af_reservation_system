@@ -1,7 +1,7 @@
 <?php
 include PATH."/class/contacts.class.php";
 
-class admin extends contacts {
+class admin extends contact {
 
 	// This displays the admin menu //
 	public function admin_menu() {

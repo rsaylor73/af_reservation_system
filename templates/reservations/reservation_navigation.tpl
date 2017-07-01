@@ -10,3 +10,16 @@
         <li role="presentation" class="{$t9}"><a href="/reservations_itinerary/{$reservationID}">Itinerary</a></li>
         <li role="presentation" class="{$t10}"><a href="/reservations_cancel/{$reservationID}">Cancel</a></li>
 </ul>
+
+<script>
+function goto_reservation() {
+        var reservationID = document.getElementById('reservationID').value;
+        document.location.href='/reservations/'+reservationID;
+}
+
+$("#reservationID").keyup(function(event){
+    if(event.keyCode == 13){
+        $("#r_btn").click();
+    }
+});
+</script>

@@ -1,7 +1,7 @@
 <?php
 include PATH."/class/resellers.class.php";
 
-class contacts extends resellers {
+class contact extends resellers {
 
 	/* This will display the contacts menu */
 	public function manage_contacts($msg='') {
@@ -21,11 +21,12 @@ class contacts extends resellers {
 	                </script>
 			<?php
 		}
-                $this->security('manage_contacts',$_SESSION['user_typeID']);
-		$template = "manage_contacts.tpl";
+        $this->security('manage_contacts',$_SESSION['user_typeID']);
+		
 		$data['country'] = $this->list_country(null);
-
-		$this->load_smarty($data,$template);
+		$template = "manage_contacts.tpl";
+		$dir = "/contacts";
+		$this->load_smarty($data,$template,$dir);
 	}
 
 	/* This will generate a random secure password */
@@ -37,7 +38,6 @@ class contacts extends resellers {
 	/* This will allow the user to view and update the contact profile */
 	public function contacts() {
 		$this->security('manage_contacts',$_SESSION['user_typeID']);
-		$template = "contacts.tpl";
 		$sql = "
 		SELECT
 			`c`.*,
@@ -72,43 +72,42 @@ class contacts extends resellers {
 				$data['female'] = "checked";
 			}
 
-	                $data['country'] = $this->list_country($row['countryID']);
+	        $data['country'] = $this->list_country($row['countryID']);
 			$data['states'] = $this->list_states($row['state']);
 			$data['date_created'] = date("m/d/Y", strtotime($row['date_created']));
 		}
-
-		$this->load_smarty($data,$template);
+		$template = "contacts.tpl";
+		$dir = "/contacts";
+		$this->load_smarty($data,$template,$dir);
 	}
 
 	/* This function will manage the additional tabs on the contacts page */
 	public function contacts_part() {
-                $this->security('manage_contacts',$_SESSION['user_typeID']);
+        $this->security('manage_contacts',$_SESSION['user_typeID']);
 		$data['contactID'] = $_GET['contactID'];
 
-                $sql = "
-                SELECT
-                        `c`.*,
-                        `cn`.`country`
-                FROM
-                        `contacts` c
-
-                LEFT JOIN `countries` cn ON `c`.`countryID` = `cn`.`countryID`
-
-                WHERE
-                        `c`.`contactID` = '$_GET[contactID]'
-                ";
-                $result = $this->new_mysql($sql);
-                while ($row = $result->fetch_assoc()) {
-                        foreach ($row as $key=>$value) {
-                                $data[$key] = $value;
-                        }
-                        $data['date_created'] = date("m/d/Y", strtotime($row['date_created']));
+		// ANSI 92 query
+        $sql = "
+        SELECT
+			`c`.*,
+			`cn`.`country`
+		FROM
+			`contacts` c
+		LEFT JOIN `countries` cn ON `c`.`countryID` = `cn`.`countryID`
+		WHERE
+			`c`.`contactID` = '$_GET[contactID]'
+		";
+        $result = $this->new_mysql($sql);
+        while ($row = $result->fetch_assoc()) {
+			foreach ($row as $key=>$value) {
+				$data[$key] = $value;
+			}
+			$data['date_created'] = date("m/d/Y", strtotime($row['date_created']));
 		}
 
 		// personal
 		if ($_GET['part'] == "personal") {
-			$template = "contacts_personal.tpl";
-                        $data['country_list'] = $this->list_country($data['nationality_countryID']);
+			$data['country_list'] = $this->list_country($data['nationality_countryID']);
 			$data['passport_exp'] = date("Y-m-d", strtotime($data['passport_exp']));
 			$data['date_of_birth'] = date("Y-m-d", strtotime($data['date_of_birth']));
 
@@ -131,22 +130,22 @@ class contacts extends resellers {
 			$tz  = new DateTimeZone('America/New_York');
 			$age = DateTime::createFromFormat('Y-m-d', $data['date_of_birth'], $tz)->diff(new DateTime('now', $tz))->y;
 			$data['age'] = $age;
-			$this->load_smarty($data,$template);
+			$template = "contacts_personal.tpl";
+			$dir = "/contacts";
+			$this->load_smarty($data,$template,$dir);
 		}
 
 		// emergency
 		if ($_GET['part'] == "emergency") {
-			$template = "contacts_emergency.tpl";
-
 			$data['emergency_country_list'] = $this->list_country($row['emergency_countryID']);
-                        $data['emergency2_country_list'] = $this->list_country($row['emergency2_countryID']);
-
-                        $this->load_smarty($data,$template);
+			$data['emergency2_country_list'] = $this->list_country($row['emergency2_countryID']);
+			$template = "contacts_emergency.tpl";
+			$dir = "/contacts";
+			$this->load_smarty($data,$template,$dir);
 		}
 
 		// history
 		if ($_GET['part'] == "history") {
-			$template = "contacts_history.tpl";
 
 			// get reservation history
 			$history = $this->reservation_history($data['contactID']);
@@ -169,27 +168,28 @@ class contacts extends resellers {
 					$state = $history[$key]['state'];
 					$total_vouchers = $history[$key]['total_vouchers'];
 
-	                                $output .= "
-        	                        <div class=\"row pad-top\">
-                	                        <div class=\"col-sm-1\">".$charterID."</div>
-						<div class=\"col-sm-1\">".$reservationID."</div>
-						<div class=\"col-sm-2\">".$company."</div>
-						<div class=\"col-sm-2\">".date("m/d/Y", strtotime($charter_date))."</div>
-						<div class=\"col-sm-2\">".$bunk."</div>
-						<div class=\"col-sm-1\">$".number_format($bunk_price)."</div>
-						<div class=\"col-sm-1\">$".number_format($bunk_balance_due)."</div>
-						<div class=\"col-sm-1\">$".number_format($total_discounts)."</div>
-						<div class=\"col-sm-1\">$".number_format($total_vouchers)."</div>
+					$output .= "
+					<div class=\"row pad-top\">
+					<div class=\"col-sm-1\">".$charterID."</div>
+					<div class=\"col-sm-1\">".$reservationID."</div>
+					<div class=\"col-sm-2\">".$company."</div>
+					<div class=\"col-sm-2\">".date("m/d/Y", strtotime($charter_date))."</div>
+					<div class=\"col-sm-2\">".$bunk."</div>
+					<div class=\"col-sm-1\">$".number_format($bunk_price)."</div>
+					<div class=\"col-sm-1\">$".number_format($bunk_balance_due)."</div>
+					<div class=\"col-sm-1\">$".number_format($total_discounts)."</div>
+					<div class=\"col-sm-1\">$".number_format($total_vouchers)."</div>
 					</div>  
-        	                        ";
-				}
-			}
+        	        ";
+				} // foreach ($history as $key=>$value)
+			} // if(is_array($history))
+
 			$data['output'] = $output;
 
 			// imported history
 			$imported = $this->reservation_history_imported($data['contactID']);
-                        $imported = json_decode($imported);
-                        $imported = $this->objectToArray($imported); // This converts the StdObject to an array
+			$imported = json_decode($imported);
+			$imported = $this->objectToArray($imported); // This converts the StdObject to an array
 			if(is_array($imported)) {
 				foreach ($imported as $key=>$value) {
 					$id = $imported[$key]['id'];
@@ -212,8 +212,9 @@ class contacts extends resellers {
 						<div class=\"col-sm-3\">".$yacht."</div>
 						<div class=\"col-sm-3\">".$source."</div>
 					</div>";
-				}
-			}
+				} // foreach ($imported as $key=>$value)
+			} // if(is_array($imported))
+
 			$data['imported_reservations'] = $imported_reservations;
 
 			// reservations cancelled as primary contact
@@ -233,8 +234,8 @@ class contacts extends resellers {
 						<div class=\"col-sm-3\">".$name."</div>
 						<div class=\"col-sm-3\">".date("m/d/Y", strtotime($charter_date))."</div>
 					</div>";
-				}
-			}
+				} // foreach($reservation_cancelled_primary as $key=>$value)
+			} // if(is_array($reservation_cancelled_primary))
 			$data['cancelled_primary'] = $cancelled_primary;
 
 			// reservations cancelled as a passenger
@@ -248,114 +249,117 @@ class contacts extends resellers {
 					$name = $reservation_cancelled_passenger[$key]['name'];
 					$charter_date = $reservation_cancelled_passenger[$key]['charter_date'];
 					$cancelled_passenger .= "
-                                        <div class=\"row pad-top\">
-						<div class=\"col-sm-3\">".$charterID."</div>
-                                                <div class=\"col-sm-3\">".$reservationID."</div>
-                                                <div class=\"col-sm-3\">".$name."</div>
-                                                <div class=\"col-sm-3\">".date("m/d/Y", strtotime($charter_date))."</div>
-                                        </div>";
-				}
-			}
+					<div class=\"row pad-top\">
+					<div class=\"col-sm-3\">".$charterID."</div>
+                    <div class=\"col-sm-3\">".$reservationID."</div>
+					<div class=\"col-sm-3\">".$name."</div>
+					<div class=\"col-sm-3\">".date("m/d/Y", strtotime($charter_date))."</div>
+					</div>";
+				} // foreach ($reservation_cancelled_passenger as $key=>$value)
+			} // if (is_array($reservation_cancelled_passenger))
+
 			$data['cancelled_passenger'] = $cancelled_passenger;
 			if ($_GET['reservationID'] != "") {
 				$data['reservationID'] = $_GET['reservationID'];
 			}
-
-                        $this->load_smarty($data,$template);
+			$template = "contacts_history.tpl";
+			$dir = "/contacts";
+			$this->load_smarty($data,$template,$dir);
 		}
 
 		// notes
 		if ($_GET['part'] == "notes") {
+
 			$template = "contacts_notes.tpl";
-
-
-                        $this->load_smarty($data,$template);
+			$dir = "/contacts";
+			$this->load_smarty($data,$template,$dir);
 		}
 
 		// cancels
 		if ($_GET['part'] == "cancels") {
-			$template = "contacts_cancels.tpl";
+			// reservations cancelled as primary contact
+			$reservation_cancelled_primary = $this->reservation_cancelled_primary($data['contactID']);
+			$reservation_cancelled_primary = json_decode($reservation_cancelled_primary);
+			$reservation_cancelled_primary = $this->objectToArray($reservation_cancelled_primary);
+			if(is_array($reservation_cancelled_primary)) {
+				foreach($reservation_cancelled_primary as $key=>$value) {
+					$charterID = $reservation_cancelled_primary[$key]['charterID'];
+					$reservationID = $reservation_cancelled_primary[$key]['reservationID'];
+					$name = $reservation_cancelled_primary[$key]['name'];
+					$charter_date = $reservation_cancelled_primary[$key]['charter_date'];
+					$cancelled_primary .= "
+					<div class=\"row pad-top\">
+					<div class=\"col-sm-3\">".$charterID."</div>
+					<div class=\"col-sm-3\">".$reservationID."</div>
+					<div class=\"col-sm-3\">".$name."</div>
+					<div class=\"col-sm-3\">".date("m/d/Y", strtotime($charter_date))."</div>
+					</div>";
+				} // foreach($reservation_cancelled_primary as $key=>$value)
+			} // if(is_array($reservation_cancelled_primary))
 
+			$data['cancelled_primary'] = $cancelled_primary;
 
-                        // reservations cancelled as primary contact
-                        $reservation_cancelled_primary = $this->reservation_cancelled_primary($data['contactID']);
-                        $reservation_cancelled_primary = json_decode($reservation_cancelled_primary);
-                        $reservation_cancelled_primary = $this->objectToArray($reservation_cancelled_primary);
-                        if(is_array($reservation_cancelled_primary)) {
-                                foreach($reservation_cancelled_primary as $key=>$value) {
-                                        $charterID = $reservation_cancelled_primary[$key]['charterID'];
-                                        $reservationID = $reservation_cancelled_primary[$key]['reservationID'];
-                                        $name = $reservation_cancelled_primary[$key]['name'];
-                                        $charter_date = $reservation_cancelled_primary[$key]['charter_date'];
-                                        $cancelled_primary .= "
-                                        <div class=\"row pad-top\">
-                                                <div class=\"col-sm-3\">".$charterID."</div>
-                                                <div class=\"col-sm-3\">".$reservationID."</div>
-                                                <div class=\"col-sm-3\">".$name."</div>
-                                                <div class=\"col-sm-3\">".date("m/d/Y", strtotime($charter_date))."</div>
-                                        </div>";
-                                }
-                        }
-                        $data['cancelled_primary'] = $cancelled_primary;
+			// reservations cancelled as a passenger
+			$reservation_cancelled_passenger = $this->reservation_cancelled_passenger($data['contactID']);
+			$reservation_cancelled_passenger = json_decode($reservation_cancelled_passenger);
+			$reservation_cancelled_passenger = $this->objectToArray($reservation_cancelled_passenger);
+			if (is_array($reservation_cancelled_passenger)) {
+				foreach ($reservation_cancelled_passenger as $key=>$value) {
+					$charterID = $reservation_cancelled_passenger[$key]['charterID'];
+					$reservationID = $reservation_cancelled_passenger[$key]['reservationID'];
+					$name = $reservation_cancelled_passenger[$key]['name'];
+					$charter_date = $reservation_cancelled_passenger[$key]['charter_date'];
+					$cancelled_passenger .= "
+					<div class=\"row pad-top\">
+					<div class=\"col-sm-3\">".$charterID."</div>
+					<div class=\"col-sm-3\">".$reservationID."</div>
+					<div class=\"col-sm-3\">".$name."</div>
+					<div class=\"col-sm-3\">".date("m/d/Y", strtotime($charter_date))."</div>
+					</div>";
+				} // foreach ($reservation_cancelled_passenger as $key=>$value)
+			} // if (is_array($reservation_cancelled_passenger))
+			$data['cancelled_passenger'] = $cancelled_passenger;
 
-                        // reservations cancelled as a passenger
-                        $reservation_cancelled_passenger = $this->reservation_cancelled_passenger($data['contactID']);
-                        $reservation_cancelled_passenger = json_decode($reservation_cancelled_passenger);
-                        $reservation_cancelled_passenger = $this->objectToArray($reservation_cancelled_passenger);
-                        if (is_array($reservation_cancelled_passenger)) {
-                                foreach ($reservation_cancelled_passenger as $key=>$value) {
-                                        $charterID = $reservation_cancelled_passenger[$key]['charterID'];
-                                        $reservationID = $reservation_cancelled_passenger[$key]['reservationID'];
-                                        $name = $reservation_cancelled_passenger[$key]['name'];
-                                        $charter_date = $reservation_cancelled_passenger[$key]['charter_date'];
-                                        $cancelled_passenger .= "
-                                        <div class=\"row pad-top\">
-                                                <div class=\"col-sm-3\">".$charterID."</div>
-                                                <div class=\"col-sm-3\">".$reservationID."</div>
-                                                <div class=\"col-sm-3\">".$name."</div>
-                                                <div class=\"col-sm-3\">".date("m/d/Y", strtotime($charter_date))."</div>
-                                        </div>";
-                                }
-                        }
-                        $data['cancelled_passenger'] = $cancelled_passenger;
-
-                        $this->load_smarty($data,$template);
+            $template = "contacts_cancels.tpl";
+            $dir = "/contacts";
+			$this->load_smarty($data,$template,$dir);
 		}
 
 		// crs_rrs
 		if ($_GET['part'] == "crsrrs") {
+
 			$template = "contacts_crsrrs.tpl";
-
-
-                        $this->load_smarty($data,$template);
+			$dir = "/contacts";
+			$this->load_smarty($data,$template,$dir);
 		}
 	}
 
 	/* This will delete a selected imported reservation then return to the history tab */
 	public function delete_imported() {
-                $this->security('manage_contacts',$_SESSION['user_typeID']);
+		$this->security('manage_contacts',$_SESSION['user_typeID']);
 		$sql = "DELETE FROM `reservations_imported` WHERE `id` = '$_GET[id]'";
 		$result = $this->new_mysql($sql);
 	
-                if ($result == "true") {
+		if ($result == "true") {
 			$redirect = "/contact/history/".$_GET['contactID'];
-                        print '<div class="alert alert-success">The imported reservation was deleted. Loading please wait...</div>';
-                        ?>
-                        <script>
-                        setTimeout(function() {
-                              window.location.replace('<?=$redirect;?>')
-                        }
-                        ,2000);
-                        </script>
-                        <?php
-                } else {
-                        print '<div class="alert alert-success">The imported reservation failed to delete.</div>';
-                }
+			print '<div class="alert alert-success">The imported reservation was deleted. 
+			Loading please wait...</div>';
+			?>
+			<script>
+			setTimeout(function() {
+				window.location.replace('<?=$redirect;?>')
+			}
+			,2000);
+			</script>
+			<?php
+		} else {
+			print '<div class="alert alert-success">The imported reservation failed to delete.</div>';
+		}
 	}
 
 	/* This will update the contact. There are 7 parts of the contact and each will have a different call */
 	public function update_contact() {
-                $this->security('manage_contacts',$_SESSION['user_typeID']);
+		$this->security('manage_contacts',$_SESSION['user_typeID']);
 
 		$p = array(); // set the var to array
 		foreach ($_POST as $key=>$value) {
@@ -370,7 +374,6 @@ class contacts extends resellers {
 				break;
 			}
 		}
-
 
 		switch ($_POST['part']) {
 			// Contacts : Tab 1
@@ -404,7 +407,7 @@ class contacts extends resellers {
 
 			break;
 
-                        // Contacts : Tab 2
+			// Contacts : Tab 2
 			case "personal":
 
 			unset($p['contactID']);
@@ -435,9 +438,8 @@ class contacts extends resellers {
 					if ($value2 == "donotbook") {
 						$donotbook = ",`donotbook` = 'Y'";
 					}
-				}
-
-			}
+				} // foreach($_POST['options'] as $key2=>$value2)
+			} // if(is_array($_POST['options']))
 
 			$p['passport_exp'] = str_replace("-","",$p['passport_exp']);
 			$p['date_of_birth'] = str_replace("-","",$p['date_of_birth']);
@@ -453,12 +455,12 @@ class contacts extends resellers {
 
 			break;
 
-                        // Contacts : Tab 3
+			// Contacts : Tab 3
 			case "emergency":
 
-                        unset($p['contactID']);
-                        unset($p['section']);
-                        unset($p['part']);
+			unset($p['contactID']);
+			unset($p['section']);
+			unset($p['part']);
 
 			$sql = "UPDATE `contacts` SET 
 			`emergency_first` = '$p[emergency_first]', `emergency_last` = '$p[emergency_last]', `emergency_relationship` = '$p[emergency_relationship]',
@@ -467,11 +469,11 @@ class contacts extends resellers {
 			`emergency_countryID` = '$p[emergency_countryID]', `emergency_ph_home` = '$p[emergency_ph_home]', `emergency_ph_work` = '$p[emergency_ph_work]',
 			`emergency_ph_mobile` = '$p[emergency_ph_mobile]',
 
-                        `emergency2_first` = '$p[emergency2_first]', `emergency2_last` = '$p[emergency2_last]', `emergency2_relationship` = '$p[emergency2_relationship]',
-                        `emergency2_email` = '$p[emergency2_email]', `emergency2_address1` = '$p[emergency2_address1]', `emergency2_address2` = '$p[emergency2_address2]',
-                        `emergency2_city` = '$p[emergency2_city]', `emergency2_state` = '$p[emergency2_state]', `emergency2_zip` = '$p[emergency2_zip]',
-                        `emergency2_countryID` = '$p[emergency2_countryID]', `emergency2_ph_home` = '$p[emergency2_ph_home]', `emergency2_ph_work` = '$p[emergency2_ph_work]',
-                        `emergency2_ph_mobile` = '$p[emergency2_ph_mobile]'
+			`emergency2_first` = '$p[emergency2_first]', `emergency2_last` = '$p[emergency2_last]', `emergency2_relationship` = '$p[emergency2_relationship]',
+			`emergency2_email` = '$p[emergency2_email]', `emergency2_address1` = '$p[emergency2_address1]', `emergency2_address2` = '$p[emergency2_address2]',
+			`emergency2_city` = '$p[emergency2_city]', `emergency2_state` = '$p[emergency2_state]', `emergency2_zip` = '$p[emergency2_zip]',
+			`emergency2_countryID` = '$p[emergency2_countryID]', `emergency2_ph_home` = '$p[emergency2_ph_home]', `emergency2_ph_work` = '$p[emergency2_ph_work]',
+			`emergency2_ph_mobile` = '$p[emergency2_ph_mobile]'
 
 			WHERE `contactID` = '$_POST[contactID]'
 			";
@@ -479,71 +481,66 @@ class contacts extends resellers {
 
 			break;
 
-                        // Contacts : Tab 4
+			// Contacts : Tab 4
 			case "history":
 
 			// nothing to update on this tab
-                        print "<pre>";
-                        print_r($p);
-                        print "</pre>";
 			die;
 
 			break;
 
-                        // Contacts : Tab 5
+			// Contacts : Tab 5
 			case "notes":
 
-                        unset($p['contactID']);
-                        unset($p['section']);
-                        unset($p['part']);
+			unset($p['contactID']);
+			unset($p['section']);
+			unset($p['part']);
 
 			$sql = "UPDATE `contacts` SET `staff_notes` = '$p[staff_notes]' WHERE `contactID` = '$_POST[contactID]'";
-                        $redirect = "/contact/".$_POST['part']."/".$_POST['contactID'];
+			$redirect = "/contact/".$_POST['part']."/".$_POST['contactID'];
 
 			break;
 
-                        // Contacts : Tab 6
+			// Contacts : Tab 6
 			case "cancels":
 
 			// nothing to update on this tab
-                        print "<pre>";
-                        print_r($p);
-                        print "</pre>";
 			die;
 
 			break;
 
-                        // Contacts : Tab 7
+			// Contacts : Tab 7
 			case "crsrrs":
 
-                        unset($p['contactID']);
-                        unset($p['section']);
-                        unset($p['part']);
+			unset($p['contactID']);
+			unset($p['section']);
+			unset($p['part']);
 
 			$sql = "UPDATE `contacts` SET `uuname` = '$p[uuname]', `contact_type` = '$p[contact_type]', `reseller_agentID` = '$p[reseller_agentID]',
 			`reseller_position` = '$p[reseller_position]', `verification_code` = '$p[verification_code]' WHERE `contactID` = '$_POST[contactID]'";
                         $redirect = "/contact/".$_POST['part']."/".$_POST['contactID'];
 
 			break;
-		}
+		} // switch ($_POST['part'])
+
 		// run SQL
 		$result = $this->new_mysql($sql);
 		if ($result == "true") {
-                	print '<div class="alert alert-success">The contact was updated. Loading please wait...</div>';
+			print '<div class="alert alert-success">The contact was updated. Loading please wait...</div>';
 			?>
-                        <script>
-                        setTimeout(function() {
-                              window.location.replace('<?=$redirect;?>')
-                        }
-                        ,2000);
-                        </script>
+			<script>
+			setTimeout(function() {
+				window.location.replace('<?=$redirect;?>')
+			}
+			,2000);
+			</script>
 			<?php
 		} else {
-                        print '<div class="alert alert-success">The contact failed to update.</div>';
+			print '<div class="alert alert-success">The contact failed to update.</div>';
 		}
 		// redirect back to the page
 
-	}
+	} // public function update_contact()
 
-}
+} // class contact extends resellers
 ?>

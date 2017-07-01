@@ -3,7 +3,7 @@
 
 include PATH."/class/reservations.class.php";
 
-class loader extends reservations {
+class loader extends reservation {
 
         public $linkID;
         function __construct($linkID){ $this->linkID = $linkID; }
@@ -14,7 +14,7 @@ class loader extends reservations {
         public function load_module($module) {
                 if (method_exists('core',$module)) {
                         $this->$module();
-                } elseif (method_exists('reservations',$module)) {
+                } elseif (method_exists('reservation',$module)) {
                         $this->$module();
                 } elseif (method_exists('charters',$module)) {
                         $this->$module();
@@ -26,7 +26,7 @@ class loader extends reservations {
                         $this->$module();
                 } elseif (method_exists('users',$module)) {
                         $this->$module();
-                } elseif (method_exists('contacts',$module)) {
+                } elseif (method_exists('contact',$module)) {
                         $this->$module();
 		} elseif (method_exists('admin',$module)) {
 			$this->$module();
@@ -38,7 +38,7 @@ class loader extends reservations {
                         $this->$module();
                 } elseif (method_exists('gis',$module)) {
                         $this->$module();
-                } elseif (method_exists('reports',$module)) {
+                } elseif (method_exists('report',$module)) {
                         $this->$module();
                 } elseif (method_exists('common',$module)) {
                         $this->$module();
@@ -61,11 +61,11 @@ class loader extends reservations {
         }
 
 
-        public function load_smarty($vars,$template) {
+        public function load_smarty($vars,$template,$dir='') {
                 // loads the PHP Smarty class
                 require_once(PATH.'/libs/Smarty.class.php');
                 $smarty=new Smarty();
-                $smarty->setTemplateDir(PATH.'/templates/');
+                $smarty->setTemplateDir(PATH.'/templates/'.$dir);
                 $smarty->setCompileDir(PATH.'/templates_c/');
                 $smarty->setConfigDir(PATH.'/configs/');
                 $smarty->setCacheDir(PATH.'/cache/');

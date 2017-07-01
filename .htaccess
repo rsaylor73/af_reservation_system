@@ -8,12 +8,12 @@ RewriteCond %{SCRIPT_FILENAME} !-f
 # One param
 # IE: search
 
-#RewriteRule ^/?([^/]*)$ index.php?section=$1 [NC,L]
 RewriteRule ^/?([^/]*)$ index.php?section=$1 [L,QSA]
 
 # Two params
 # IE: search/12345
 
+RewriteRule ^pdf/?([^/]*)$ view_waiver.php?pdf_file=$1 [NC,L]
 RewriteRule ^edit_access/([a-zA-Z0-9]+)/?$ index.php?section=edit_access&actionID=$1 [NC,L]
 RewriteRule ^edit_boat/([a-zA-Z0-9]+)/?$ index.php?section=edit_boat&boatID=$1 [NC,L]
 RewriteRule ^edit_historic_boat/([a-zA-Z0-9]+)/?$ index.php?section=edit_historic_boat&boatID=$1 [NC,L]

@@ -8,6 +8,8 @@
 
 {$msg}
 
+{include file="reservation_header.tpl"}
+
 <div class="row pad-top">
         <div class="col-sm-12"><h3><a href="/resellers/{$resellerID}" target=_blank>{$company}</a> - {$boat_name} ({$start_date} to {$end_date})</h3></div>
 </div>
@@ -78,7 +80,10 @@
                                 <i class="fa fa-exclamation-triangle fa-2x" style="color:{$red}" aria-hidden="true"></i>
                                 {elseif $passengers.waiver eq "1"}
                                 <!-- // yellow -->
+                                <a href="/pdf/{$passengers.passengerID}_{$passengers.charterID}.pdf"
+                                target="_blank"
                                 <i class="fa fa-check-square fa-2x" style="color:{$yellow}" aria-hidden="true"></i>
+                                </a>
                                 {elseif $passengers.waiver eq "2"}
                                 <!-- //green-->
                                 <i class="fa fa-check-square fa-2x" style="color:{$green}" aria-hidden="true"></i>
@@ -225,35 +230,11 @@
                                 </div>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                         </div>
                 </div>
 
 
         </div>
         {/foreach}
-
-
-
-
-
-
-
-
 </div>
+

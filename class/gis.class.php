@@ -1,7 +1,7 @@
 <?php
 include PATH."/class/reports.class.php";
 
-class gis extends reports {
+class gis extends report {
 
 
 

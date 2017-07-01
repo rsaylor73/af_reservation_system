@@ -1,7 +1,7 @@
 <?php
 include PATH."/class/charters.class.php";
 
-class reservations extends charters {
+class reservation extends charters {
 
 	/* This will allow the user to view a reservation */
 	public function reservations() {
@@ -93,7 +93,8 @@ class reservations extends charters {
 		}
 
 		$template = "reservations.tpl";
-		$this->load_smarty($data,$template);
+                $dir = "/reservations";
+		$this->load_smarty($data,$template,$dir);
 	}
 
 	/* This will pull the header for reservations tab 2 - 10 */
@@ -192,7 +193,8 @@ class reservations extends charters {
                 //print "</pre>";
 
 		$template = "reservations_guests.tpl";
-		$this->load_smarty($data,$template);
+                $dir = "/reservations";
+		$this->load_smarty($data,$template,$dir);
 	}
 
 	/* This is the 3rd tab */
@@ -211,7 +213,8 @@ class reservations extends charters {
                 /* End top of tab */
 
                 $template = "reservations_dollars.tpl";
-                $this->load_smarty($data,$template);
+                $dir = "/reservations";
+                $this->load_smarty($data,$template,$dir);
 	}
 
         /* This is the 4th tab */
@@ -230,7 +233,8 @@ class reservations extends charters {
                 /* End top of tab */
 
                 $template = "reservations_notes.tpl";
-                $this->load_smarty($data,$template);
+                $dir = "/reservations";
+                $this->load_smarty($data,$template,$dir);
         }
 
         /* This is the 5th tab */
@@ -249,7 +253,8 @@ class reservations extends charters {
                 /* End top of tab */
 
                 $template = "reservations_options.tpl";
-                $this->load_smarty($data,$template);
+                $dir = "/reservations";
+                $this->load_smarty($data,$template,$dir);
         }
 
         /* This is the 6th tab */
@@ -268,7 +273,8 @@ class reservations extends charters {
                 /* End top of tab */
 
                 $template = "reservations_airline.tpl";
-                $this->load_smarty($data,$template);
+                $dir = "/reservations";
+                $this->load_smarty($data,$template,$dir);
         }
 
         /* This is the 7th tab */
@@ -287,7 +293,8 @@ class reservations extends charters {
                 /* End top of tab */
 
                 $template = "reservations_hotel.tpl";
-                $this->load_smarty($data,$template);
+                $dir = "/reservations";
+                $this->load_smarty($data,$template,$dir);
         }
 
         /* This is the 8th tab */
@@ -306,7 +313,8 @@ class reservations extends charters {
                 /* End top of tab */
 
                 $template = "reservations_aat.tpl";
-                $this->load_smarty($data,$template);
+                $dir = "/reservations";
+                $this->load_smarty($data,$template,$dir);
         }
 
         /* This is the 9th tab */
@@ -325,7 +333,8 @@ class reservations extends charters {
                 /* End top of tab */
 
                 $template = "reservations_itinerary.tpl";
-                $this->load_smarty($data,$template);
+                $dir = "/reservations";
+                $this->load_smarty($data,$template,$dir);
         }
 
         /* This is the 10th tab */
@@ -344,7 +353,8 @@ class reservations extends charters {
                 /* End top of tab */
 
                 $template = "reservations_cancel.tpl";
-                $this->load_smarty($data,$template);
+                $dir = "/reservations";
+                $this->load_smarty($data,$template,$dir);
         }
 
 
