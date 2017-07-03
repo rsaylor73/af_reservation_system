@@ -14,7 +14,20 @@ class bunks extends users {
 			`c`.`first`,
 			`c`.`middle`,
 			`c`.`last`,
-			DATE_FORMAT(`ch`.`start_date`, '%m/%d/%Y') AS 'charter_date'
+			DATE_FORMAT(`ch`.`start_date`, '%m/%d/%Y') AS 'charter_date',
+			`g`.`general`,
+			`g`.`travel`,
+			`g`.`emcontact`,
+			`g`.`requests`,
+			`g`.`rentals`,
+			`g`.`activities`,
+			`g`.`diving`,
+			`g`.`insurance`,
+			`g`.`waiver`,
+			`g`.`policy`,
+			`g`.`confirmation`,
+			`g`.`options`,
+			`ch`.`charterID`
 
 		FROM
 			`inventory` i
@@ -22,6 +35,9 @@ class bunks extends users {
 		# ANSI 92 query
 		LEFT JOIN `charters` ch ON `i`.`charterID` = `ch`.`charterID`
 		LEFT JOIN `contacts` c ON `i`.`passengerID` = `c`.`contactID`
+		LEFT JOIN guestform_status g ON 
+			i.charterID = g.charterID
+			AND c.contactID = g.passengerID
 
 		WHERE
 			`i`.`inventoryID` = '$inventoryID'
@@ -35,13 +51,236 @@ class bunks extends users {
 		return json_encode($json);		
 	} // private function stateroom_header($inventoryID)
 
+
+
 	/* This allows the agent to review the customer's GIS entries and to confirm them */
 	public function stateroom_overview() {
 		$this->security('reservations',$_SESSION['user_typeID']);
 		$json_data = $this->objectToArray(json_decode($this->stateroom_header($_GET['inventoryID'])));
 		foreach($json_data as $key=>$value) {
 			$data[$key] = $value;
+			// General
+			if ($key == "general") {
+				$part = $key;
+				switch ($value) {
+					case "0":
+					$part_1 = $part . "1";
+					$data[$part_1] = "checked";
+					break;
+					case "1":
+					$part_2 = $part . "2";
+					$data[$part_2] = "checked";
+					break;
+					case "2":
+					$part_3 = $part . "3";
+					$data[$part_3] = "checked";
+					break;
+					default:
+					$part_1 = $part . "1";
+					$data[$part_1] = "checked";
+					break;
+				}
+			}
+			// Waiver
+			if ($key == "waiver") {
+				$part = $key;
+				switch ($value) {
+					case "0":
+					$part_1 = $part . "1";
+					$data[$part_1] = "checked";
+					break;
+					case "1":
+					$part_2 = $part . "2";
+					$data[$part_2] = "checked";
+					break;
+					case "2":
+					$part_3 = $part . "3";
+					$data[$part_3] = "checked";
+					break;
+					default:
+					$part_1 = $part . "1";
+					$data[$part_1] = "checked";
+					break;
+				}
+			}
+			// Policy
+			if ($key == "policy") {
+				$part = $key;
+				switch ($value) {
+					case "0":
+					$part_1 = $part . "1";
+					$data[$part_1] = "checked";
+					break;
+					case "1":
+					$part_2 = $part . "2";
+					$data[$part_2] = "checked";
+					break;
+					case "2":
+					$part_3 = $part . "3";
+					$data[$part_3] = "checked";
+					break;
+					default:
+					$part_1 = $part . "1";
+					$data[$part_1] = "checked";
+					break;
+				}
+			}
+			// emcontact
+			if ($key == "emcontact") {
+				$part = $key;
+				switch ($value) {
+					case "0":
+					$part_1 = $part . "1";
+					$data[$part_1] = "checked";
+					break;
+					case "1":
+					$part_2 = $part . "2";
+					$data[$part_2] = "checked";
+					break;
+					case "2":
+					$part_3 = $part . "3";
+					$data[$part_3] = "checked";
+					break;
+					default:
+					$part_1 = $part . "1";
+					$data[$part_1] = "checked";
+					break;
+				}
+			}
+			// requests
+			if ($key == "requests") {
+				$part = $key;
+				switch ($value) {
+					case "0":
+					$part_1 = $part . "1";
+					$data[$part_1] = "checked";
+					break;
+					case "1":
+					$part_2 = $part . "2";
+					$data[$part_2] = "checked";
+					break;
+					case "2":
+					$part_3 = $part . "3";
+					$data[$part_3] = "checked";
+					break;
+					default:
+					$part_1 = $part . "1";
+					$data[$part_1] = "checked";
+					break;
+				}
+			}
+			// rentals
+			if ($key == "rentals") {
+				$part = $key;
+				switch ($value) {
+					case "0":
+					$part_1 = $part . "1";
+					$data[$part_1] = "checked";
+					break;
+					case "1":
+					$part_2 = $part . "2";
+					$data[$part_2] = "checked";
+					break;
+					case "2":
+					$part_3 = $part . "3";
+					$data[$part_3] = "checked";
+					break;
+					default:
+					$part_1 = $part . "1";
+					$data[$part_1] = "checked";
+					break;
+				}
+			}
+			// diving
+			if ($key == "diving") {
+				$part = $key;
+				switch ($value) {
+					case "0":
+					$part_1 = $part . "1";
+					$data[$part_1] = "checked";
+					break;
+					case "1":
+					$part_2 = $part . "2";
+					$data[$part_2] = "checked";
+					break;
+					case "2":
+					$part_3 = $part . "3";
+					$data[$part_3] = "checked";
+					break;
+					default:
+					$part_1 = $part . "1";
+					$data[$part_1] = "checked";
+					break;
+				}
+			}
+			// insurance
+			if ($key == "insurance") {
+				$part = $key;
+				switch ($value) {
+					case "0":
+					$part_1 = $part . "1";
+					$data[$part_1] = "checked";
+					break;
+					case "1":
+					$part_2 = $part . "2";
+					$data[$part_2] = "checked";
+					break;
+					case "2":
+					$part_3 = $part . "3";
+					$data[$part_3] = "checked";
+					break;
+					default:
+					$part_1 = $part . "1";
+					$data[$part_1] = "checked";
+					break;
+				}
+			}
+			// travel
+			if ($key == "travel") {
+				$part = $key;
+				switch ($value) {
+					case "0":
+					$part_1 = $part . "1";
+					$data[$part_1] = "checked";
+					break;
+					case "1":
+					$part_2 = $part . "2";
+					$data[$part_2] = "checked";
+					break;
+					case "2":
+					$part_3 = $part . "3";
+					$data[$part_3] = "checked";
+					break;
+					default:
+					$part_1 = $part . "1";
+					$data[$part_1] = "checked";
+					break;
+				}
+			}
+			// confirmation
+			if ($key == "confirmation") {
+				$part = $key;
+				switch ($value) {
+					case "0":
+					$part_1 = $part . "1";
+					$data[$part_1] = "checked";
+					break;
+					case "1":
+					$part_2 = $part . "2";
+					$data[$part_2] = "checked";
+					break;
+					case "2":
+					$part_3 = $part . "3";
+					$data[$part_3] = "checked";
+					break;
+					default:
+					$part_1 = $part . "1";
+					$data[$part_1] = "checked";
+					break;
+				}
+			}
 		}
+
 
 		$data['s1'] = "active";
 

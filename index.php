@@ -12,6 +12,7 @@ $section = "";
 if ($_SESSION['logged'] == "TRUE") {
         $smarty->assign('name',$_SESSION['first'] . " " . $_SESSION['last']);
         $smarty->assign('logged','yes');
+        $smarty->assign('TINYMCE',TINYMCE);
 }
 
 

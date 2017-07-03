@@ -170,8 +170,8 @@ class reservation extends charters {
                 FROM
                         `inventory` i
 
-                JOIN contacts c ON i.passengerID = c.contactID
-                INNER JOIN guestform_status g ON 
+                LEFT JOIN contacts c ON i.passengerID = c.contactID
+                LEFT JOIN guestform_status g ON 
                         i.charterID = g.charterID
                         AND c.contactID = g.passengerID
 
