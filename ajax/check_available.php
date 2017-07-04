@@ -4,8 +4,9 @@ error_reporting(E_ALL & ~E_NOTICE);
 include "../include/settings.php";
 include "../include/templates.php";
 $smarty->error_reporting = E_ALL & ~E_NOTICE;
-if ($_SESSION['logged'] == "TRUE") {
-
+$logged = $core->check_login();
+if ($logged == "TRUE") {
+	
 	$sql = "SELECT `contactID` FROM `contacts` WHERE `uuname` = '$_GET[uuname]' AND `contactID` != '$_GET[contactID]'";
 	$result = $core->new_mysql($sql);
 	while ($row = $result->fetch_assoc()) {

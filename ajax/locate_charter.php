@@ -4,8 +4,8 @@ error_reporting(E_ALL & ~E_NOTICE);
 include "../include/settings.php";
 include "../include/templates.php";
 $smarty->error_reporting = E_ALL & ~E_NOTICE;
-if ($_SESSION['logged'] == "TRUE") {
-
+$logged = $core->check_login();
+if ($logged == "TRUE") {
         if ($_GET['ajax'] != "1") {
                 foreach($_SESSION as $key=>$value) {
                         if(preg_match("/lc/",$key)) {

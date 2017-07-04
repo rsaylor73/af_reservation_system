@@ -4,8 +4,8 @@ error_reporting(E_ALL & ~E_NOTICE);
 include "../include/settings.php";
 include "../include/templates.php";
 $smarty->error_reporting = E_ALL & ~E_NOTICE;
-if ($_SESSION['logged'] == "TRUE") {
-
+$logged = $core->check_login();
+if ($logged == "TRUE") {
 	// get old inventory
 	$old_bunk_details = $core->objectToArray(json_decode($core->get_inventory_swap($_GET['charterID'],$_GET['old'])));
 

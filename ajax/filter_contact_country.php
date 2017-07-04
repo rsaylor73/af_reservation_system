@@ -4,7 +4,8 @@ error_reporting(E_ALL & ~E_NOTICE);
 include "../include/settings.php";
 include "../include/templates.php";
 $smarty->error_reporting = E_ALL & ~E_NOTICE;
-if ($_SESSION['logged'] == "TRUE") {
+$logged = $core->check_login();
+if ($logged == "TRUE") {
         if ($_GET['countryID'] == "2") {
                 $sql2 = "SELECT `state` FROM `contacts` WHERE `contactID` = '$_GET[contactID]'";
                 $result2 = $core->new_mysql($sql2);

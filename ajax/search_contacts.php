@@ -4,7 +4,8 @@ error_reporting(E_ALL & ~E_NOTICE);
 include "../include/settings.php";
 include "../include/templates.php";
 $smarty->error_reporting = E_ALL & ~E_NOTICE;
-if ($_SESSION['logged'] == "TRUE") {
+$logged = $core->check_login();
+if ($logged == "TRUE") {
 	$core->security('manage_contacts',$_SESSION['user_typeID']);
 	$template = "contacts_search_results.tpl";
 

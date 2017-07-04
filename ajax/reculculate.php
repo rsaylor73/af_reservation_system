@@ -4,8 +4,8 @@ error_reporting(E_ALL & ~E_NOTICE);
 include "../include/settings.php";
 include "../include/templates.php";
 $smarty->error_reporting = E_ALL & ~E_NOTICE;
-if ($_SESSION['logged'] == "TRUE") {
-
+$logged = $core->check_login();
+if ($logged == "TRUE") {
                 // get base rate
                 $sql2 = "SELECT `charter_rate` FROM `boats` WHERE `boatID` = '$_GET[boatID]'";
                 $result2 = $core->new_mysql($sql2);

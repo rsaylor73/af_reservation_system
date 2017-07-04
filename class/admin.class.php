@@ -3,6 +3,21 @@ include PATH."/class/contacts.class.php";
 
 class admin extends contact {
 
+	// This will change the password from a password to a hash in the database
+	// This should be ran only 2 times. Once for testing and once when going live
+	public function hash_passwords() {
+		$this->security('admin_menu',$_SESSION['user_typeID']);
+
+		$sql = "SELECT `userID`,`password` FROM `users`";
+		$result = $this->new_mysql($sql);
+		while ($row = $result->fetch_assoc()) {
+			$password = password_hash($row['password'], PASSWORD_DEFAULT);
+			$sql2 = "UPDATE `users` SET `password` = '$password' WHERE `userID` = '$row[userID]'";
+			$result2 = $this->new_mysql($sql2);
+		}
+		print "Done!";
+	}
+
 	// This displays the admin menu //
 	public function admin_menu() {
 		$this->security('admin_menu',$_SESSION['user_typeID']);

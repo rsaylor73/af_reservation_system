@@ -9,6 +9,17 @@ class users extends admin {
 		$this->load_smarty($data,$template);
 	}
 
+	public function randomPassword() {
+    	$alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+    	$pass = array(); //remember to declare $pass as an array
+    	$alphaLength = strlen($alphabet) - 1; //put the length -1 in cache
+    	for ($i = 0; $i < 8; $i++) {
+        	$n = rand(0, $alphaLength);
+        	$pass[] = $alphabet[$n];
+    	}
+    	return implode($pass); //turn the array into a string
+	}
+
 	/* This displays the user profile and allows the user to update there profile */
 	public function profile() {
 		$template = "profile.tpl";
@@ -26,7 +37,8 @@ class users extends admin {
 	/* This updated the user profile changes */
 	public function update_profile() {
 		if ($_POST['uupass'] != "") {
-			$uupass = ",`password` = '$_POST[uupass]'";
+			$password = password_hash($_POST['uupass'], PASSWORD_DEFAULT);
+			$uupass = ",`password` = '$password'";
 		}
 		$sql = "UPDATE `users` SET `first` = '$_POST[first]', `last` = '$_POST[last]', `email` = '$_POST[email]' $uupass WHERE `userID` = '$_SESSION[userID]'";
 		$result = $this->new_mysql($sql);

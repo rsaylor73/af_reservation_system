@@ -4,7 +4,8 @@ error_reporting(E_ALL & ~E_NOTICE);
 include "../include/settings.php";
 include "../include/templates.php";
 $smarty->error_reporting = E_ALL & ~E_NOTICE;
-if ($_SESSION['logged'] == "TRUE") {
+$logged = $core->check_login();
+if ($logged == "TRUE") {
 	$date = str_replace('-','',$_GET['charter_date']);
 	$sql = "
 	SELECT 

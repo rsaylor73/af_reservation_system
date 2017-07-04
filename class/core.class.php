@@ -5,7 +5,16 @@
 class core {
 
         public function new_mysql($sql) {
-                $result = $this->linkID->query($sql) or die($this->linkID->error.__LINE__);
+                $result = $this->linkID->query($sql) or die(
+                        print "
+                        <div class=\"alert alert-danger\">
+                        <i class=\"fa fa-exclamation-triangle\" aria-hidden=\"true\"></i>&nbsp;
+
+                        <b>There was a MySQL error.</b><br>The following query failed to load:<br><br>
+                        $sql<br><br>" .
+                        $this->linkID->error.__LINE__
+                        . "</div>"
+                        );
                 return $result;
         }
 
@@ -33,46 +42,93 @@ class core {
 
 	// checks if a user is signed in
         public function check_login() {
-
-                $sql = "SELECT * FROM `users` WHERE `username` = '$_SESSION[username]' AND `password` = '$_SESSION[password]' AND `status` = 'Active'";
+                $time = date("U");
+                $sql = "
+                SELECT 
+                        `userID`,`username`,`password`,`expire`
+                FROM 
+                        `users` 
+                WHERE 
+                        `username` = '$_SESSION[username]'
+                        AND `token` = '$_SESSION[token]'
+                        AND `expire` > '$time'
+                ";
+                $found = "0";
                 $result = $this->new_mysql($sql);
                 while ($row = $result->fetch_assoc()) {
                         $found = "1";
-			if ($_SESSION['geo_record'] == "") {
-				// this will log the users GEO location if they accept the browser warning
-				$this->activity_log('login');
-				$_SESSION['geo_record'] = "1";
-			}
 
-                        // update session data
-                        foreach ($row as $key=>$value) {
-                                $_SESSION[$key] = $value;
+                        // extend the expire
+                        if ($row['expire'] < 350) {
+                                $new_time = $row['expire'] + EXPIRE; // adds 5 mins
+                                $sql2 = "UPDATE `users` SET `expire` = '$new_time' WHERE `userID` = '$row[userID]'";
+                                $result2 = $this->new_mysql($sql2);
+                        }
+
+                        if ($_SESSION['geo_record'] == "") {
+                                // this will log the users GEO location if they accept the browser warning
+                                $this->activity_log('login');
+                                $_SESSION['geo_record'] = "1";
                         }
                 }
-                if ($found == "1") {
+
+                if ($_SESSION['username'] == "") {
+                        $found = "0";
+                }
+                if ($_SESSION['token'] == "") {
+                        $found = "0";
+                }
+
+                $remote_addr = $_SERVER['REMOTE_ADDR'];
+                if ($remote_addr == SERVER_IP) { // Server IP of the virtual host
+                        $found = "1";
+                }
+
+                switch ($found) {
+                        case "0":
+                        return "FALSE";
+                        break;
+                        case "1":
                         return "TRUE";
-                } else {
-			// this will bypass signin for cron jobs
-                        $remote_addr = $_SERVER['REMOTE_ADDR'];
-                        if ($remote_addr == SERVER_IP) { // Server IP of the virtual host
-                                return "TRUE";
-                        } else {
-                                return "FALSE";
-                        }
+                        break;
+                        default:
+                        return "FALSE";
+                        break;
                 }
         }
 
 	// login form
 	public function login() {
-		$sql = "SELECT `userID`,`first`,`last`,`company`,`email`,`user_typeID`,`status`,`boats`,`username`,`password` FROM `users` 
-		WHERE `username` = '$_POST[uuname]' AND `password` = '$_POST[uupass]' AND `status` = 'Active'";
+                /* The password is not validated as a match but instead the hash
+                of the password is validated. If correct then a secure token
+                is issued to the user and an expiration time is set. */
+
+		$sql = "
+                SELECT 
+                        `userID`,`first`,`last`,`company`,`email`,`user_typeID`,
+                        `status`,`boats`,`username`,`password` 
+                FROM 
+                        `users` 
+		WHERE 
+                        `username` = '$_POST[uuname]' 
+                        AND `status` = 'Active'
+                ";
 		$result = $this->new_mysql($sql);
 		while ($row = $result->fetch_assoc()) {
-			$found = "1";
-			foreach($row as $key=>$value) {
-				$_SESSION[$key] = $value;
-			}
-			$_SESSION['logged'] = "TRUE";
+                        if (password_verify($_POST['uupass'], $row['password'])) {
+			     $found = "1";
+			     foreach($row as $key=>$value) {
+                                $_SESSION[$key] = $value;
+			     }
+                             unset($_SESSION['password']);
+                             $token = $this->encode(rand(100,5000), AF_MASTER_KEY);
+                             $expire = date("U");
+                             $expire = $expire + EXPIRE;
+                             $_SESSION['token'] = $token;
+                             $sql2 = "UPDATE `users` SET `token` = '$token', `expire` = '$expire'
+                             WHERE `userID` = '$row[userID]'";
+                             $result2 = $this->new_mysql($sql2);
+                        }
 		}
 
                 if ($found == "1") {
@@ -102,6 +158,9 @@ class core {
 
 	// logout
 	public function logout() {
+                $sql = "UPDATE `users` SET `expire` = '0' WHERE `userID` = '$_SESSION[userID]'";
+                $result = $this->new_mysql($sql);
+
 		$_SESSION = array();
 		if (ini_get("session.use_cookies")) {
 			$params = session_get_cookie_params();

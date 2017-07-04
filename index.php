@@ -9,7 +9,17 @@ $smarty->error_reporting = E_ALL & ~E_NOTICE;
 $section = "";
 
 // header
-if ($_SESSION['logged'] == "TRUE") {
+$logged = $core->check_login();
+if ($logged == "TRUE") {
+		$sql = "SELECT `expire` FROM `users` WHERE `userID` = '$_SESSION[userID]'";
+		$result = $core->new_mysql($sql);
+		while ($row = $result->fetch_assoc()) {
+			$expires = $row['expire'];
+			$time = date("U");
+			$time_left = $expires - $time;
+			$time_left = $time_left - 300;
+			$smarty->assign('counter',$time_left);
+		}
         $smarty->assign('name',$_SESSION['first'] . " " . $_SESSION['last']);
         $smarty->assign('logged','yes');
         $smarty->assign('TINYMCE',TINYMCE);
