@@ -8,3 +8,4 @@ ADD  `icon` VARCHAR( 50 ) NULL ;
 
 ALTER TABLE  `actions` ADD  `new_link` VARCHAR( 200 ) NULL ;
 
+-Add token and expire to users

@@ -297,6 +297,23 @@ class bunks extends users {
 			$data[$key] = $value;
 		}
 
+		// passenger_info_for_this_bunk (inventory)
+		$sql = "SELECT `passenger_info_for_this_bunk`,`passengerID` FROM `inventory` 
+		WHERE `inventoryID` = '$_GET[inventoryID]'";
+		$result = $this->new_mysql($sql);
+		while ($row = $result->fetch_assoc()) {
+			$data['passenger_info_for_this_bunk'] = $row['passenger_info_for_this_bunk'];
+			$passengerID = $row['passengerID'];
+		}
+
+		// special_passenger_details (contact)
+		$sql = "SELECT `special_passenger_details` FROM `contacts` 
+		WHERE `contactID` = '$passengerID'";
+		$result = $this->new_mysql($sql);
+		while ($row = $result->fetch_assoc()) {
+			$data['special_passenger_details'] = $row['special_passenger_details'];
+		}
+
 		$data['s2'] = "active";
 
 		$template = "stateroom_requests.tpl";
@@ -310,6 +327,30 @@ class bunks extends users {
 		$json_data = $this->objectToArray(json_decode($this->stateroom_header($_GET['inventoryID'])));
 		foreach($json_data as $key=>$value) {
 			$data[$key] = $value;
+		}
+
+		$sql = "
+		SELECT
+			`certification_level`,
+			`certification_date`,
+			`certification_agency`,
+			`certification_number`,
+			`nitrox_agency`,
+			`nitrox_number`,
+			`nitrox_date`,
+			`dive_insurance`,
+			`dive_insurance_co`,
+			`dive_insurance_number`
+		FROM
+			`inventory`
+		WHERE
+			`inventoryID` = '$_GET[inventoryID]'
+		";
+		$result = $this->new_mysql($sql);
+		while ($row = $result->fetch_assoc()) {
+			foreach ($row as $key=>$value) {
+				$data[$key] = $value;
+			}
 		}
 
 		$data['s3'] = "active";

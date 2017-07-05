@@ -214,7 +214,13 @@ Show_Countdown();
     <script>
     function repaint_screen() {
       extend_login();
-      window.location.reload();
+
+      setTimeout(function() {
+        window.location.reload();
+      }
+      ,2000);
+
+
     }
 
     function extend_login() {
