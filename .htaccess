@@ -72,8 +72,8 @@ RewriteRule ^contact/delete_imported/([a-zA-Z0-9]+)/([a-zA-Z0-9]+)/?$ index.php?
 RewriteRule ^contact/([a-zA-Z0-9]+)/([a-zA-Z0-9]+)/([a-zA-Z0-9]+)/?$ index.php?section=contacts_part&part=$1&contactID=$2&reservationID=$3 [NC,L]
 
 # php -- BEGIN cPanel-generated handler, do not edit
-# Set the “ea-php70” package as the default “PHP” programming language.
+# Set the “ea-php56” package as the default “PHP” programming language.
 <IfModule mime_module>
-  AddType application/x-httpd-ea-php70 .php .php7 .phtml
+  AddType application/x-httpd-ea-php56 .php .php5 .phtml
 </IfModule>
 # php -- END cPanel-generated handler, do not edit

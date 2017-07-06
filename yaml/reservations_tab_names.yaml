@@ -1,0 +1,14 @@
+# This is a YAML config file. The use of symbols is not permitted.
+AF:
+  config_invoice:  Invoice
+  config_booker:   Booker
+  config_reservation_type: Reservation Type
+  config_confirmation: Conf Number
+  config_reseller_agreement: Reseller Agreement
+
+OFY:
+  config_invoice:  Invoice
+  config_booker:   Booker
+  config_reservation_type: Reservation Type
+  config_confirmation: Conf Number
+  config_reseller_agreement: Reseller Agreement

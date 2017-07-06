@@ -340,7 +340,8 @@ class bunks extends users {
 			`nitrox_date`,
 			`dive_insurance`,
 			`dive_insurance_co`,
-			`dive_insurance_number`
+			`dive_insurance_number`,
+			`dive_insurance_date`
 		FROM
 			`inventory`
 		WHERE

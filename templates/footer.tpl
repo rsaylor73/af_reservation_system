@@ -56,7 +56,18 @@ $(function() {
                 dateFormat: "yy-mm-dd",
                 changeMonth: true,
                 changeYear: true,
-                minDate: "-3Y", 
+                minDate: "-50Y", 
+                maxDate: "0"
+        });
+
+});
+
+$(function() {
+        $( "#nitrox_date" ).datepicker({ 
+                dateFormat: "yy-mm-dd",
+                changeMonth: true,
+                changeYear: true,
+                minDate: "-50Y", 
                 maxDate: "0"
         });
 

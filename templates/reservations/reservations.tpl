@@ -25,11 +25,11 @@
 		</div>
 
 		<div class="row pad-top">
-			<div class="col-sm-2"><b>Invoice</b></div>
-			<div class="col-sm-4"><b>Booker</b></div>
-			<div class="col-sm-2"><b>Reservation Type</b></div>
-			<div class="col-sm-2"><b>Conf #</b></div>
-			<div class="col-sm-2"><b>Reseller Agreement</b></div>
+			<div class="col-sm-2"><b>{$config_invoice}</b></div>
+			<div class="col-sm-4"><b>{$config_booker}</b></div>
+			<div class="col-sm-2"><b>{$config_reservation_type}</b></div>
+			<div class="col-sm-2"><b>{$config_confirmation}</b></div>
+			<div class="col-sm-2"><b>{$config_reseller_agreement}</b></div>
 		</div>
 
 		<div class="row pad-top">
