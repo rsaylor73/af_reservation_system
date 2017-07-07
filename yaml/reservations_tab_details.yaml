@@ -1,0 +1,106 @@
+# This is a YAML config file. The use of symbols is not permitted.
+AF:
+  config_reservation_details_header:  Reservation Details
+  config_button_top_left: Update Reservation Details
+  config_button_top_right: Cancel Reservation
+  config_invoice:  Invoice
+  config_booker:   Booker
+  config_reservation_type: Reservation Type
+  config_confirmation: Conf Number
+  config_reseller_agreement: Reseller Agreement
+
+  config_middle_header: Booking Agent
+  config_button_middle: Change Agent
+  config_reseller_number: Reseller Number
+  config_agent: Agent
+  config_company: Company
+  config_reseller_type: Reseller Type
+  config_commission: Commission
+
+  config_bottom_header: Correspondence Address
+  config_button_bottom_left: Find Contact
+  config_button_bottom_middle: Edit Contact
+  config_button_bottom_right: History
+  config_contact_id: Contact ID
+  config_name: Name
+  config_group_name: Group Name
+  config_home_phone: Home Phone
+  config_work_phone: Work Phone
+  config_mobile_phone: Mobile Phone
+  config_address1: Address
+  config_address2: Unit/Appt
+  config_city: City
+  config_state: State
+  config_province: Province
+  config_country: Country
+  config_zip: Zip
+  config_email: Email
+
+  config_buttom2_header: Charter Details
+  config_button_bottom2_left: Edit Passengers
+  config_button_bottom2_right: Review Charter
+  config_charter_id: Charter ID
+  config_boat_name: Boat Name
+  config_date_start: Date Start
+  config_nights: Nights
+  config_date_end: Date End
+  config_text_notification: Text Notification
+  config_percent_booked: Percent Booked
+  config_bunks_left: Bunks Left
+  config_reservation_type2: Reservation Type
+  config_charter_add_on: Charter Add On
+  config_number_passengers: Number Passengers
+  config_default_commission: Default Commission
+
+OFY:
+  config_reservation_details_header:  Reservation Details
+  config_button_top_left: Update Reservation Details
+  config_button_top_right: Cancel Reservation
+  config_invoice:  Invoice
+  config_booker:   Booker
+  config_reservation_type: Reservation Type
+  config_confirmation: Conf Number
+  config_reseller_agreement: Affiliate Agreement
+
+  config_middle_header: Booking Agent
+  config_button_middle: Change Agent
+  config_reseller_number: Reseller Number
+  config_agent: Agent
+  config_company: Company
+  config_reseller_type: Affiliate Type
+  config_commission: Referral
+
+  config_bottom_header: Correspondence Address
+  config_button_bottom_left: Find Contact
+  config_button_bottom_middle: Edit Contact
+  config_button_bottom_right: History
+  config_contact_id: Contact ID
+  config_name: Name
+  config_group_name: Group Name
+  config_home_phone: Home Phone
+  config_work_phone: Work Phone
+  config_mobile_phone: Mobile Phone
+  config_address1: Address
+  config_address2: Unit/Appt
+  config_city: City
+  config_state: State
+  config_province: Province
+  config_country: Country
+  config_zip: Zip
+  config_email: Email
+
+  config_buttom2_header: Program Details
+  config_button_bottom2_left: Edit Travelers
+  config_button_bottom2_right: Review Program
+  config_charter_id: Program ID
+  config_boat_name: Program Name
+  config_date_start: Date Start
+  config_nights: Nights
+  config_date_end: Date End
+  config_text_notification: Text Notification
+  config_percent_booked: Percent Booked
+  config_bunks_left: Staterooms Left
+  config_reservation_type2: Reservation Type
+  config_charter_add_on: Program Add On
+  config_number_passengers: Number Travelers
+  config_default_commission: Default Referral

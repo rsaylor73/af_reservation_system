@@ -7,7 +7,7 @@
 <input type="hidden" name="inventoryID" value="{$inventoryID}">
 <input type="hidden" name="passengerID" value="{$passengerID}">
 <input type="hidden" name="charterID" value="{$charterID}">
-<div class="well">
+<div class="jumbotron">
 	<div class="row pad-top">
 		<div class="col-sm-8">
 			<h3>Other Comments/Requests: (details for this reservation only)</h3>

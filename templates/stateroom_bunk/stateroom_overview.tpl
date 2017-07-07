@@ -1,5 +1,7 @@
 <style>
-
+.alert{
+   margin: 0;
+}
 </style>
 
 <h2><a href="/">Main Menu</a> : <a href="/reservations_guests/{$reservationID}">Reservation {$reservationID}</a> : Stateroom Overview</h2>
@@ -10,6 +12,7 @@
 <input type="hidden" name="inventoryID" value="{$inventoryID}">
 <input type="hidden" name="passengerID" value="{$passengerID}">
 <input type="hidden" name="charterID" value="{$charterID}">
+<div class="jumbotron">
 	<div class="row">
 		<div class="col-sm-2 alert">&nbsp;</div>
 		<div class="col-sm-2 alert alert-warning text-center">
@@ -183,7 +186,7 @@
 			onchange="update_status(this.form)">
 		</div>
 	</div>
-
+</div>
 </form>
 
 <script>

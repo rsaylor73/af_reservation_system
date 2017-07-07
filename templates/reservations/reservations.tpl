@@ -16,9 +16,9 @@
 			<div class="col-sm-12">
 				<div class="alert alert-info">
 					<div class="row">
-						<div class="col-sm-8"><h4>Reservation Details</h4></div>
-						<div class="col-sm-2"><input type="button" class="btn btn-warning form-control" value="Update Reservation Details"></div>
-						<div class="col-sm-2"><input type="button" class="btn btn-warning form-control" value="Cancel Reservation"></div>
+						<div class="col-sm-8"><h4>{$config_reservation_details_header}</h4></div>
+						<div class="col-sm-2"><input type="button" class="btn btn-warning form-control" value="{$config_button_top_left}"></div>
+						<div class="col-sm-2"><input type="button" class="btn btn-warning form-control" value="{$config_button_top_right}"></div>
 					</div>
 				</div>
 			</div>
@@ -59,23 +59,23 @@
 			<div class="col-sm-12">
 				<div class="alert alert-info">
 					<div class="row">
-						<div class="col-sm-10"><h4>Booking Agent</h4></div>
-						<div class="col-sm-2"><input type="button" value="Change Agent" class="btn btn-warning form-control"></div>
+						<div class="col-sm-10"><h4>{$config_middle_header}</h4></div>
+						<div class="col-sm-2"><input type="button" value="{$config_button_middle}" class="btn btn-warning form-control"></div>
 					</div>
 				</div>
 			</div>
 		</div>
 
 		<div class="row pad-top">
-			<div class="col-sm-2"><b>Reseller Number</b></div>
-			<div class="col-sm-4"><b>Agent</b></div>
-			<div class="col-sm-2"><b>Company</b></div>
-			<div class="col-sm-2"><b>Reseller Type</b></div>
-			<div class="col-sm-2"><b>Commission</b></div>
+			<div class="col-sm-2"><b>{$config_reseller_number}</b></div>
+			<div class="col-sm-4"><b>{$config_agent}</b></div>
+			<div class="col-sm-2"><b>{$config_company}</b></div>
+			<div class="col-sm-2"><b>{$config_reseller_type}</b></div>
+			<div class="col-sm-2"><b>{$config_commission}</b></div>
 		</div>
 
-                <div class="row pad-top">
-			<div class="col-sm-2"><span id="cb" onclick="data-clipboard-action='copy'>{$resellerID}</span></div>
+		<div class="row pad-top">
+			<div class="col-sm-2">{$resellerID}</div>
 			<div class="col-sm-4"><a href="mailto:{$ra_email}">{$ra_first} {$ra_last}</a></div>
 			<div class="col-sm-2">{$company}</div>
 			<div class="col-sm-2">{$type}</div>
@@ -83,18 +83,15 @@
 		</div>
 	</div>
 
-        <div class="well">
-                <div class="row pad-top">
-                        <div class="col-sm-12">
-                                <div class="alert alert-info">
-                                        <div class="row">
-						<div class="col-sm-6"><h4>Correspondence Address</h4></div>
-						<div class="col-sm-2"><input type="button" value="Find Contact" class="btn btn-warning form-control"></div>
-                                                <div class="col-sm-2"><input type="button" value="Edit Contact" class="btn btn-warning form-control"></div>
-                                                <div class="col-sm-2">
-							<input type="button" value="History" class="btn btn-warning form-control"
-							onclick="document.location.href='/contact/history/{$contactID}/{$reservationID}'">
-
+	<div class="well">
+		<div class="row pad-top">
+			<div class="col-sm-12">
+				<div class="alert alert-info">
+					<div class="row">
+						<div class="col-sm-6"><h4>{$config_bottom_header}</h4></div>
+						<div class="col-sm-2"><input type="button" value="{$config_button_bottom_left}" class="btn btn-warning form-control"></div>
+						<div class="col-sm-2"><input type="button" value="{$config_button_bottom_middle}" class="btn btn-warning form-control"></div>
+						<div class="col-sm-2"><input type="button" value="{$config_button_bottom_right}" class="btn btn-warning form-control" onclick="document.location.href='/contact/history/{$contactID}/{$reservationID}'">
 						</div>
 					</div>
 				</div>
@@ -102,12 +99,12 @@
 		</div>
 
 		<div class="row pad-top">
-			<div class="col-sm-2"><b>Contact ID</b></div>
-			<div class="col-sm-2"><b>Name</b></div>
-			<div class="col-sm-2"><b>Group Name</b></div>
-			<div class="col-sm-2"><b>Home Phone</b></div>
-                        <div class="col-sm-2"><b>Work Phone</b></div>
-                        <div class="col-sm-2"><b>Mobile Phone</b></div>
+			<div class="col-sm-2"><b>{$config_contact_id}</b></div>
+			<div class="col-sm-2"><b>{$config_name}</b></div>
+			<div class="col-sm-2"><b>{$config_group_name}</b></div>
+			<div class="col-sm-2"><b>{$config_home_phone}</b></div>
+			<div class="col-sm-2"><b>{$config_work_phone}</b></div>
+			<div class="col-sm-2"><b>{$config_mobile_phone}</b></div>
 		</div>
 
 		<div class="row pad-top">
@@ -116,31 +113,31 @@
 			<div class="col-sm-2">{$group_name}</div>
 			<div class="col-sm-2">
 				{if $phone1_type eq "Home"}{$phone1}{/if}
-                                {if $phone2_type eq "Home"}{$phone2}{/if}
-                                {if $phone3_type eq "Home"}{$phone3}{/if}
-                                {if $phone4_type eq "Home"}{$phone4}{/if}
+				{if $phone2_type eq "Home"}{$phone2}{/if}
+				{if $phone3_type eq "Home"}{$phone3}{/if}
+				{if $phone4_type eq "Home"}{$phone4}{/if}
 			</div>
-                        <div class="col-sm-2">
-                                {if $phone1_type eq "Work"}{$phone1}{/if}
-                                {if $phone2_type eq "Work"}{$phone2}{/if}
-                                {if $phone3_type eq "Work"}{$phone3}{/if}
-                                {if $phone4_type eq "Work"}{$phone4}{/if}
-                        </div>
-                        <div class="col-sm-2">
-                                {if $phone1_type eq "Mobile"}{$phone1}{/if}
-                                {if $phone2_type eq "Mobile"}{$phone2}{/if}
-                                {if $phone3_type eq "Mobile"}{$phone3}{/if}
-                                {if $phone4_type eq "Mobile"}{$phone4}{/if}
-                        </div>
+			<div class="col-sm-2">
+				{if $phone1_type eq "Work"}{$phone1}{/if}
+				{if $phone2_type eq "Work"}{$phone2}{/if}
+				{if $phone3_type eq "Work"}{$phone3}{/if}
+				{if $phone4_type eq "Work"}{$phone4}{/if}
+			</div>
+			<div class="col-sm-2">
+				{if $phone1_type eq "Mobile"}{$phone1}{/if}
+				{if $phone2_type eq "Mobile"}{$phone2}{/if}
+				{if $phone3_type eq "Mobile"}{$phone3}{/if}
+				{if $phone4_type eq "Mobile"}{$phone4}{/if}
+			</div>
 		</div>
 
 		<div class="row pad-top">
-			<div class="col-sm-2"><b>Address</b></div>
-			<div class="col-sm-2"><b>Unit/Appt</b></div>
-			<div class="col-sm-2"><b>City</b></div>
-			<div class="col-sm-2">{if $countryID eq "2"}<b>State</b>{else}<b>Province</b>{/if}</div>
-			<div class="col-sm-2"><b>Country</b></div>
-			<div class="col-sm-2"><b>Zip</b></div>
+			<div class="col-sm-2"><b>{$config_address1}</b></div>
+			<div class="col-sm-2"><b>{$config_address2}</b></div>
+			<div class="col-sm-2"><b>{$config_city}</b></div>
+			<div class="col-sm-2">{if $countryID eq "2"}<b>{$config_state}</b>{else}<b>{$config_province}</b>{/if}</div>
+			<div class="col-sm-2"><b>{$config_country}</b></div>
+			<div class="col-sm-2"><b>{$config_zip}</b></div>
 		</div>
 
 		<div class="row pad-top">
@@ -152,40 +149,36 @@
 			<div class="col-sm-2">{$c_zip}</div>
 		</div>
 
-                <div class="row pad-top">
-			<div class="col-sm-4"><b>Email</b></div>
-
+		<div class="row pad-top">
+			<div class="col-sm-4"><b>{$config_email}</b></div>
 		</div>
 
-                <div class="row pad-top">
+		<div class="row pad-top">
 			<div class="col-sm-4"><a href="mailto:{$c_email}">{$c_email}</a></div>
-
 		</div>
 	</div>
 
-        <div class="well">
-                <div class="row pad-top">
-                        <div class="col-sm-12">
-                                <div class="alert alert-info">
-                                        <div class="row">
-                                                <div class="col-sm-8"><h4>Charter Details</h4></div>
-                                                <div class="col-sm-2"><input type="button" value="Edit Passengers" class="btn btn-warning form-control"></div>
-                                                <div class="col-sm-2">
-							<input type="button" value="Review Charter" class="btn btn-warning form-control"
-							onclick="document.location.href='/view_charter/{$charterID}'">
+	<div class="well">
+		<div class="row pad-top">
+			<div class="col-sm-12">
+				<div class="alert alert-info">
+					<div class="row">
+						<div class="col-sm-8"><h4>{$config_buttom2_header}</h4></div>
+						<div class="col-sm-2"><input type="button" value="{$config_button_bottom2_left}" class="btn btn-warning form-control"></div>
+						<div class="col-sm-2"><input type="button" value="{$config_button_bottom2_right}" class="btn btn-warning form-control" onclick="document.location.href='/view_charter/{$charterID}'">
 						</div>
-                                        </div>
-                                </div>
-                        </div>
-                </div>
+					</div>
+				</div>
+			</div>
+		</div>
 
 		<div class="row pad-top">
-			<div class="col-sm-2"><b>Charter ID</b></div>
-			<div class="col-sm-2"><b>Boat Name</b></div>
-			<div class="col-sm-2"><b>Date Start</b></div>
-			<div class="col-sm-2"><b>Nights</b></div>
-			<div class="col-sm-2"><b>Date End</b></div>
-			<div class="col-sm-2"><b>Text Notification</b></div>
+			<div class="col-sm-2"><b>{$config_charter_id}</b></div>
+			<div class="col-sm-2"><b>{$config_boat_name}</b></div>
+			<div class="col-sm-2"><b>{$config_date_start}</b></div>
+			<div class="col-sm-2"><b>{$config_nights}</b></div>
+			<div class="col-sm-2"><b>{$config_date_end}</b></div>
+			<div class="col-sm-2"><b>{$config_text_notification}</b></div>
 		</div>
 
 		<div class="row pad-top">
@@ -198,24 +191,21 @@
 		</div>
 
 		<div class="row pad-top">
-			<div class="col-sm-2"><b>Percent Booked</b></div>
-			<div class="col-sm-2"><b>Bunks Left</b></div>
-			<div class="col-sm-2"><b>Reservation Type</b></div>
-			<div class="col-sm-2"><b>Charter Add On</b></div>
-			<div class="col-sm-2"><b># Res Passengers</b></div>
-			<div class="col-sm-2"><b>Default Commission</b></div>
+			<div class="col-sm-2"><b>{$config_percent_booked}</b></div>
+			<div class="col-sm-2"><b>{$config_bunks_left}</b></div>
+			<div class="col-sm-2"><b>{$config_reservation_type2}</b></div>
+			<div class="col-sm-2"><b>{$config_charter_add_on}</b></div>
+			<div class="col-sm-2"><b>{$config_number_passengers}</b></div>
+			<div class="col-sm-2"><b>{$config_default_commission}</b></div>
 		</div>
 
 		<div class="row pad-top">
 			<div class="col-sm-2">{$percent_booked} %</div>
 			<div class="col-sm-2">{$avail}</div>
-                        <div class="col-sm-2">{$reservation_type}</div>
-                        <div class="col-sm-2">$ {$add_on}</div>
-                        <div class="col-sm-2">{$pax}</div>
+			<div class="col-sm-2">{$reservation_type}</div>
+			<div class="col-sm-2">$ {$add_on}</div>
+			<div class="col-sm-2">{$pax}</div>
 			<div class="col-sm-2"><input type="checkbox" name="default_commission" value="checked" {$default_commission}>&nbsp;&nbsp;Set to 15%</div>
 		</div>
-
-
 	</div>
-
 </div>

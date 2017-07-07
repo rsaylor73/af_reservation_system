@@ -369,6 +369,26 @@ class bunks extends users {
 			$data[$key] = $value;
 		}
 
+		$sql = "
+		SELECT
+			`equipment_insurance`,
+			`equipment_policy`,
+			`trip_insurance`,
+			`trip_insurance_co`,
+			`trip_insurance_number`,
+			`trip_insurance_date`
+		FROM
+			`inventory`
+		WHERE
+			`inventoryID` = '$_GET[inventoryID]'
+		";
+		$result = $this->new_mysql($sql);
+		while ($row = $result->fetch_assoc()) {
+			foreach ($row as $key=>$value) {
+				$data[$key] = $value;
+			}
+		}
+		
 		$data['s4'] = "active";
 
 		$template = "stateroom_insurance.tpl";

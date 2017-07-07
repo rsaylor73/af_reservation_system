@@ -7,12 +7,11 @@
 <input type="hidden" name="passengerID" value="{$passengerID}">
 <input type="hidden" name="charterID" value="{$charterID}">
 
-<div class="well">
+<div class="jumbotron">
 	<div id="ajax_results"></div>
 	<div class="row pad-top">
 		<div class="col-sm-5">
 			<!-- left -->
-			<div class="well">
 				<div class="row">
 					<div class="col-sm-12"><b>Diving Certification Information</b></div>
 				</div>
@@ -61,12 +60,10 @@
 						class="form-control">
 					</div>
 				</div>
-			</div>
 			<!-- end left -->
 		</div>
 		<div class="col-sm-5">
 			<!-- right -->
-			<div class="well">
 				<div class="row">
 					<div class="col-sm-12"><b>Nitrox Certification Information</b></div>
 				</div>
@@ -99,14 +96,12 @@
 						class="form-control">
 					</div>
 				</div>
-			</div>
 			<!-- end right -->
 		</div>
 	</div>
 	<div class="row pad-top">
 		<div class="col-sm-5">
 			<!-- left -->
-			<div class="well">
 				<div class="row">
 					<div class="col-sm-12"><b>Diving Insurance Information</b></div>
 				</div>
@@ -149,7 +144,6 @@
 						Declined to purchased Dive Insurance
 					</div>
 				</div>
-			</div>
 			<!-- end left -->
 		</div>
 		<div class="col-sm-5">

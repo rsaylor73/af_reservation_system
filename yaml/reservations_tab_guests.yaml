@@ -1,0 +1,30 @@
+# This is a YAML config file. The use of symbols is not permitted.
+AF:
+  config_guest: Guest
+  config_bunk: Bunk
+  config_gis: GIS
+  config_gen: Gen
+  config_wav: Wav
+  config_pol: Pol
+  config_emer: Emer
+  config_req: Req
+  config_rent: Rent
+  config_div: Div
+  config_ins: Ins
+  config_trvl: Trvl
+  config_conf: Conf
+
+OFY:
+  config_guest: Traveler
+  config_bunk: Bunk
+  config_gis: GIS
+  config_gen: Gen
+  config_wav: Wav
+  config_pol: Pol
+  config_emer: Emer
+  config_req: Req
+  config_rent: Rent
+  config_div: Div
+  config_ins: Ins
+  config_trvl: Trvl
+  config_conf: Conf

@@ -91,7 +91,7 @@ class reservation extends charters {
 			@$data['percent_booked'] = floor(($charter_data['avail'] / $total)*100);
 
 		}
-                $yaml = yaml_parse_file("yaml/reservations_tab_names.yaml");
+                $yaml = yaml_parse_file("yaml/reservations_tab_details.yaml");
                 $config_values = $yaml[PLATFORM];
                 foreach ($config_values as $key=>$value) {
                         $data[$key] = $value;
@@ -193,9 +193,11 @@ class reservation extends charters {
                         }
                 }
 
-                //print "<pre>";
-                //print_r($data['guests']);
-                //print "</pre>";
+                $yaml = yaml_parse_file("yaml/reservations_tab_guests.yaml");
+                $config_values = $yaml[PLATFORM];
+                foreach ($config_values as $key=>$value) {
+                        $data[$key] = $value;
+                }
 
 		$template = "reservations_guests.tpl";
                 $dir = "/reservations";

@@ -18,21 +18,21 @@
 
 <div class="well">
 	<div class="row pad-top">
-		<div class="col-sm-2"><h4>Guest</h4></div>
-		<div class="col-sm-2"><h4>Bunk</h4></div>
+		<div class="col-sm-2"><h4>{$config_guest}</h4></div>
+		<div class="col-sm-2"><h4>{$config_bunk}</h4></div>
 		<div class="col-sm-8">
 			<div class="row">
-				<div class="col-sm-1"><h4>GIS</h4></div>
-                                <div class="col-sm-1"><h4>Gen</h4></div>
-                                <div class="col-sm-1"><h4>Wav</h4></div>
-                                <div class="col-sm-1"><h4>Pol</h4></div>
-                                <div class="col-sm-1"><h4>Emer</h4></div>
-                                <div class="col-sm-1"><h4>Req</h4></div>
-                                <div class="col-sm-1"><h4>Rent</h4></div>
-                                <div class="col-sm-1"><h4>Div</h4></div>
-                                <div class="col-sm-1"><h4>Ins</h4></div>
-                                <div class="col-sm-1"><h4>Trvl</h4></div>
-                                <div class="col-sm-1"><h4>Conf</h4></div>
+				<div class="col-sm-1"><h4>{$config_gis}</h4></div>
+                                <div class="col-sm-1"><h4>{$config_gen}</h4></div>
+                                <div class="col-sm-1"><h4>{$config_wav}</h4></div>
+                                <div class="col-sm-1"><h4>{$config_pol}</h4></div>
+                                <div class="col-sm-1"><h4>{$config_emer}</h4></div>
+                                <div class="col-sm-1"><h4>{$config_req}</h4></div>
+                                <div class="col-sm-1"><h4>{$config_rent}</h4></div>
+                                <div class="col-sm-1"><h4>{$config_div}</h4></div>
+                                <div class="col-sm-1"><h4>{$config_ins}</h4></div>
+                                <div class="col-sm-1"><h4>{$config_trvl}</h4></div>
+                                <div class="col-sm-1"><h4>{$config_conf}</h4></div>
 			</div>
 		</div>
 	</div>
