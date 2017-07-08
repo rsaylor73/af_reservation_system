@@ -16,7 +16,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
 
     <link rel="stylesheet" type="text/css" href="/css/jquery-gmaps-latlon-picker.css"/>
-
+    <link rel="stylesheet" type="text/css" href="/css/jquery.datetimepicker.css"/>
     <style>
     .table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
       background-color: #00d4ff;

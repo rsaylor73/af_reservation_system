@@ -6,7 +6,142 @@ include PATH."/class/jwt_helper.php";
 
 class api extends JWT {
 
+	protected $_lastToken = null;
+	protected $_expireAt = null;
+	protected $_lastInfo = null;
+	protected $_debugMode = false; // true or false
+	protected $_numretries = 0;
+	
+	private function generate_sabre_key() {
+		// This can only be ran by a programmer to obtain the new key
+		// update the value of SABRE_KEY with the key generated
+		$part1 = base64_encode(SABER_CLIENT_ID_KEY);
+		$part2 = base64_encode(SABER_SECRET);
+		$part_concat = $part1 . ":" . $part2;
+		$appkey = base64_encode($part_concat);
+		//return($appkey);
+		print "Key: $appkey<br>";
+	}
 
+	private function checkExpDate(){
+		$retVal = false;
+		$dtToken = strtotime($_SESSION['expireAt']);
+		$dtNow = time();
+		$subTime = $dtToken - $dtNow;
+			
+		if($this->_debugMode){
+			var_dump($subTime);
+			var_dump($_SESSION);
+		}
+		if($subTime>0){
+			$retVal = true;
+		}else{
+			$retVal = false;
+		}
+		return $retVal;
+	}
+
+	// Saber token
+	public function saber_token() {
+		/* See docs
+		https://developer.sabre.com/docs/read/rest_basics/authentication
+		*/
+		
+		// http://curl.haxx.se/ca/cacert.pem
+
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_CAINFO, dirname(__FILE__)."/ssl/cacert.pem");
+		curl_setopt($ch, CURLOPT_URL, SABER_URL . 'v2/auth/token');
+		curl_setopt($ch, CURLOPT_POST, true);
+		//curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-type: application/x-www-form-urlencoded;charset=UTF-8','Authorization:Basic ' . SABRE_KEY));
+		curl_setopt($ch, CURLOPT_POSTFIELDS, 'grant_type=client_credentials');
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$retVal = curl_exec($ch);
+				
+		//var_dump(curl_error($ch));
+				
+		curl_close($ch);
+		$js = json_decode($retVal,true);
+		$now = time();//date("Y-m-d h:i:sa");
+		$expIn = $js['expires_in'];
+		$nDt = date("Y-m-d h:i:sa",$now);
+		$expTime = date("Y-m-d h:i:sa",$now+$expIn);
+		$_SESSION['lastToken'] = $js['access_token'];
+		$_SESSION['expireAt'] = $expTime;
+		$_SESSION['initAt'] = $nDt;
+		$this->_lastToken = $js['access_token'];
+	}
+
+	public function sabre_sendRequest($payload) {
+		$retVal = 'null';
+		if(isset($_SESSION['lastToken']) and $this->checkExpDate()) {
+			// check token
+			$this->_lastToken = $_SESSION['lastToken'];
+		} else {
+			// get new token
+			$this->saber_token();
+		}
+
+		if($this->_lastToken!=null){
+			$ch = curl_init();
+			curl_setopt($ch, CURLOPT_CAINFO, dirname(__FILE__)."/ssl/cacert.pem");
+			curl_setopt($ch, CURLOPT_URL, SABER_URL . $payload);
+			//curl_setopt($ch, CURLOPT_HTTPGET, true);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			//curl_setopt($ch, CURLOPT_HEADER, true);
+			curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-type: application/x-www-form-urlencoded;charset=UTF-8','Authorization:Bearer ' . $this->_lastToken));
+			$retVal = curl_exec($ch);
+			$this->_lastInfo = curl_getInfo($ch);
+			curl_close($ch);
+
+			$st = $this->_lastInfo['http_code'];
+			if($st==401 && $this->_numretries==0){
+				//auto retry 1 time
+				$this->_numretries++;
+				return $this->sabre_sendRequest($payload);
+			}
+		}
+		return $retVal;
+	}
+
+	public function sabre_sendResponse($status=200,$body='',$content_type='text/html'){
+		$status_header = 'HTTP/1.1 ' . $status . ' ';
+		// set the status
+		header($status_header);
+		// set the content type
+		header('Content-type: ' . $content_type);
+		header('Access-Control-Allow-Origin: *');
+		// pages with body are easy
+		if($body != '') {
+			// send the body
+			//
+			//if($this->_debugMode){
+				//var_dump($_SESSION);
+			//}
+			echo $body;
+			exit;
+		}else{
+			echo "no content";
+			exit;
+		}
+	}
+
+	public function test_sabre() {
+		// see endpoint options here:
+		// https://developer.sabre.com/docs/read/REST_APIs
+
+		// test endpointe
+		//$payload = "v1/shop/flights/fares?origin=ATL&destination=NYC&lengthofstay=4";
+		$payload = "v1/shop/flights?origin=ATL&destination=NYC&departuredate=2017-07-08&returndate=2017-07-12&pointofsalecountry=US";
+		$response = $this->sabre_sendRequest($payload);
+		$json = $this->objectToArray(json_decode($response));
+		print "<pre>";
+		print_r($json);
+		print "</pre>";
+	}
+
+	// This is the AF API
 	public function api_get_token() {
 		// read the JSON payload, check the api key then return the new token
 		$input = json_decode(file_get_contents('php://input'),true);

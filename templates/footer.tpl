@@ -26,6 +26,14 @@
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBQbQO-EyjRgdLPbzcAJk3kelHqYCPBhvs"></script>
     <script src="/js/jquery-gmaps-latlon-picker.js"></script>
 
+    <script src="/js/jquery.datetimepicker.full.js"></script>
+    <script>
+    $.datetimepicker.setLocale('en');
+    $('.datetimepicker').datetimepicker({
+        step:15
+    });
+    </script>
+
 {literal}
 <script>
 $(function() {

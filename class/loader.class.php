@@ -65,7 +65,11 @@ class loader extends reservation {
                 // loads the PHP Smarty class
                 require_once(PATH.'/libs/Smarty.class.php');
                 $smarty=new Smarty();
-                $smarty->setTemplateDir(PATH.'/templates/'.$dir);
+                if ($dir == "") {
+                        $smarty->setTemplateDir(PATH.'/templates/');    
+                } else {
+                        $smarty->setTemplateDir(PATH.'/templates' . $dir);
+                }
                 $smarty->setCompileDir(PATH.'/templates_c/');
                 $smarty->setConfigDir(PATH.'/configs/');
                 $smarty->setCacheDir(PATH.'/cache/');

@@ -1,7 +1,7 @@
 {* Colors *}
 {assign var="green" value="#1fa856"}
-{assign var="yellow" value="#ccc322"}
-{assign var="red" value="#ba1f34"}
+{assign var="yellow" value="#FFCC00"}
+{assign var="red" value="#FF3333"}
 
 
 <h2><a href="/">Main Menu</a> : Reservations</h2>
@@ -22,7 +22,7 @@
 		<div class="col-sm-2"><h4>{$config_bunk}</h4></div>
 		<div class="col-sm-8">
 			<div class="row">
-				<div class="col-sm-1"><h4>{$config_gis}</h4></div>
+				<div class="col-sm-2"><h4>{$config_gis}</h4></div>
                                 <div class="col-sm-1"><h4>{$config_gen}</h4></div>
                                 <div class="col-sm-1"><h4>{$config_wav}</h4></div>
                                 <div class="col-sm-1"><h4>{$config_pol}</h4></div>
@@ -43,7 +43,7 @@
                 <div class="col-sm-2"><a href="/stateroom/{$passengers.inventoryID}">{$passengers.bunk}</a></div>
                 <div class="col-sm-8">
                         <div class="row">
-                                <div class="col-sm-1">
+                                <div class="col-sm-2">
                                 <i class="fa fa-sign-in fa-2x" aria-hidden="true"></i>&nbsp;
                                 {if $passengers.loginkey ne ""}
                                 <a href="https://gis.liveaboardfleet.com/gis/index.php/{$passengers.passengerID}/{$passengers.reservationID}/{$passengers.charterID}/{$passengers.loginkey}" target="_blank">

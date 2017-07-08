@@ -404,6 +404,58 @@ class bunks extends users {
 			$data[$key] = $value;
 		}
 
+		$sql = "
+		SELECT
+			`g`.`flight_id`,
+			`g`.`airport`,
+			`g`.`airline`,
+			`g`.`flight_num`,
+			`g`.`date`
+		FROM
+			`guest_flights` g
+
+		WHERE
+			`g`.`passengerID` = '$data[passengerID]'
+			AND `g`.`charterID` = '$data[charterID]'
+			AND `g`.`flight_type` = 'INBOUND'
+		ORDER BY `date` ASC
+		";
+		$result = $this->new_mysql($sql);
+		while ($row = $result->fetch_assoc()) {
+			$flight_id = $row['flight_id'];
+			$data['inbound_flight'][$flight_id]['id'] = $flight_id;
+			$data['inbound_flight'][$flight_id]['airport'] = $row['airport'];
+			$data['inbound_flight'][$flight_id]['airline'] = $row['airline'];
+			$data['inbound_flight'][$flight_id]['flight_num'] = $row['flight_num'];
+			$data['inbound_flight'][$flight_id]['date'] = $row['date'];
+		}
+
+		$sql = "
+		SELECT
+			`g`.`flight_id`,
+			`g`.`airport`,
+			`g`.`airline`,
+			`g`.`flight_num`,
+			`g`.`date`
+		FROM
+			`guest_flights` g
+
+		WHERE
+			`g`.`passengerID` = '$data[passengerID]'
+			AND `g`.`charterID` = '$data[charterID]'
+			AND `g`.`flight_type` = 'OUTBOUND'
+		ORDER BY `date` ASC
+		";
+		$result = $this->new_mysql($sql);
+		while ($row = $result->fetch_assoc()) {
+			$flight_id = $row['flight_id'];
+			$data['outbound_flight'][$flight_id]['id'] = $flight_id;
+			$data['outbound_flight'][$flight_id]['airport'] = $row['airport'];
+			$data['outbound_flight'][$flight_id]['airline'] = $row['airline'];
+			$data['outbound_flight'][$flight_id]['flight_num'] = $row['flight_num'];
+			$data['outbound_flight'][$flight_id]['date'] = $row['date'];
+		}
+
 		$data['s5'] = "active";
 
 		$template = "stateroom_travel.tpl";
