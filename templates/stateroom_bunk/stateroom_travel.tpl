@@ -58,7 +58,7 @@
 			<input type="text" name="new[flight_num]" placeholder="enter flight #" class="form-control">
 		</div>
 		<div class="col-sm-3">
-			<input type="text" name="new[date]" class="form-control datetimepicker">
+			<input type="text" name="new[date]" class="form-control datetimepicker" placeholder="Select date/time">
 		</div>
 		<div class="col-sm-2">
 			<input type="button" value="Add" class="btn btn-success" onclick="update_inbound(this.form)">
@@ -120,7 +120,7 @@
 			<input type="text" name="new[flight_num]" placeholder="enter flight #" class="form-control">
 		</div>
 		<div class="col-sm-3">
-			<input type="text" name="new[date]" class="form-control datetimepicker">
+			<input type="text" name="new[date]" class="form-control datetimepicker" placeholder="Select date/time">
 		</div>
 		<div class="col-sm-2">
 			<input type="button" value="Add" class="btn btn-success" onclick="update_outbound(this.form)">

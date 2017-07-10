@@ -1,0 +1,36 @@
+# This is a YAML config file. The use of symbols is not permitted.
+# If you change these values you must update the fix tables inside bunks.class.php
+course:
+  c01: Nitrox
+  c02: Environmental Diver
+  c03: U/W Photographer
+  c04: Deep Diver
+  c05: Adv. O/W Diver
+  c06: Rescue Diver
+  c07: U/W Video Professional
+  c08: Intro to Scuba
+  c09: Night Diver
+  c10: O/W Certification Course
+  c11: Wreck Diver
+  c12: O/W Check-Out
+  c13: Master Diver
+
+equipment:
+  e01: Dive Computer
+  e02: Photo Equipment (Digital Photo Pkg)
+  e03: BC
+  e04: Photo Equipment (GoPro Pkg)
+  e05: Regulator
+  e06: Nitrox (Unlimited)
+  e07: Mask
+  e08: Fins
+  e09: Snorkel
+  e10: Dive Light
+
+size:
+  s01: xs
+  s02: s
+  s03: m
+  s04: l
+  s05: xl
+  s06: 2xl

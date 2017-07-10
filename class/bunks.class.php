@@ -471,6 +471,60 @@ class bunks extends users {
 			$data[$key] = $value;
 		}
 
+		$yaml = yaml_parse_file("yaml/rentals.yaml");
+		$course = $yaml['course'];
+		$equipment = $yaml['equipment'];
+		$size = $yaml['size'];
+
+		$sql = "SELECT `course`,`rental_equipment`,`other_rental` FROM `inventory` WHERE `inventoryID` = '$_GET[inventoryID]'";
+		$result = $this->new_mysql($sql);
+		while ($row = $result->fetch_assoc()) {
+			$c_array = explode(",", $row['course']);
+			$e_array = explode(",", $row['rental_equipment']);
+		}
+		foreach($c_array as $key=>$value) {
+			// If the values in the yaml config file
+			// does not match the values in the DB then
+			// you must key them below:
+			// fix mitch match items
+			if ($value == "Certification Course") {
+				$value = "O/W Certification Course";
+			}
+			if ($value == "O/W Check-out") {
+				$value = "O/W Check-Out";
+			}
+			// end fix
+			$data['course_checked'][$value] = $value;
+		}
+		foreach($e_array as $key=>$value) {
+			// If the values in the yaml config file
+			// does not match the values in the DB then
+			// you must key them below:
+			// fix mitch match items
+			if ($value == "Photo Equipment") {
+				$value = "Photo Equipment (Digital Photo Pkg)";
+			}
+			if ($value == "Photo Equipment Pro") {
+				$value = "Photo Equipment (GoPro Pkg)";
+			}
+			if ($value == "Nitrox Unlimited") {
+				$value = "Nitrox (Unlimited)";
+			}
+			$data['equipment_checked'][$value] = $value;
+		}
+
+		foreach ($course as $key=>$value) {
+			$data['course'][$value] = $value;
+		}
+
+		foreach ($equipment as $key=>$value) {
+			$data['equipment'][$value] = $value;
+		}
+
+		foreach ($size as $key=>$value) {
+			$data['size'][$value] = $value;
+		}
+
 		$data['s6'] = "active";
 
 		$template = "stateroom_rentals.tpl";
