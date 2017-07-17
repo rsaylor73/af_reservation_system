@@ -481,7 +481,9 @@ class bunks extends users {
 		while ($row = $result->fetch_assoc()) {
 			$c_array = explode(",", $row['course']);
 			$e_array = explode(",", $row['rental_equipment']);
+			$data['other_rental'] = $row['other_rental'];
 		}
+
 		foreach($c_array as $key=>$value) {
 			// If the values in the yaml config file
 			// does not match the values in the DB then
@@ -509,6 +511,24 @@ class bunks extends users {
 			}
 			if ($value == "Nitrox Unlimited") {
 				$value = "Nitrox (Unlimited)";
+			}
+			if ($value == "BC (xs)") {
+				$value = "xs";
+			}
+			if ($value == "BC (s)") {
+				$value = "s";
+			}
+			if ($value == "BC (m)") {
+				$value = "m";
+			}
+			if ($value == "BC (l)") {
+				$value = "l";
+			}
+			if ($value == "BC (xl)") {
+				$value = "xl";
+			}
+			if ($value == "BC (2xl)") {
+				$value = "2xl";
 			}
 			$data['equipment_checked'][$value] = $value;
 		}

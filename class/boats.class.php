@@ -5,7 +5,7 @@ class boats extends bunks {
 
 	/* This function displays the list of boats for staff to manage */
 	public function manage_boats($msg='') {
-                $this->security('manage_boats',$_SESSION['user_typeID']);
+		$this->security('manage_boats',$_SESSION['user_typeID']);
 		$template = "manage_boats.tpl";
 
 		// load data

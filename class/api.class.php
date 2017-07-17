@@ -95,36 +95,16 @@ class api extends JWT {
 			$this->_lastInfo = curl_getInfo($ch);
 			curl_close($ch);
 
+			
 			$st = $this->_lastInfo['http_code'];
 			if($st==401 && $this->_numretries==0){
 				//auto retry 1 time
 				$this->_numretries++;
 				return $this->sabre_sendRequest($payload);
 			}
+			
 		}
 		return $retVal;
-	}
-
-	public function sabre_sendResponse($status=200,$body='',$content_type='text/html'){
-		$status_header = 'HTTP/1.1 ' . $status . ' ';
-		// set the status
-		header($status_header);
-		// set the content type
-		header('Content-type: ' . $content_type);
-		header('Access-Control-Allow-Origin: *');
-		// pages with body are easy
-		if($body != '') {
-			// send the body
-			//
-			//if($this->_debugMode){
-				//var_dump($_SESSION);
-			//}
-			echo $body;
-			exit;
-		}else{
-			echo "no content";
-			exit;
-		}
 	}
 
 	public function test_sabre() {
@@ -133,12 +113,77 @@ class api extends JWT {
 
 		// test endpointe
 		//$payload = "v1/shop/flights/fares?origin=ATL&destination=NYC&lengthofstay=4";
-		$payload = "v1/shop/flights?origin=ATL&destination=NYC&departuredate=2017-07-08&returndate=2017-07-12&pointofsalecountry=US";
+		$payload = "v1/shop/flights?origin=ATL&destination=NYC&departuredate=2017-07-25&returndate=2017-07-26&pointofsalecountry=US&includedcarriers=DL&limit=10&passengercount=4";
 		$response = $this->sabre_sendRequest($payload);
 		$json = $this->objectToArray(json_decode($response));
 		print "<pre>";
 		print_r($json);
 		print "</pre>";
+	}
+
+	public function populate_airline_codes() {
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_CAINFO, dirname(__FILE__)."/ssl/cacert.pem");
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, "FALSE");
+		curl_setopt($ch, CURLOPT_SSL_VERIFYSTATUS, "FALSE");
+		curl_setopt($ch, CURLOPT_URL, IATA_URL . IATA_KEY);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
+
+		$response = curl_exec($ch);
+		$err = curl_error($ch);
+		curl_close($ch);
+
+		if ($err) {
+		  echo "cURL Error #:" . $err;
+		} else {
+			$json = $this->objectToArray(json_decode($response));
+		}
+		$air = $json['response'];
+		$total = count($air);
+		for ($x=0; $x < $total; $x++) {
+			$code = $this->linkID->escape_string($air[$x]['code']);
+			$name = $this->linkID->escape_string($air[$x]['name']);
+			$sql = "SELECT `code` FROM `iata_airline_codes` WHERE `code` = '$code'";
+			$found = "0";
+			$result = $this->new_mysql($sql);
+			while ($row = $result->fetch_assoc()) {
+				$found = "1";
+			}
+			if ($found == "0") {
+				$sql = "INSERT INTO `iata_airline_codes` (`code`,`name`) VALUES ('$code','$name')";
+				$result = $this->new_mysql($sql);
+			}
+		}
+		print "Done!";
+	}
+
+	public function get_air_logo() {
+		// https://support.travelpayouts.com/hc/en-us/articles/203956073-Airline-logos
+		// https://pics.avs.io/150/50/AA.png
+		$sql = "SELECT `id`,`code`,`name`,`logo` FROM `iata_airline_codes` 
+		WHERE `logo` = '' AND `no_logo` != '1'";
+		$result = $this->new_mysql($sql);
+		while ($row = $result->fetch_assoc()) {
+			$code = $row['code'];
+			print "Getting $code<br>";
+			$ch = curl_init('https://pics.avs.io/150/50/'.$code.'.png');
+			$fp = fopen(PATH . '/airlogo/'.$code.'.png', 'wb');
+			curl_setopt($ch, CURLOPT_FILE, $fp);
+			curl_setopt($ch, CURLOPT_HEADER, 0);
+			curl_exec($ch);
+			curl_close($ch);
+			fclose($fp);
+			$logo = $code . ".png";
+			$sql2 = "UPDATE `iata_airline_codes` SET `logo` = '$logo' WHERE `id` = '$row[id]'";
+			$result2 = $this->new_mysql($sql2);
+		}
+		print "Done";
+
+	}
+
+	public function developer_info() {
+		phpinfo();
 	}
 
 	// This is the AF API

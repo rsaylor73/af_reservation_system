@@ -2,6 +2,11 @@
 
 {include file="stateroom_header.tpl"}
 
+<form name="myform">
+<input type="hidden" name="inventoryID" value="{$inventoryID}">
+<input type="hidden" name="passengerID" value="{$passengerID}">
+<input type="hidden" name="charterID" value="{$charterID}">
+
 <div class="jumbotron">
 	<div id="ajax_results"></div>
 
@@ -24,7 +29,7 @@
 					{assign var="checked" value="checked"}
 				{/if}
 			{/foreach} 
-			<input type="checkbox" name="{$courses}" value="checked" {$checked}>&nbsp;{$courses}
+			<input type="checkbox" name="course[{$courses}]" value="checked" {$checked}>&nbsp;{$courses}
 		</div>
 		{if $count eq "2"}
 	</div>
@@ -52,7 +57,7 @@
 					{assign var="checked" value="checked"}
 				{/if}
 			{/foreach} 
-			<input type="checkbox" name="{$equipments}" value="checked" {$checked}>&nbsp;{$equipments}
+			<input type="checkbox" name="equipment[{$equipments}]" value="checked" {$checked}>&nbsp;{$equipments}
 		</div>
 		{if $count eq "2"}
 	</div>
@@ -73,8 +78,19 @@
 	<div class="row">
 	{foreach $size as $sizes}
 		<div class="col-sm-6">
+			{*
+				We use equipment_checkeds again because the two
+				data sources are the same. The check will only
+				match what is available in sizes.
+			*}
 			{counter}
-			<input type="checkbox" name="{$sizes}" value="checked">&nbsp;{$sizes}
+			{assign var="checked" value=""}
+			{foreach $equipment_checked as $equipment_checkeds2}
+				{if $equipment_checkeds2 eq $sizes}
+					{assign var="checked" value="checked"}
+				{/if}
+			{/foreach} 
+			<input type="checkbox" name="equipment[{$sizes}]" value="checked" {$checked}>&nbsp;{$sizes}
 		</div>
 		{if $count eq "2"}
 	</div>
@@ -85,7 +101,37 @@
 
 	<div class="row pad-top">
 		<div class="col-sm-1"><b>OTHER:</b></div>
-		<div class="col-sm-2"><input type="text" name="other" value="{$other}" class="form-control"></div>
+		<div class="col-sm-2"><input type="text" name="other_rental" value="{$other_rental}" class="form-control"></div>
 	</div>
 
+		{if $rentals eq "1"}
+		<div class="row pad-top">
+			<div class="col-sm-5">
+				<div class="alert alert-warning">
+					<input type="button" value="Update" class="btn btn-success" onclick="update_rentals(this.form)">&nbsp;
+					<input type="checkbox" name="validate_rentals" value="checked" checked> Mark Validated
+				</div>
+			</div>
+		</div>
+		{else}
+		<div class="row pad-top">
+			<div class="col-sm-5">
+				<input type="button" value="Update" class="btn btn-success" onclick="update_rentals(this.form)">
+			</div>
+		</div>
+		{/if}
+
 </div>
+</form>
+
+<script>
+function update_rentals(myform) {
+	$.get('/ajax/stateroom/update_rentals.php',
+	$(myform).serialize(),
+	function(php_msg) {
+        $("#ajax_results").html(php_msg);
+	});
+
+	window.scrollTo(0, 0);
+}
+</script>

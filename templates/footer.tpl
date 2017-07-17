@@ -94,6 +94,44 @@ $(function() {
 });
 
 $(function() {
+    $( "#air_date1" ).datepicker({
+        dateFormat: "yy-mm-dd",
+        changeMonth: true,
+        changeYear: true,
+        minDate: "0",
+        maxDate: "+1Y",
+        onSelect: function (date) {
+            var date1 = $('#air_date1').datepicker('getDate');
+            date1.setDate(date1.getDate() + 3);
+            var date2 = $('#air_date1').datepicker('getDate');
+            date2.setDate(date2.getDate() + 7);
+            $('#air_date2').datepicker('setDate', date2);
+            //sets minDate to dt1 date + 1
+            $('#air_date2').datepicker('option', 'minDate', date1);
+        }
+    });
+});
+
+$(function() {
+    $( "#air_date2" ).datepicker({
+        dateFormat: "yy-mm-dd",
+        changeMonth: true,
+        changeYear: true,
+        minDate: "0",
+        maxDate: "+16D",
+        onClose: function () {
+            var dt1 = $('#air_date1').datepicker('getDate');
+            var dt2 = $('#air_date2').datepicker('getDate');
+            //check to prevent a user from entering a date below date of dt1
+            if (dt2 <= dt1) {
+                var minDate = $('#air_date2').datepicker('option', 'minDate');
+                $('#air_date2').datepicker('setDate', minDate);
+            }
+        } 
+    });
+});
+
+$(function() {
         $( "#charter_date" ).datepicker({ 
                 dateFormat: "yy-mm-dd",
                 changeMonth: true,

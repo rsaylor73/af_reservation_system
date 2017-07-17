@@ -1,5 +1,7 @@
 # This is a YAML config file. The use of symbols is not permitted.
 # If you change these values you must update the fix tables inside bunks.class.php
+# The use of the hash and comma is not supported. Use another symbol. If you use the 
+# comma it WILL cause an error in the code.
 course:
   c01: Nitrox
   c02: Environmental Diver
