@@ -16,7 +16,7 @@ if ($logged == "TRUE") {
 	if ($_GET['includedcarriers'] != "") {
 		$includedcarriers = "&includedcarriers=$_GET[includedcarriers]";
 	}
-
+	
 	//$payload = "v1/shop/flights/fares?origin=".$origin."&destination=".$destination."&lengthofstay=4";
 	$payload = "v1/shop/flights?origin=";
 	$payload .= $origin;
@@ -28,8 +28,11 @@ if ($logged == "TRUE") {
 	$payload .= $date2;
 	$payload .= "&pointofsalecountry=US";
 	$payload .= $includedcarriers;
-	//$payload .= "&limit=2"; 
+	$payload .= "&limit=300"; 
 	$payload .= "&passengercount=" . $_GET['passengercount'];
+
+	$payload .= "&eticketsonly=N&sortby=departuretime&order=asc&sortby2=totalfare&order2=asc";
+	$payload .= "&enabletagging=true";
 
 	//print "$payload<br>";
 
@@ -49,6 +52,7 @@ if ($logged == "TRUE") {
 	for ($x=0; $x < $i; $x++) {
 		//print "<h3>Itinerary $x:<h3>";
 		$AirItinerary = $json->PricedItineraries[$x]->AirItinerary;
+		$TPA_Extensions = $json->PricedItineraries[$x]->TPA_Extensions;
 		$AirItineraryPricingInfo = $json->PricedItineraries[$x]->AirItineraryPricingInfo;
 		// Total cost all pax (before AF fee)
 		$total_cost[$x] = $json->PricedItineraries[$x]->AirItineraryPricingInfo->ItinTotalFare->TotalFare->Amount;
@@ -72,6 +76,10 @@ if ($logged == "TRUE") {
 			);
 			// remaining seats
 			$remaining = $AirItineraryPricingInfo->FareInfos->FareInfo[$x2]->TPA_Extensions->SeatsRemaining->Number;
+			// tag
+			$tag = $TPA_Extensions->TagID;
+			$tag_arr[$x] = $tag;
+			//print "Tag: $tag<br>";
 
 			$OriginDestinationOption = $AirItinerary
 				->OriginDestinationOptions
@@ -103,7 +111,9 @@ if ($logged == "TRUE") {
 				$trip[$x][$status][$x3]['FlightNumber'] = $FlightNumber;
 				$trip[$x][$status][$x3]['Cabin_Class'] = $cabin;
 				$trip[$x][$status][$x3]['seats_remaining'] = $remaining;
+				
 
+				
 				/*
 				print "
 				Leg $x3<br>
@@ -117,7 +127,8 @@ if ($logged == "TRUE") {
 				ArrivalDateTime : $ArrivalDateTime<br>
 				FlightNumber : $FlightNumber<br><br><br>
 				";
-				*/					
+				*/
+
 			}
 			//print "Test $test<br>";
 			//print "<pre>";
@@ -126,19 +137,21 @@ if ($logged == "TRUE") {
 		}
 	}
 
+
 	print "<br><br>";
 	foreach ($trip as $itinerary=>$flights) {
 		$itin = $itinerary +1;
+		$tag = $tag_arr[$itinerary];
 		print "
 		<div class=\"panel panel-info\">
 			<div class=\"row pad-top\">
 				<div class=\"col-sm-12\">
 					<h3>
 					&nbsp;&nbsp;Itinerary $itin : Total $_GET[passengercount] passengers $".
-					number_format($total_cost[$itin],2,'.',','). "&nbsp;USD
+					number_format($total_cost[$itinerary],2,'.',','). "&nbsp;USD
 					&nbsp;
 					<div class=\"pull-right\">
-						<input type=\"button\" value=\"Select Flight\" class=\"btn btn-success btn-lg\">
+						<input type=\"button\" value=\"Select Flight $tag\" class=\"btn btn-success btn-lg\">
 						&nbsp;&nbsp;
 					</div>
 					</h3>
@@ -250,6 +263,8 @@ if ($logged == "TRUE") {
 		";
 
 	}
-
+//print "<pre>";
+//print_r($json);
+//print "</pre>";
 }
 ?>

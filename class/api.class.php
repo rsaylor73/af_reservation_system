@@ -107,6 +107,58 @@ class api extends JWT {
 		return $retVal;
 	}
 
+	public function test_json_request() {
+		$json = '{"EnhancedSeatMapRQ": {"SeatMapQueryEnhanced": {"RequestType": "Payload","Flight": {"destination": "SAN","origin": "ATL","DepartureDate": {"content": "2017-10-23"},"ArrivalDate": {"content": "2017-10-23"},"Operating": {"carrier": "DL","content": "1692"},"Marketing": [{"carrier": "DL","content": "1692"}]},"CabinDefinition": {"RBD": "Y"}}}}';
+		return($json);
+	}
+
+	public function air_seats($payload='v4.0.0/book/flights/seatmaps?mode=seatmaps') {
+		$json = $this->test_json_request;
+		
+		if(isset($_SESSION['lastToken']) and $this->checkExpDate()) {
+			// check token
+			$this->_lastToken = $_SESSION['lastToken'];
+		} else {
+			// get new token
+			$this->saber_token();
+		}
+
+		if($this->_lastToken!=null){
+
+			$token = $this->_lastToken;
+
+	        $curl = curl_init();
+
+	        curl_setopt_array($curl, array(
+	          CURLOPT_URL => SABER_URL . $payload,
+	          CURLOPT_RETURNTRANSFER => true,
+	          CURLOPT_ENCODING => "",
+	          CURLOPT_MAXREDIRS => 10,
+	          CURLOPT_TIMEOUT => 30,
+	          CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+	          CURLOPT_CUSTOMREQUEST => "POST",
+	          CURLOPT_POSTFIELDS => "$json",
+
+	          CURLOPT_HTTPHEADER => array(
+	            "accept: application/json",
+	            "authorization:Bearer $token",
+	            "cache-control: no-cache",
+	            "content-type: application/json",
+	            "postman-token: 76e37d4e-647e-fe5c-d6af-606946f80687"
+	          ),
+	        ));
+
+	        $response = curl_exec($curl);
+	        $err = curl_error($curl);
+	        curl_close($curl);
+
+	        print "<pre>";
+	        print_r($response);
+	        print_r($err);
+	        print "</pre>";
+	    }
+	}
+
 	public function test_sabre() {
 		// see endpoint options here:
 		// https://developer.sabre.com/docs/read/REST_APIs

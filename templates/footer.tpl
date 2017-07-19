@@ -118,7 +118,7 @@ $(function() {
         changeMonth: true,
         changeYear: true,
         minDate: "0",
-        maxDate: "+16D",
+        maxDate: "+1Y",
         onClose: function () {
             var dt1 = $('#air_date1').datepicker('getDate');
             var dt2 = $('#air_date2').datepicker('getDate');

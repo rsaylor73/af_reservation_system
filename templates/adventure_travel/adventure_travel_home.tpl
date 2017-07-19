@@ -46,6 +46,7 @@
 				<option value="HA">Hawailian Airlines</option>
 				<option value="B6">Jet Blue</option>
 				<option value="UA">United Airlines</option>
+				<option value="NK">Spirit</option>
 			</select>
 		</div>
 		<div class="col-sm-2">
