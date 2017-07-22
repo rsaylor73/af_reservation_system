@@ -7,16 +7,13 @@ class common extends destinations {
 	public function dashboard() {
 		$template = "dashboard.tpl";
 		$data['name'] = $_SESSION['first'] . " " . $_SESSION['last'];
-
 		$data['html'] = $this->paint_screen();
-
 		$this->load_smarty($data,$template);
 	}
 
 	/* This will handle error messages */
 	public function error($msg,$extra='') {
-
-	        print '<div class="alert alert-danger">'.$msg.'</div>';
+	    print '<div class="alert alert-danger">'.$msg.'</div>';
 		if ($extra == '') {
 			print "<br>The process has stopped. Please click on main menu to return to the dashboard.<br>";
 			$template = 'footer.tpl';
@@ -56,7 +53,7 @@ class common extends destinations {
 			if ($title == "") {
 				$title = $method;
 			}
-                	print '<div class="row"><div class="col-lg-12 "><div class="alert alert-danger">Sorry '.$_SESSION['first'].', but you do not have
+            print '<div class="row"><div class="col-lg-12 "><div class="alert alert-danger">Sorry '.$_SESSION['first'].', but you do not have
 			access to <b>'.$title.'</b>. If you feel this is incorrect please contact your administrator.</div></div></div>';
 			$template = "footer.tpl";
 			$this->load_smarty(null,$template);
@@ -76,22 +73,22 @@ class common extends destinations {
 			// admin
 			case "3":
 			$sql = "
-                        SELECT
-                                `actions`.`action` AS 'title',
-                                `actions`.`row`,
-                                `actions`.`rank`,
-                                `actions`.`icon`,
-                                `actions`.`new_link`    
+            SELECT
+	            `actions`.`action` AS 'title',
+	            `actions`.`row`,
+	            `actions`.`rank`,
+	            `actions`.`icon`,
+	            `actions`.`new_link`    
 
-                        FROM
-                                `actions`
+            FROM
+                `actions`
 
-                        WHERE
-                                `actions`.`rank` IS NOT NULL
+            WHERE
+                `actions`.`rank` IS NOT NULL
 				$sql_pre
 
-                        ORDER BY `actions`.`row` ASC, `actions`.`rank` ASC
-                        ";
+            ORDER BY `actions`.`row` ASC, `actions`.`rank` ASC
+            ";
 			break;
 
 			// user and manager
@@ -128,9 +125,15 @@ class common extends destinations {
 					//$html .= '<div class="row"><div class="col-lg-12 "><div class="alert alert-info">&nbsp;'.$row['row'].'</div></div></div>';
 					$counter = 0;
 				}
-                                $new_row = $row['row'];
+				$new_row = $row['row'];
 				$html .= "
-				<div class=\"row\"><div class=\"col-lg-12\"><div class=\"alert alert-info\">&nbsp;<h4>".$menu_headers[$new_row]."</h4></div></div></div>
+				<div class=\"row\">
+					<div class=\"col-lg-12\">
+						<div class=\"alert alert-info\">&nbsp;
+							<h4>".$menu_headers[$new_row]."</h4>
+						</div>
+					</div>
+				</div>
 				<div class=\"row text-center pad-top\">";
 			}
 
@@ -141,14 +144,34 @@ class common extends destinations {
 			}
 			
 			if ($row['title'] == "Locate Reservation") {
-	                        $html .= "
-        	                <div class=\"col-lg-2 col-md-2 col-sm-2 col-xs-6\">
-                	                <div class=\"div-square\">
-	                                        <a href=\"javascript:void(0)\"><h4>$row[title]</h4></a>
-						<br><form><input type=\"text\" name=\"reservationID\" placeholder=\"Conf #\" class=\"form-control\"></form>
-        	                        </div>
-                	        </div>
-	                        ";
+	            $html .= "
+	            <div class=\"col-lg-2 col-md-2 col-sm-2 col-xs-6\">
+					<div class=\"div-square\">
+						<a href=\"javascript:void(0)\"><h4>$row[title]</h4></a>
+						<br>
+						<div id=\"loader\">
+						<form name=\"myform_homepage\">
+						<input type=\"text\" name=\"reservationID\" placeholder=\"Conf #\" 
+						class=\"form-control\"
+						onkeypress=\"if(event.keyCode==13) { find_reservation(this.form); return false;}\"
+						>
+						</form>
+						</div>
+						<br>
+					</div>
+		        </div>
+		        ";
+		        $html .= '
+				<script>
+				function find_reservation(myform_homepage) {
+					$.get(\'/ajax/reservations/lookup_reservation.php\',
+					$(myform_homepage).serialize(),
+					function(php_msg) {
+        				$("#loader").html(php_msg);
+					});
+				}
+				</script>
+				';
 			} else {
 				$html .= "
 				<div class=\"col-lg-2 col-md-2 col-sm-2 col-xs-6\">
@@ -188,7 +211,7 @@ class common extends destinations {
 			if ($row['countryID'] == $countryID) {
 				$option .= "<option selected value=\"$row[countryID]\">$row[country]</option>";
 			} else {
-                                $option .= "<option value=\"$row[countryID]\">$row[country]</option>";
+				$option .= "<option value=\"$row[countryID]\">$row[country]</option>";
 			}
 		}
 		return($option);
@@ -197,12 +220,12 @@ class common extends destinations {
 	/* This will display a list of US states for a select box */
 	public function list_states($state_abbr) {
 		$sql = "SELECT `state`,`state_abbr` FROM `state` ORDER BY `state` ASC";
-                $result = $this->new_mysql($sql);
-                while ($row = $result->fetch_assoc()) {
+        $result = $this->new_mysql($sql);
+        while ($row = $result->fetch_assoc()) {
 			if ($row['state_abbr'] == $state_abbr) {
 				$option .= "<option selected value=\"$row[state_abbr]\">$row[state]</option>";
 			} else {
-                                $option .= "<option value=\"$row[state_abbr]\">$row[state]</option>";
+				$option .= "<option value=\"$row[state_abbr]\">$row[state]</option>";
 			}
 		}
 		return($option);

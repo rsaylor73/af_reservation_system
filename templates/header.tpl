@@ -10,6 +10,7 @@
     <meta name="author" content="Custom PHP Design : Robert Saylor : http://www.customphpdesign.com">
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="/css/simple-sidebar.css" rel="stylesheet">
+    <link href="/css/timeline.css" rel="stylesheet">
     <link href="/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <link href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet">
     <link rel="stylesheet" href="/chosen.css">

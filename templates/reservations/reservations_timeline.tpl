@@ -9,12 +9,13 @@
 </div>
 
 {include file="reservation_navigation.tpl"}
-
 <div class="row">
 	<div class="col-sm-8">
 		<div class="page-header">
-			<h1 id="">Notes</h1>
+			<h1 id="">Timeline</h1>
 		</div>
-
+		<div id="timeline">
+			{$html}
+		</div>
 	</div>
 </div>

@@ -562,6 +562,45 @@ class bunks extends users {
 
 		$data['s7'] = "active";
 
+		$sql = "SELECT `charterID` FROM `inventory` WHERE `inventoryID` = '$_GET[inventoryID]'";
+		$result = $this->new_mysql($sql);
+		while ($row = $result->fetch_assoc()) {
+			$charterID = $row['charterID'];
+			$data['charterID'] = $charterID;
+		}
+		$data['inventoryID'] = $_GET['inventoryID'];
+
+		// get current S.S.
+		$sql = "SELECT * FROM `ss` WHERE `inventoryID` = '$_GET[inventoryID]'";
+		$result = $this->new_mysql($sql);
+		while ($row = $result->fetch_assoc()) {
+			$data['single'] = $row['primary'];
+			$data['bunk'] = $row['ss'];
+		}
+
+		$sql = "
+		SELECT
+			`i`.`bunk`,
+			`i`.`inventoryID`,
+			`i`.`status`
+
+		FROM
+			`inventory` i
+
+		WHERE
+			`i`.`charterID` =  '$charterID'
+
+		ORDER BY `i`.`bunk` ASC
+		";
+		$result = $this->new_mysql($sql);
+		while ($row = $result->fetch_assoc()) {
+			foreach ($row as $key=>$value) {
+				$inventoryID = $row['inventoryID'];
+				$data['bunks'][$inventoryID][$key] = $value;
+			}
+		}
+
+
 		$template = "stateroom_supplement.tpl";
 		$dir = "/stateroom_bunk";
 		$this->load_smarty($data,$template,$dir);
@@ -573,6 +612,32 @@ class bunks extends users {
 		$json_data = $this->objectToArray(json_decode($this->stateroom_header($_GET['inventoryID'])));
 		foreach($json_data as $key=>$value) {
 			$data[$key] = $value;
+		}
+
+		$sql = "
+		SELECT 
+			`c`.`first`,
+			`c`.`last`,
+			`c`.`email` 
+
+		FROM
+			`contacts` c, `inventory` i
+		WHERE
+			`i`.`inventoryID` = '$_GET[inventoryID]'
+			AND `i`.`passengerID` = `c`.`contactID`
+		";
+		$result = $this->new_mysql($sql);
+		while ($row = $result->fetch_assoc()) {
+			$data['first'] = $row['first'];
+			$data['last'] = $row['last'];
+			$data['email'] = $row['email'];
+		}
+
+		$sql = "SELECT DATE_FORMAT(`submitted`, '%m/%d/%Y') AS 'submitted' FROM `WWM_survey_codes` WHERE `inventoryID` = '$_GET[inventoryID]' AND `submitted` IS NOT NULL";
+		$result = $this->new_mysql($sql);
+		while ($row = $result->fetch_assoc()) {
+			$data['date'] = $row['submitted'];
+			$data['found'] = "1";
 		}
 
 		$data['s8'] = "active";

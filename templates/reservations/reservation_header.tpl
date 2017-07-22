@@ -1,6 +1,6 @@
 <form name="myform2">
 <div class="row pad-top">
-	<div class="col-sm-1"><b>Reservation ID:</b></div>
+	<div class="col-sm-1"><b>Conf #:</b></div>
 	<div class="col-sm-2">
 		<input type="text" name="reservationID" id="reservationID" value="{$reservationID}" class="form-control">
 	</div>

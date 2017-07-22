@@ -31,16 +31,7 @@ while ($row = $result->fetch_assoc()) {
         Username: $row[username]<br>
         Password: $new_password<br><br>";
 
-        $from_header = "Aggressor Reservation System <".SITEEMAIL.">";
-        $reply_header = "Aggressor Reservation System <".SITEEMAIL.">";
-
-	$header = "MIME-Version: 1.0\r\n";
-        $header .= "Content-type: text/html; charset=iso-8859-1\r\n";
-        $header .= "From: $from_header\r\n";
-        $header .= "Reply-To: $reply_header\r\n";
-        $header .= "X-Priority: 3\r\n";
-        $header .= "X-Mailer: PHP/" . phpversion()."\r\n";
-        mail($row['email'],$subj,$msg,$header);
+        mail($row['email'],$subj,$msg,HEADER);
 	$ok = "1";
 }
 

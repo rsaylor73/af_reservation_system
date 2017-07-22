@@ -5,13 +5,13 @@ class reservation extends charters {
 
 	/* This will allow the user to view a reservation */
 	public function reservations() {
-                $this->security('reservations',$_SESSION['user_typeID']);
+        $this->security('reservations',$_SESSION['user_typeID']);
 
 		$sql = "
 		SELECT
 			`r`.`reservationID`,
 			`r`.`group_name`,
-                        CONCAT(`u`.`first`,' ',`u`.`last`) AS 'booker_name',
+            CONCAT(`u`.`first`,' ',`u`.`last`) AS 'booker_name',
 			`u`.`email` AS 'booker_email',
 			`r`.`reservation_type`,
 			`ra`.`first` AS 'ra_first',
@@ -19,14 +19,14 @@ class reservation extends charters {
 			`ra`.`email` AS 'ra_email',
 			`ra`.`status` AS 'ra_status',
 			`ra`.`waiver` AS 'ra_waiver',
-                        `rs`.`resellerID`,
-                        `rs`.`company`,
-                        `rs`.`commission`,
-                        `rt`.`type`,
+            `rs`.`resellerID`,
+            `rs`.`company`,
+            `rs`.`commission`,
+            `rt`.`type`,
 			`ch`.`charterID`,
 			`b`.`name` AS 'boat_name',
 			DATE_FORMAT(`ch`.`start_date`, '%m/%d/%Y') AS 'start_date',
-                        DATE_FORMAT(DATE_ADD(`ch`.`start_date`, INTERVAL `ch`.`nights` DAY), '%m/%d/%Y') AS 'end_date',
+            DATE_FORMAT(DATE_ADD(`ch`.`start_date`, INTERVAL `ch`.`nights` DAY), '%m/%d/%Y') AS 'end_date',
 			`ch`.`nights`,
 			`c`.`contactID`,
 			`c`.`first` AS 'c_first',
@@ -53,21 +53,21 @@ class reservation extends charters {
 		FROM
 			`reservations` r,
 			`users` u,
-                        `reseller_agents` ra,
-                        `resellers` rs,
-                        `reseller_types` rt,
+            `reseller_agents` ra,
+            `resellers` rs,
+            `reseller_types` rt,
 			`charters` ch,
 			`boats` b,
 			`contacts` c
 
-                LEFT JOIN `countries` cn ON `c`.`countryID` = `cn`.`countryID`          
+        LEFT JOIN `countries` cn ON `c`.`countryID` = `cn`.`countryID`          
 
 		WHERE
 			`r`.`reservationID` = '$_GET[reservationID]'
 			AND `r`.`userID` = `u`.`userID`
 			AND `r`.`reseller_agentID` = `ra`.`reseller_agentID`
-                        AND `ra`.`resellerID` = `rs`.`resellerID`
-                        AND `rs`.`reseller_typeID` = `rt`.`reseller_typeID`
+            AND `ra`.`resellerID` = `rs`.`resellerID`
+            AND `rs`.`reseller_typeID` = `rt`.`reseller_typeID`
 			AND `r`.`charterID` = `ch`.`charterID`
 			AND `ch`.`boatID` = `b`.`boatID`
 			AND `r`.`reservation_contactID` = `c`.`contactID`
@@ -91,39 +91,39 @@ class reservation extends charters {
 			@$data['percent_booked'] = floor(($charter_data['avail'] / $total)*100);
 
 		}
-                $yaml = yaml_parse_file("yaml/reservations_tab_details.yaml");
-                $config_values = $yaml[PLATFORM];
-                foreach ($config_values as $key=>$value) {
-                        $data[$key] = $value;
-                }
+        $yaml = yaml_parse_file("yaml/reservations_tab_details.yaml");
+        $config_values = $yaml[PLATFORM];
+        foreach ($config_values as $key=>$value) {
+                $data[$key] = $value;
+        }
 
 		$template = "reservations.tpl";
-                $dir = "/reservations";
+        $dir = "/reservations";
 		$this->load_smarty($data,$template,$dir);
 	}
 
 	/* This will pull the header for reservations tab 2 - 10 */
 	private function get_reservations_headers($reservationID) {
-                $sql = "
-                SELECT
-                        DATE_FORMAT(`ch`.`start_date`, '%m/%d/%Y') AS 'start_date',
-                        DATE_FORMAT(DATE_ADD(`ch`.`start_date`, INTERVAL `ch`.`nights` DAY), '%m/%d/%Y') AS 'end_date',
-                        `b`.`name` AS 'boat_name',
-                        `rs`.`company`,
-                        `rs`.`resellerID`
-                FROM
-                        `reservations` r,
-			`charters` ch,
-                        `reseller_agents` ra,
-                        `resellers` rs,
-			`boats` b
+        $sql = "
+        SELECT
+            DATE_FORMAT(`ch`.`start_date`, '%m/%d/%Y') AS 'start_date',
+            DATE_FORMAT(DATE_ADD(`ch`.`start_date`, INTERVAL `ch`.`nights` DAY), '%m/%d/%Y') AS 'end_date',
+            `b`.`name` AS 'boat_name',
+            `rs`.`company`,
+            `rs`.`resellerID`
+        FROM
+            `reservations` r,
+            `charters` ch,
+            `reseller_agents` ra,
+            `resellers` rs,
+            `boats` b
 		WHERE
-                        `r`.`reservationID` = '$reservationID'
-                        AND `r`.`reseller_agentID` = `ra`.`reseller_agentID`
-                        AND `ra`.`resellerID` = `rs`.`resellerID`
-                        AND `r`.`charterID` = `ch`.`charterID`
-                        AND `ch`.`boatID` = `b`.`boatID`
-                ";
+            `r`.`reservationID` = '$reservationID'
+            AND `r`.`reseller_agentID` = `ra`.`reseller_agentID`
+            AND `ra`.`resellerID` = `rs`.`resellerID`
+            AND `r`.`charterID` = `ch`.`charterID`
+            AND `ch`.`boatID` = `b`.`boatID`
+        ";
 		$result = $this->new_mysql($sql);
 		while ($row = $result->fetch_assoc()) {
 			foreach ($row as $key=>$value) {
@@ -135,7 +135,7 @@ class reservation extends charters {
 
 	/* This is the 2nd tab on the manage reservation */
 	public function reservations_guests() {
-                $this->security('reservations',$_SESSION['user_typeID']);
+        $this->security('reservations',$_SESSION['user_typeID']);
 		$data['t2'] = "active";
 		$data['reservationID'] = $_GET['reservationID'];
 
@@ -148,104 +148,191 @@ class reservation extends charters {
 		$data['resellerID'] = $reservation_headers->resellerID;
 		/* End top of tab */
 
-                // get inventory
-                $sql = "
-                SELECT
-                        `i`.`inventoryID`,
-                        `i`.`bunk`,
-                        `i`.`passengerID`,
-                        `i`.`charterID`,
-                        `i`.`reservationID`,
-                        `i`.`login_key` AS 'loginkey',
-                        `c`.`first`,
-                        `c`.`middle`,
-                        `c`.`last`,
-                        `g`.`general`,
-                        `g`.`travel`,
-                        `g`.`emcontact`,
-                        `g`.`requests`,
-                        `g`.`rentals`,
-                        `g`.`activities`,
-                        `g`.`diving`,
-                        `g`.`insurance`,
-                        `g`.`waiver`,
-                        `g`.`policy`,
-                        `g`.`confirmation`,
-                        `g`.`options`
-                FROM
-                        `inventory` i
+        // get inventory
+        $sql = "
+        SELECT
+            `i`.`inventoryID`,
+            `i`.`bunk`,
+            `i`.`passengerID`,
+            `i`.`charterID`,
+            `i`.`reservationID`,
+            `i`.`login_key` AS 'loginkey',
+            `c`.`first`,
+            `c`.`middle`,
+            `c`.`last`,
+            `g`.`general`,
+            `g`.`travel`,
+            `g`.`emcontact`,
+            `g`.`requests`,
+            `g`.`rentals`,
+            `g`.`activities`,
+            `g`.`diving`,
+            `g`.`insurance`,
+            `g`.`waiver`,
+            `g`.`policy`,
+            `g`.`confirmation`,
+            `g`.`options`
+        FROM
+            `inventory` i
 
-                LEFT JOIN contacts c ON i.passengerID = c.contactID
-                LEFT JOIN guestform_status g ON 
-                        i.charterID = g.charterID
-                        AND c.contactID = g.passengerID
+        LEFT JOIN contacts c ON i.passengerID = c.contactID
+        LEFT JOIN guestform_status g ON 
+            i.charterID = g.charterID
+            AND c.contactID = g.passengerID
 
-                WHERE
-                        `i`.`reservationID` = '$_GET[reservationID]'
+        WHERE
+            `i`.`reservationID` = '$_GET[reservationID]'
 
-                ORDER BY `i`.`bunk` ASC
-                ";
-                $result = $this->new_mysql($sql);
-                while ($row = $result->fetch_assoc()) {
-                        $id = $row['passengerID'];
-                        foreach ($row as $key=>$value) {
-                                $data['guests'][$id][$key] = $value;
-                        }
-                }
+        ORDER BY `i`.`bunk` ASC
+        ";
+        $result = $this->new_mysql($sql);
+        while ($row = $result->fetch_assoc()) {
+            $id = $row['passengerID'];
+            foreach ($row as $key=>$value) {
+                $data['guests'][$id][$key] = $value;
+            }
+        }
 
-                $yaml = yaml_parse_file("yaml/reservations_tab_guests.yaml");
-                $config_values = $yaml[PLATFORM];
-                foreach ($config_values as $key=>$value) {
-                        $data[$key] = $value;
-                }
+        $yaml = yaml_parse_file("yaml/reservations_tab_guests.yaml");
+        $config_values = $yaml[PLATFORM];
+        foreach ($config_values as $key=>$value) {
+            $data[$key] = $value;
+        }
 
 		$template = "reservations_guests.tpl";
-                $dir = "/reservations";
+        $dir = "/reservations";
 		$this->load_smarty($data,$template,$dir);
 	}
 
 	/* This is the 3rd tab */
 	public function reservations_dollars() {
-                $this->security('reservations',$_SESSION['user_typeID']);
-                $data['t3'] = "active";
-                $data['reservationID'] = $_GET['reservationID'];
+        $this->security('reservations',$_SESSION['user_typeID']);
+        $data['t3'] = "active";
+        $data['reservationID'] = $_GET['reservationID'];
 
-                /* This will get the data for the top of the tab */
-                $reservation_headers = json_decode($this->get_reservations_headers($_GET['reservationID']));
-                $data['start_date'] = $reservation_headers->start_date;
-                $data['end_date'] = $reservation_headers->end_date;
-                $data['boat_name'] = $reservation_headers->boat_name;
-                $data['company'] = $reservation_headers->company;
-                $data['resellerID'] = $reservation_headers->resellerID;
-                /* End top of tab */
+        /* This will get the data for the top of the tab */
+        $reservation_headers = json_decode($this->get_reservations_headers($_GET['reservationID']));
+        $data['start_date'] = $reservation_headers->start_date;
+        $data['end_date'] = $reservation_headers->end_date;
+        $data['boat_name'] = $reservation_headers->boat_name;
+        $data['company'] = $reservation_headers->company;
+        $data['resellerID'] = $reservation_headers->resellerID;
+        /* End top of tab */
 
-                $template = "reservations_dollars.tpl";
-                $dir = "/reservations";
-                $this->load_smarty($data,$template,$dir);
+        $template = "reservations_dollars.tpl";
+        $dir = "/reservations";
+        $this->load_smarty($data,$template,$dir);
 	}
 
         /* This is the 4th tab */
-        public function reservations_notes() {
-                $this->security('reservations',$_SESSION['user_typeID']);
-                $data['t4'] = "active";
-                $data['reservationID'] = $_GET['reservationID'];
+        public function reservations_timeline() {
+            $this->security('reservations',$_SESSION['user_typeID']);
+            $data['t4'] = "active";
+            $data['reservationID'] = $_GET['reservationID'];
 
-                /* This will get the data for the top of the tab */
-                $reservation_headers = json_decode($this->get_reservations_headers($_GET['reservationID']));
-                $data['start_date'] = $reservation_headers->start_date;
-                $data['end_date'] = $reservation_headers->end_date;
-                $data['boat_name'] = $reservation_headers->boat_name;
-                $data['company'] = $reservation_headers->company;
-                $data['resellerID'] = $reservation_headers->resellerID;
-                /* End top of tab */
+            /* This will get the data for the top of the tab */
+            $reservation_headers = json_decode($this->get_reservations_headers($_GET['reservationID']));
+            $data['start_date'] = $reservation_headers->start_date;
+            $data['end_date'] = $reservation_headers->end_date;
+            $data['boat_name'] = $reservation_headers->boat_name;
+            $data['company'] = $reservation_headers->company;
+            $data['resellerID'] = $reservation_headers->resellerID;
+            /* End top of tab */
 
-                $template = "reservations_notes.tpl";
-                $dir = "/reservations";
-                $this->load_smarty($data,$template,$dir);
+            $sql = "
+            SELECT
+                    `n`.`note_date`,
+                    DATE_FORMAT(`n`.`note_date`, '%m%Y') AS 'month_year',
+                    DATE_FORMAT(`n`.`note_date`, '%b') AS 'month',
+                    DATE_FORMAT(`n`.`note_date`, '%d') AS 'day',
+                    DATE_FORMAT(`n`.`note_date`, '%m/%d/%Y') AS 'date',
+                    `n`.`user_id`,
+                    `n`.`title`,
+                    `n`.`note`
+
+            FROM
+                    `reservations` r,
+                    `inventory` i,
+                    `notes` n
+
+            WHERE
+                    `r`.`reservationID` = '$_GET[reservationID]'
+                    AND `r`.`reservationID` = `i`.`reservationID`
+                    AND `i`.`inventoryID` = `n`.`fkey`
+                    AND `n`.`table_ref` = 'inventory'
+
+            ORDER BY `n`.`note_date` DESC
+            ";
+            // start of output
+            $html = '<div class="row timeline-movement">';
+            $counter = "0";
+
+            $result = $this->new_mysql($sql);
+            while ($row = $result->fetch_assoc()) {
+                $row['month'] = strtoupper($row['month']);
+                if ($marker != $row['month_year']) {
+                    //print "Marker: $row[month_year]<br>";
+                    if ($marker != "") {
+                            $html .= "</div>";
+                            $html .= '<div class="row timeline-movement">';
+                    }
+                    $marker = $row['month_year'];
+                    $html .= '
+                        <div class="timeline-badge">
+                            <span class="timeline-balloon-date-day">'.$row['day'].'</span>
+                            <span class="timeline-balloon-date-month">'.$row['month'].'</span>
+                        </div>
+                    ';
+                }
+                $counter++;
+                if ($counter % 2 == 0) {
+                    $html .= '
+                        <!-- right -->
+                        <div class="col-sm-offset-6 col-sm-6  timeline-item">
+                            <div class="row">
+                                <div class="col-sm-offset-1 col-sm-11">
+                                    <div class="timeline-panel debits">
+                                        <ul class="timeline-panel-ul">
+                                            <li><span class="importo">'.$row['title'].'</span></li>
+                                            <li><span class="causale">'.$row['note'].' by: '.$row['user_id'].'</span> </li>
+                                            <li><p><small class="text-muted"><i class="glyphicon glyphicon-time"></i> '.$row['date'].'</small></p> </li>
+                                        </ul>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    ';
+                } else {
+                    $html .= '
+                        <!-- left -->
+                        <div class="col-sm-6  timeline-item">
+                            <div class="row">
+                                <div class="col-sm-11">
+                                    <div class="timeline-panel credits">
+                                        <ul class="timeline-panel-ul">
+                                            <li><span class="importo">'.$row['title'].'</span></li>
+                                            <li><span class="causale">'.$row['note'].' by: '.$row['user_id'].'</span> </li>
+                                            <li><p><small class="text-muted"><i class="glyphicon glyphicon-time"></i> '.$row['date'].'</small></p> </li>
+                                        </ul>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    ';
+                }
+            }
+            $html .= "</div>";
+            $data['html'] = $html;
+
+            $template = "reservations_timeline.tpl";
+            $dir = "/reservations";
+            $this->load_smarty($data,$template,$dir);
         }
 
         /* This is the 5th tab */
-        public function reservations_options() {
+        public function reservations_notes() {
                 $this->security('reservations',$_SESSION['user_typeID']);
                 $data['t5'] = "active";
                 $data['reservationID'] = $_GET['reservationID'];
@@ -259,7 +346,7 @@ class reservation extends charters {
                 $data['resellerID'] = $reservation_headers->resellerID;
                 /* End top of tab */
 
-                $template = "reservations_options.tpl";
+                $template = "reservations_notes.tpl";
                 $dir = "/reservations";
                 $this->load_smarty($data,$template,$dir);
         }

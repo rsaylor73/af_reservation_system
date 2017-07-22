@@ -245,7 +245,7 @@ class charters extends inventory {
 		SELECT
 		        `i`.`inventoryID`,
 		        `i`.`passengerID`,
-			`i`.`reservationID`,
+				`i`.`reservationID`,
 		        `i`.`manual_discount`,
 		        `i`.`DWC_discount`,
 		        `i`.`voucher`,
@@ -301,9 +301,9 @@ class charters extends inventory {
 		return(json_encode($data));
 	}
 
-        /* This will swap data from the inventory with new data provided for swapping a bunk */
-        public function update_inventory_swap($inventoryID,$data) {
-                $this->security('locate_charter',$_SESSION['user_typeID']);
+    /* This will swap data from the inventory with new data provided for swapping a bunk */
+    public function update_inventory_swap($inventoryID,$data) {
+		$this->security('locate_charter',$_SESSION['user_typeID']);
 
 		$sql = "UPDATE `inventory` SET
 		`passengerID` = '$data[passengerID]',
@@ -347,7 +347,7 @@ class charters extends inventory {
 		";
 		//print "$sql<br><br>";
 		$result = $this->new_mysql($sql);
-        }
+    }
 
 
 	/* This will generate the calendar from locate charters */
