@@ -640,6 +640,19 @@ class bunks extends users {
 			$data['found'] = "1";
 		}
 
+		// survey view
+		if ($_SESSION['user_typeID'] == "3") { // admin
+			$data['view'] = "admin";
+			$sql = "SELECT * FROM `WWM_survey_results` WHERE `inventoryID` = '$_GET[inventoryID]'";
+			$result = $this->new_mysql($sql);
+			while ($row = $result->fetch_assoc()) {
+				foreach ($row as $key=>$value) {
+					$data[$key] = $value;
+				}
+			}
+
+		}
+
 		$data['s8'] = "active";
 
 		$template = "stateroom_survey.tpl";
