@@ -123,192 +123,86 @@
 			</div>
 			<div class="row pad-top">
 				<div class="col-sm-4">Alert Diver Magazine</div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_0 eq "5"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_0 eq "4"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_0 eq "3"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_0 eq "2"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_0 eq "1"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_0 eq "0"}checked{/if}></div>
+				{$mag_1}
+
 			</div>
 			<div class="row pad-top">
-				<div class="col-sm-4">Aquanaut</div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_20 eq "5"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_20 eq "4"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_20 eq "3"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_20 eq "2"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_20 eq "1"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_20 eq "0"}checked{/if}></div>
 			</div>
 			<div class="row pad-top">
 				<div class="col-sm-4">Asian Diver</div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_16 eq "5"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_16 eq "4"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_16 eq "3"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_16 eq "2"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_16 eq "1"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_16 eq "0"}checked{/if}></div>
+				{$mag_17}
 			</div>
 			<div class="row pad-top">
 				<div class="col-sm-4">Blue Magazine</div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_10 eq "5"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_10 eq "4"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_10 eq "3"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_10 eq "2"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_10 eq "1"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_10 eq "0"}checked{/if}></div>
+				{$mag_11}
 			</div>
 			<div class="row pad-top">
 				<div class="col-sm-4">Buceadores Magazine</div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_8 eq "5"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_8 eq "4"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_8 eq "3"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_8 eq "2"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_8 eq "1"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_8 eq "0"}checked{/if}></div>
+				{$mag_9}
 			</div>
 			<div class="row pad-top">
 				<div class="col-sm-4">Dive Center Business</div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_18 eq "5"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_18 eq "4"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_18 eq "3"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_18 eq "2"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_18 eq "1"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_18 eq "0"}checked{/if}></div>
+				{$mag_19}
 			</div>
 			<div class="row pad-top">
 				<div class="col-sm-4">Dive Training Magazine</div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_1 eq "5"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_1 eq "4"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_1 eq "3"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_1 eq "2"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_1 eq "1"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_1 eq "0"}checked{/if}></div>
+				{$mag_2}
 			</div>
 			<div class="row pad-top">
 				<div class="col-sm-4">DIVE UK</div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_19 eq "5"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_19 eq "4"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_19 eq "3"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_19 eq "2"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_19 eq "1"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_19 eq "0"}checked{/if}></div>
+				{$mag_20}
 			</div>
 			<div class="row pad-top">
 				<div class="col-sm-4">Diver Canada</div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_11 eq "5"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_11 eq "4"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_11 eq "3"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_11 eq "2"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_11 eq "1"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_11 eq "0"}checked{/if}></div>
+				{$mag_12}
 			</div>
 			<div class="row pad-top">
 				<div class="col-sm-4">DIVER UK</div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_4 eq "5"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_4 eq "4"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_4 eq "3"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_4 eq "2"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_4 eq "1"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_4 eq "0"}checked{/if}></div>
+				{$mag_5}
 			</div>
 			<div class="row pad-top">
 				<div class="col-sm-4">EZ Dive Magazine</div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_6 eq "5"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_6 eq "4"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_6 eq "3"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_6 eq "2"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_6 eq "1"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_6 eq "0"}checked{/if}></div>
+				{$mag_7}
 			</div>
 			<div class="row pad-top">
 				<div class="col-sm-4">Plongee</div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_12 eq "5"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_12 eq "4"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_12 eq "3"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_12 eq "2"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_12 eq "1"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_12 eq "0"}checked{/if}></div>
+				{$mag_13}
 			</div>
 			<div class="row pad-top">
 				<div class="col-sm-4">Scuba Diver AustralAsia</div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_7 eq "5"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_7 eq "4"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_7 eq "3"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_7 eq "2"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_7 eq "1"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_7 eq "0"}checked{/if}></div>
+				{$mag_8}
 			</div>
 			<div class="row pad-top">
 				<div class="col-sm-4">Scuba Diver (Australasia / Ocean Planet)</div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_17 eq "5"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_17 eq "4"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_17 eq "3"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_17 eq "2"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_17 eq "1"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_17 eq "0"}checked{/if}></div>
+				{$mag_18}
 			</div>
 			<div class="row pad-top">
 				<div class="col-sm-4">Scuba Diving Magazine USA</div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_2 eq "5"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_2 eq "4"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_2 eq "3"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_2 eq "2"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_2 eq "1"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_2 eq "0"}checked{/if}></div>
+				{$mag_3}
 			</div>
 			<div class="row pad-top">
 				<div class="col-sm-4">Sport Diver Australia</div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_13 eq "5"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_13 eq "4"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_13 eq "3"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_13 eq "2"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_13 eq "1"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_13 eq "0"}checked{/if}></div>
+				{$mag_14}
 			</div>
 			<div class="row pad-top">
 				<div class="col-sm-4">Sport Diver Magazine UK</div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_15 eq "5"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_15 eq "4"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_15 eq "3"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_15 eq "2"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_15 eq "1"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_15 eq "0"}checked{/if}></div>
+				{$mag_16}
 			</div>
 			<div class="row pad-top">
 				<div class="col-sm-4">Sport Diver Magazine USA</div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_3 eq "5"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_3 eq "4"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_3 eq "3"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_3 eq "2"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_3 eq "1"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_3 eq "0"}checked{/if}></div>
+				{$mag_4}
 			</div>
 			<div class="row pad-top">
 				<div class="col-sm-4">Tauchen Magazine</div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_9 eq "5"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_9 eq "4"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_9 eq "3"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_9 eq "2"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_9 eq "1"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_9 eq "0"}checked{/if}></div>
+				{$mag_10}
 			</div>
 			<div class="row pad-top">
 				<div class="col-sm-4">Ultimate Depth Russia</div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_14 eq "5"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_14 eq "4"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_14 eq "3"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_14 eq "2"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_14 eq "1"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_14 eq "0"}checked{/if}></div>
+				{$mag_15}
 			</div>
 			<div class="row pad-top">
 				<div class="col-sm-4">unterwasser</div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_5 eq "5"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_5 eq "4"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_5 eq "3"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_5 eq "2"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_5 eq "1"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q12a_5 eq "0"}checked{/if}></div>
+				{$mag_6}
 			</div>
 		</div>
 	</div>

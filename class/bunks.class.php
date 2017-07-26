@@ -643,6 +643,7 @@ class bunks extends users {
 		// survey view
 		if ($_SESSION['user_typeID'] == "3") { // admin
 			$data['view'] = "admin";
+			// survey results
 			$sql = "SELECT * FROM `WWM_survey_results` WHERE `inventoryID` = '$_GET[inventoryID]'";
 			$result = $this->new_mysql($sql);
 			while ($row = $result->fetch_assoc()) {
@@ -650,6 +651,20 @@ class bunks extends users {
 					$data[$key] = $value;
 				}
 			}
+			// publication results
+			$sql = "SELECT * FROM `WWM_survey_publications` WHERE `inventoryID` = '$_GET[inventoryID]'";
+			$result = $this->new_mysql($sql);
+			while ($row = $result->fetch_assoc()) {
+
+				//checkbox_style($mag_id='mag_1',$mag_value='5') 
+				foreach ($row as $key=>$value) {
+
+					if (preg_match("/mag/i",$key)) {
+						$data[$key] = $this->checkbox_style($key,$value);
+					}
+					//$data[$key] = $value;
+				}
+			}			
 
 		}
 

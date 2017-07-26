@@ -294,8 +294,8 @@ class reservation extends charters {
                                     <div class="timeline-panel debits">
                                         <ul class="timeline-panel-ul">
                                             <li><span class="importo">'.$row['title'].'</span></li>
-                                            <li><span class="causale">'.$row['note'].' by: '.$row['user_id'].'</span> </li>
-                                            <li><p><small class="text-muted"><i class="glyphicon glyphicon-time"></i> '.$row['date'].'</small></p> </li>
+                                            <li><span class="causale">'.$row['note'].'</span> </li>
+                                            <li><p><small class="text-muted"><i class="glyphicon glyphicon-time"></i> Sent '.$row['date'].' by: '.$row['user_id'].'</small></p> </li>
                                         </ul>
                                     </div>
 
@@ -312,8 +312,8 @@ class reservation extends charters {
                                     <div class="timeline-panel credits">
                                         <ul class="timeline-panel-ul">
                                             <li><span class="importo">'.$row['title'].'</span></li>
-                                            <li><span class="causale">'.$row['note'].' by: '.$row['user_id'].'</span> </li>
-                                            <li><p><small class="text-muted"><i class="glyphicon glyphicon-time"></i> '.$row['date'].'</small></p> </li>
+                                            <li><span class="causale">'.$row['note'].'</span> </li>
+                                            <li><p><small class="text-muted"><i class="glyphicon glyphicon-time"></i> Sent '.$row['date'].' by: '.$row['user_id'].'</small></p> </li>
                                         </ul>
                                     </div>
 
