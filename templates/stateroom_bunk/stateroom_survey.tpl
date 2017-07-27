@@ -221,167 +221,92 @@
 
 			<div class="row pad-top">
 				<div class="col-sm-4">Aggressor TV</div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_11 eq "5"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_11 eq "4"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_11 eq "3"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_11 eq "2"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_11 eq "1"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_11 eq "0"}checked{/if}></div>
+				{$site_12}
 			</div>	
 
 			<div class="row pad-top">
 				<div class="col-sm-4">AQa</div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_15 eq "5"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_15 eq "4"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_15 eq "3"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_15 eq "2"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_15 eq "1"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_15 eq "0"}checked{/if}></div>
+				{$site_16}
 			</div>
 			<div class="row pad-top">
 				<div class="col-sm-4">Aqua Lung</div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_12 eq "5"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_12 eq "4"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_12 eq "3"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_12 eq "2"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_12 eq "1"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_12 eq "0"}checked{/if}></div>
+				{$site_13}
 			</div>	
 			<div class="row pad-top">
 				<div class="col-sm-4">AustralAsia</div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_6 eq "5"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_6 eq "4"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_6 eq "3"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_6 eq "2"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_6 eq "1"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_6 eq "0"}checked{/if}></div>
+				{$site_7}
 			</div>	
 
 			<div class="row pad-top">
 				<div class="col-sm-4">DEMA</div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_13 eq "5"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_13 eq "4"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_13 eq "3"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_13 eq "2"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_13 eq "1"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_13 eq "0"}checked{/if}></div>
+				{$site_14}
 			</div>	
 
 			<div class="row pad-top">
 				<div class="col-sm-4">DIVE UK</div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_7 eq "5"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_7 eq "4"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_7 eq "3"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_7 eq "2"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_7 eq "1"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_7 eq "0"}checked{/if}></div>
+				{$site_8}
 			</div>	
 			<div class="row pad-top">
 				<div class="col-sm-4">DiveNewsWire</div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_3 eq "5"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_3 eq "4"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_3 eq "3"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_3 eq "2"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_3 eq "1"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_3 eq "0"}checked{/if}></div>
+				{$site_4}
 			</div>	
 			<div class="row pad-top">
 				<div class="col-sm-4">In Depth</div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_16 eq "5"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_16 eq "4"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_16 eq "3"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_16 eq "2"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_16 eq "1"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_16 eq "0"}checked{/if}></div>
+				{$site_17}
 			</div>
 			<div class="row pad-top">
 				<div class="col-sm-4">Jim Church Photo</div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_14 eq "5"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_14 eq "4"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_14 eq "3"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_14 eq "2"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_14 eq "1"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_14 eq "0"}checked{/if}></div>
+				{$site_15}
 			</div>
 
 			<div class="row pad-top">
 				<div class="col-sm-4">PADI</div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_9 eq "5"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_9 eq "4"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_9 eq "3"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_9 eq "2"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_9 eq "1"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_9 eq "0"}checked{/if}></div>
+				{$site_10}
 			</div>	
 
 			<div class="row pad-top">
 				<div class="col-sm-4">ScubaBoard</div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_0 eq "5"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_0 eq "4"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_0 eq "3"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_0 eq "2"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_0 eq "1"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_0 eq "0"}checked{/if}></div>
+				{$site_1}
 			</div>	
 			<div class="row pad-top">
 				<div class="col-sm-4">Scuba Diver USA</div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_2 eq "5"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_2 eq "4"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_2 eq "3"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_2 eq "2"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_2 eq "1"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_2 eq "0"}checked{/if}></div>
+				{$site_3}
 			</div>	
 
 			<div class="row pad-top">
 				<div class="col-sm-4">Sport Diver USA</div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_1 eq "5"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_1 eq "4"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_1 eq "3"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_1 eq "2"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_1 eq "1"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_1 eq "0"}checked{/if}></div>
+				{$site_2}
 			</div>	
 			<div class="row pad-top">
 				<div class="col-sm-4">SSI</div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_10 eq "5"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_10 eq "4"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_10 eq "3"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_10 eq "2"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_10 eq "1"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_10 eq "0"}checked{/if}></div>
+				{$site_11}
 			</div>	
 
 			<div class="row pad-top">
 				<div class="col-sm-4">X-Ray</div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_5 eq "5"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_5 eq "4"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_5 eq "3"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_5 eq "2"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_5 eq "1"}checked{/if}></div>
-				<div class="col-sm-1"><input type="checkbox" disabled {if $q13a_5 eq "0"}checked{/if}></div>
+				{$site_6}
 			</div>	
 		</div>
 	</div>
 
 	<div class="row pad-top panel">
 		<div class="col-sm-4">On a scale of 10 (best) to 1 (least), how likely are you to recommend us to a friend or colleague?</div>
-		<div class="col-sm-4">{$q14}</div>
+		<div class="col-sm-4">{$ans_15}</div>
 	</div>
 
 	<div class="row pad-top panel">
 		<div class="col-sm-4">On a scale of 10 (best) to 1 (least), how likely are you to recommend {$boat_name} to a friend or colleague?
 		</div>
-		<div class="col-sm-4">{$q15}</div>
+		<div class="col-sm-4">{$ans_16}</div>
 	</div>
 
 	<div class="row pad-top panel">
 		<div class="col-sm-4">What was the primary factor you considered in determining your score?</div>
-		<div class="col-sm-4">{$q16}</div>
+		<div class="col-sm-4">{$ans_17}</div>
 	</div>
 	<div class="row pad-top panel">
 		<div class="col-sm-4">What is the one thing we can do to improve this score next time?</div>
-		<div class="col-sm-4">{$q17}</div>
+		<div class="col-sm-4">{$ans_18}</div>
 	</div>
 	
 

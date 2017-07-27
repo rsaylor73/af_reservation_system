@@ -648,8 +648,14 @@ class bunks extends users {
 			$result = $this->new_mysql($sql);
 			while ($row = $result->fetch_assoc()) {
 				foreach ($row as $key=>$value) {
-					$data[$key] = $value;
+					$data[$key] = stripslashes($value);
 				}
+				$boatID = $row['boatID'];
+			}
+			$sql = "SELECT `name` FROM `boats` WHERE `boatID` = '$boatID'";
+			$result = $this->new_mysql($sql);
+			while ($row = $result->fetch_assoc()) {
+				$data['boat_name'] = $row['name'];
 			}
 			// publication results
 			$sql = "SELECT * FROM `WWM_survey_publications` WHERE `inventoryID` = '$_GET[inventoryID]'";
@@ -662,7 +668,9 @@ class bunks extends users {
 					if (preg_match("/mag/i",$key)) {
 						$data[$key] = $this->checkbox_style($key,$value);
 					}
-					//$data[$key] = $value;
+					if (preg_match("/site/i",$key)) {
+						$data[$key] = $this->checkbox_style($key,$value);
+					}
 				}
 			}			
 

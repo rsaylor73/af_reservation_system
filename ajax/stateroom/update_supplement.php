@@ -33,7 +33,6 @@ if ($logged == "TRUE") {
 		</div>";
 		die;
 	}
-	print "Test $bunk1A = $bunk2A<br>";
 
 	if ($status != "avail") {
 		print "<div class=\"alert alert-danger\">
@@ -61,6 +60,11 @@ if ($logged == "TRUE") {
 	('$_GET[inventoryID]','$_GET[ss]','$bunk')
 	";
 	$result = $core->new_mysql($sql);
+
+    $title = "Single Supplement";
+    $fkey = $_GET['inventoryID'];
+    $note = "Single Supplement was added to stateroom $bunk";
+	$core->log_activity($fkey,$note,'inventory',$title);
 
 	// 4. set the single status in inventory to match the status of the partner bunk
 	$sql = "SELECT `status` FROM `inventory` WHERE `inventoryID` = '$_GET[inventoryID]'";

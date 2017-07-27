@@ -231,6 +231,18 @@ class common extends destinations {
 		return($option);
 	}
 
+	/* This will log activity on the inventory timeline */
+	public function log_activity($fkey,$note,$ref='inventory',$title) {
+		$note_date = date("Ymd");
+		$user_id = $_SESSION['username'];
+
+		$sql = "INSERT INTO `notes` 
+		(`note_date`,`table_ref`,`fkey`,`user_id`,`title`,`note`)
+		VALUES
+		('$note_date','$ref','$fkey','$user_id','$title','$note')
+		";
+		$result = $this->new_mysql($sql);
+	}
 
 }
 ?>

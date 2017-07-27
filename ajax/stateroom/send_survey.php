@@ -36,6 +36,10 @@ if ($logged == "TRUE") {
             Augusta, GA 30907<br>
 
             ";
+            $title = "Resend Survey";
+            $fkey = $_GET['inventoryID'];
+            $note = "Guest survey was resent to $_GET[email]";
+			$core->log_activity($fkey,$note,'inventory',$title);
 
             mail($_GET['email'],$subject,$body,HEADER);
 			print "<div class=\"alert alert-success\" id=\"success-alert\">The survey was sent to $_GET[email].</div>";

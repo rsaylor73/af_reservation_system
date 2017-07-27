@@ -28,7 +28,6 @@ if ($logged == "TRUE") {
     $result = $core->new_mysql($sql);
 
     $note_date = date("Ymd");
-    $user_id = $_SESSION['username'];
     $fkey = $target_bunk_details['inventoryID'];
     $title = "Stateroom Move";
 
@@ -46,12 +45,6 @@ if ($logged == "TRUE") {
 
     $note = "Guest was moved from $old_bunk to $new_bunk";
 
-	$sql = "INSERT INTO `notes` 
-	(`note_date`,`table_ref`,`fkey`,`user_id`,`title`,`note`)
-	VALUES
-	('$note_date','inventory','$fkey','$user_id','$title','$note')
-	";
-	$result = $core->new_mysql($sql);
-
+    $core->log_activity($fkey,$note,'inventory',$title);
 }
 ?>
