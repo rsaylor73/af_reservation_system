@@ -102,7 +102,7 @@ $( document ).ready(function() {
 {/if}
 
 function step2(myform) {
-        $.get('/ajax/new_reservation_step2.php',
+        $.get('/ajax/reservations/new_reservation_step2.php',
         $(myform).serialize(),
         function(php_msg) {     
                 $("#interactive").html(php_msg);
@@ -110,7 +110,7 @@ function step2(myform) {
 }
 
 function tab2(myform) {
-        $.get('/ajax/new_reservation_step2.php',
+        $.get('/ajax/reservations/new_reservation_step2.php',
         $(myform).serialize(),
         function(php_msg) {     
                 $("#interactive").html(php_msg);
@@ -118,7 +118,7 @@ function tab2(myform) {
 }
 
 function tab3(myform) {
-        $.get('/ajax/new_reservation_step3.php',
+        $.get('/ajax/reservations/new_reservation_step3.php',
         $(myform).serialize(),
         function(php_msg) {     
                 $("#interactive").html(php_msg);
@@ -126,7 +126,7 @@ function tab3(myform) {
 }
 
 function tab4(myform) {
-        $.get('/ajax/new_reservation_step4.php',
+        $.get('/ajax/reservations/new_reservation_step4.php',
         $(myform).serialize(),
         function(php_msg) {     
                 $("#interactive").html(php_msg);
@@ -134,7 +134,7 @@ function tab4(myform) {
 }
 
 function tab5(myform) {
-        $.get('/ajax/new_reservation_step5.php',
+        $.get('/ajax/reservations/new_reservation_step5.php',
         $(myform).serialize(),
         function(php_msg) {     
                 $("#interactive").html(php_msg);

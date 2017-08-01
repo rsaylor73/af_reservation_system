@@ -456,34 +456,34 @@ class reservation extends charters {
 	public function new_reservation() {
 		$this->security('new_reservation',$_SESSION['user_typeID']);
 
-	        // check if all bunks assigned
+	    // check if all bunks assigned
 		$ses = session_id();
 		$charter = $_SESSION['charterID'];
-	        $sql = "SELECT `inventoryID` FROM `inventory` WHERE `charterID` = '$charter' AND `timestamp` > '0' AND `sessionID` = '$ses'";
-	        $result = $this->new_mysql($sql);
-	        while ($row = $result->fetch_assoc()) {
-	                $inv = $row['inventoryID'];
-	                $_SESSION['c'][$charter][$inv] = "";
-	        }
-	        ?>
-	        <script>
-	        document.getElementById('checkout').disabled=true;
-	        </script>
-	        <?php   
-	        // end check
+        $sql = "SELECT `inventoryID` FROM `inventory` WHERE `charterID` = '$charter' AND `timestamp` > '0' AND `sessionID` = '$ses'";
+        $result = $this->new_mysql($sql);
+        while ($row = $result->fetch_assoc()) {
+            $inv = $row['inventoryID'];
+            $_SESSION['c'][$charter][$inv] = "";
+        }
+        ?>
+        <script>
+        document.getElementById('checkout').disabled=true;
+        </script>
+        <?php   
+        // end check
 
 
-                $data['tab1'] = "disabled";
+        $data['tab1'] = "disabled";
 		$data['tab1_color'] = "primary";
-                $data['tab2'] = "disabled";
+        $data['tab2'] = "disabled";
 		$data['tab2_color'] = "default";
-                $data['tab3'] = "disabled";
+        $data['tab3'] = "disabled";
 		$data['tab3_color'] = "default";
-                $data['tab4'] = "disabled";
+        $data['tab4'] = "disabled";
 		$data['tab4_color'] = "default";
-                $data['tab5'] = "disabled";
+        $data['tab5'] = "disabled";
 		$data['tab5_color'] = "default";
-                $data['tab6'] = "disabled";
+        $data['tab6'] = "disabled";
 		$data['tab6_color'] = "default";
 
 		// load current tab
@@ -494,63 +494,63 @@ class reservation extends charters {
 			break;
 
 			case "2":
-                        $data['tab1'] = "";
-                        $data['tab1_color'] = "success";
-                        $data['tab2'] = "";
-                        $data['tab2_color'] = "success";
+            $data['tab1'] = "";
+            $data['tab1_color'] = "success";
+            $data['tab2'] = "";
+            $data['tab2_color'] = "success";
 			$data['tab2_click'] = "yes";
-                        break;
+            break;
 
-                        case "3":
-                        $data['tab1'] = "";
-                        $data['tab1_color'] = "success";                        
-                        $data['tab2'] = "";
-                        $data['tab2_color'] = "success";
-                        $data['tab3'] = "";
-                        $data['tab3_color'] = "success";
+            case "3":
+            $data['tab1'] = "";
+            $data['tab1_color'] = "success";                        
+            $data['tab2'] = "";
+            $data['tab2_color'] = "success";
+            $data['tab3'] = "";
+            $data['tab3_color'] = "success";
 			$data['tab3_click'] = "yes";
-                        break;
+            break;
 
-                        case "4":
-                        $data['tab1'] = "";
-                        $data['tab1_color'] = "success";
-                        $data['tab2'] = "";
-                        $data['tab2_color'] = "success";                        
-                        $data['tab3'] = "";
-                        $data['tab3_color'] = "success";
-                        $data['tab4'] = "";
-                        $data['tab4_color'] = "success";
+            case "4":
+            $data['tab1'] = "";
+            $data['tab1_color'] = "success";
+            $data['tab2'] = "";
+            $data['tab2_color'] = "success";                        
+            $data['tab3'] = "";
+            $data['tab3_color'] = "success";
+            $data['tab4'] = "";
+            $data['tab4_color'] = "success";
 			$data['tab4_click'] = "yes";
-                        break;
+            break;
 
-                        case "5":
-                        $data['tab1'] = "";
-                        $data['tab1_color'] = "success";
-                        $data['tab2'] = "";
-                        $data['tab2_color'] = "success";
-                        $data['tab3'] = "";
-                        $data['tab3_color'] = "success";                        
-                        $data['tab4'] = "";
-                        $data['tab4_color'] = "success";
-                        $data['tab5'] = "";
-                        $data['tab5_color'] = "success";
-                        $data['tab5_click'] = "yes";
-                        break;
+            case "5":
+            $data['tab1'] = "";
+            $data['tab1_color'] = "success";
+            $data['tab2'] = "";
+            $data['tab2_color'] = "success";
+            $data['tab3'] = "";
+            $data['tab3_color'] = "success";                        
+            $data['tab4'] = "";
+            $data['tab4_color'] = "success";
+            $data['tab5'] = "";
+            $data['tab5_color'] = "success";
+            $data['tab5_click'] = "yes";
+            break;
 
-                        case "6":
-                        $data['tab1'] = "";
-                        $data['tab1_color'] = "success";
-                        $data['tab2'] = "";
-                        $data['tab2_color'] = "success";
-                        $data['tab3'] = "";
-                        $data['tab3_color'] = "success";
-                        $data['tab4'] = "";
-                        $data['tab4_color'] = "success";                        
-                        $data['tab5'] = "";
-                        $data['tab5_color'] = "success";
-                        $data['tab6'] = "";
-                        $data['tab6_color'] = "success";
-                        break;
+            case "6":
+            $data['tab1'] = "";
+            $data['tab1_color'] = "success";
+            $data['tab2'] = "";
+            $data['tab2_color'] = "success";
+            $data['tab3'] = "";
+            $data['tab3_color'] = "success";
+            $data['tab4'] = "";
+            $data['tab4_color'] = "success";                        
+            $data['tab5'] = "";
+            $data['tab5_color'] = "success";
+            $data['tab6'] = "";
+            $data['tab6_color'] = "success";
+            break;
 		}
 
 
@@ -558,41 +558,38 @@ class reservation extends charters {
 		$charter = $_GET['charterID'];
 
 		if ($_SESSION['c'][$charter]['s1'] == "complete") {
-                        $data['tab1'] = "";
-                        $data['tab1_color'] = "success";
+            $data['tab1'] = "";
+            $data['tab1_color'] = "success";
 		}
-                if ($_SESSION['c'][$charter]['s2'] == "complete") {
-                        $data['tab2'] = "";
-                        $data['tab2_color'] = "success";
-                }
-                if ($_SESSION['c'][$charter]['s3'] == "complete") {
-                        $data['tab3'] = "";
-                        $data['tab3_color'] = "success";
-                }
-                if ($_SESSION['c'][$charter]['s4'] == "complete") {
-                        $data['tab4'] = "";
-                        $data['tab4_color'] = "success";
-                }
-                if ($_SESSION['c'][$charter]['s5'] == "complete") {
-                        $data['tab5'] = "";
-                        $data['tab5_color'] = "success";
-                }
-                if ($_SESSION['c'][$charter]['s6'] == "complete") {
-                        $data['tab6'] = "";
-                        $data['tab6_color'] = "success";
-                }
-
-
+        if ($_SESSION['c'][$charter]['s2'] == "complete") {
+            $data['tab2'] = "";
+            $data['tab2_color'] = "success";
+        }
+        if ($_SESSION['c'][$charter]['s3'] == "complete") {
+            $data['tab3'] = "";
+            $data['tab3_color'] = "success";
+        }
+        if ($_SESSION['c'][$charter]['s4'] == "complete") {
+            $data['tab4'] = "";
+            $data['tab4_color'] = "success";
+        }
+        if ($_SESSION['c'][$charter]['s5'] == "complete") {
+            $data['tab5'] = "";
+            $data['tab5_color'] = "success";
+        }
+        if ($_SESSION['c'][$charter]['s6'] == "complete") {
+            $data['tab6'] = "";
+            $data['tab6_color'] = "success";
+        }
 
 		// end history
-
 
 		// get charter info
 		$sql = "
 		SELECT
 			`b`.`name`,
 			DATE_FORMAT(`c`.`start_date`, '%m/%d/%Y') AS 'start_date',
-                        DATE_FORMAT(DATE_ADD(`c`.`start_date`, INTERVAL `c`.`nights` DAY), '%m/%d/%Y') AS 'end_date',
+            DATE_FORMAT(DATE_ADD(`c`.`start_date`, INTERVAL `c`.`nights` DAY), '%m/%d/%Y') AS 'end_date',
 			`c`.`nights`
 		FROM
 			`charters` c,
@@ -630,15 +627,15 @@ class reservation extends charters {
 				$data['continue'] = "";
 				$options .= "<option selected value=\"$userID\">$first $last</option>";
 			} else {
-                                $options .= "<option value=\"$userID\">$first $last</option>";
-			}
-			
+                $options .= "<option value=\"$userID\">$first $last</option>";
+			}			
 		}
 		$data['options'] = $options;
 		$data['charterID'] = $_GET['charterID'];
 		$_SESSION['charterID'] = $_GET['charterID'];
 		$template = "new_reservation.tpl";
-		$this->load_smarty($data,$template);
+        $dir = "/reservations";
+		$this->load_smarty($data,$template,$dir);
 	}
 
 	private function get_agents() {

@@ -110,7 +110,7 @@ The contact listed below is the current selected contact for this reservation. I
 
 <script>
 function search_contact(myform) {
-        $.get('/ajax/new_reservation_contact_search.php',
+        $.get('/ajax/reservations/new_reservation_contact_search.php',
         $(myform).serialize(),
         function(php_msg) {     
                 $("#search_results").html(php_msg);
@@ -118,7 +118,7 @@ function search_contact(myform) {
 }
 
 function create_new_contact(myform) {
-        $.get('/ajax/create_new_contact.php',
+        $.get('/ajax/reservations/create_new_contact.php',
         $(myform).serialize(),
         function(php_msg) {     
                 $("#search_results").html(php_msg);
@@ -138,7 +138,7 @@ $(function() {
 });
 
 function step5(resellerID,reseller_agentID,contactID,reservation_sourceID,charterID,userID,reservation_type,myform) {
-        $.get('/ajax/new_reservation_step5.php?resellerID='+resellerID+'&reseller_agentID='+reseller_agentID+'&contactID='+contactID+'&reservation_sourceID='+reservation_sourceID+'&charterID='+charterID+'&userID='+userID+'&reservation_type='+reservation_type,
+        $.get('/ajax/reservations/new_reservation_step5.php?resellerID='+resellerID+'&reseller_agentID='+reseller_agentID+'&contactID='+contactID+'&reservation_sourceID='+reservation_sourceID+'&charterID='+charterID+'&userID='+userID+'&reservation_type='+reservation_type,
         $(myform).serialize(), // nothing to really serialize cause the form is lost on the 3rd jQuery layer
         function(php_msg) {     
                 $("#interactive").html(php_msg);

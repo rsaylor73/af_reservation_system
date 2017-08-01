@@ -35,7 +35,7 @@
 
 <script>
 function search_pax(inventoryID) {
-        $.get('/ajax/new_reservation_search_pax.php?inventoryID='+inventoryID,
+        $.get('/ajax/reservations/new_reservation_search_pax.php?inventoryID='+inventoryID,
         $(myform).serialize(), // nothing to really serialize cause the form is lost on the 3rd jQuery layer
         function(php_msg) {     
                 $("#pax_results").html(php_msg);
@@ -43,7 +43,7 @@ function search_pax(inventoryID) {
 }
 
 function complete_reservation() {
-        $.get('/ajax/new_reservation_finish.php',
+        $.get('/ajax/reservations/new_reservation_finish.php',
         function(php_msg) {     
                 $("#interactive").html(php_msg);
         });

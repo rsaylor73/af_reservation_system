@@ -1,8 +1,8 @@
 <?php
 session_start();
 error_reporting(E_ALL & ~E_NOTICE);
-include "../include/settings.php";
-include "../include/templates.php";
+include "../../include/settings.php";
+include "../../include/templates.php";
 $smarty->error_reporting = E_ALL & ~E_NOTICE;
 $logged = $core->check_login();
 if ($logged == "TRUE") {
@@ -105,7 +105,7 @@ if ($logged == "TRUE") {
 	});
 
 	function assign_pax(inventoryID,passengerID) {
-                $.get('/ajax/new_reservation_assign_pax_complete.php?inventoryID='+inventoryID+'&passengerID='+passengerID,
+                $.get('/ajax/reservations/new_reservation_assign_pax_complete.php?inventoryID='+inventoryID+'&passengerID='+passengerID,
                 function(php_msg) {     
                         $("#pax_<?=$_GET['inventoryID'];?>").html(php_msg);
 			$("#paxtools_<?=$_GET['inventoryID'];?>").html(null);
@@ -115,7 +115,7 @@ if ($logged == "TRUE") {
 
 
 	function lookup_pax(myform) {
-	        $.get('/ajax/new_reservation_lookup_pax.php',
+	        $.get('/ajax/reservations/new_reservation_lookup_pax.php',
 	        $(myform).serialize(),
 	        function(php_msg) {     
 	                $("#paxtools_<?=$_GET['inventoryID'];?>").html(php_msg);
@@ -123,7 +123,7 @@ if ($logged == "TRUE") {
 	}
 
         function create_new_pax(myform) {
-                $.get('/ajax/new_reservation_create_pax.php',
+                $.get('/ajax/reservations/new_reservation_create_pax.php',
                 $(myform).serialize(),
                 function(php_msg) {     
                         $("#paxtools_<?=$_GET['inventoryID'];?>").html(php_msg);

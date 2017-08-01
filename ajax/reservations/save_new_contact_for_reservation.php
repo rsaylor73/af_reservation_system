@@ -1,8 +1,8 @@
 <?php
 session_start();
 error_reporting(E_ALL & ~E_NOTICE);
-include "../include/settings.php";
-include "../include/templates.php";
+include "../../include/settings.php";
+include "../../include/templates.php";
 $smarty->error_reporting = E_ALL & ~E_NOTICE;
 $logged = $core->check_login();
 if ($logged == "TRUE") {
@@ -21,23 +21,27 @@ if ($logged == "TRUE") {
 	('$g[first]','$g[middle]','$g[last]','$g[address1]','$g[address2]','$dob','$g[city]','$g[state]','$g[province]','$g[zip]','$g[email]','$g[sex]',
 	'Home','$g[phone1]','Mobile','$g[phone2]','$date','consumer')";
 
-
 	$result = $core->new_mysql($sql);
 	$contactID = $core->linkID->insert_id;
 
 	if ($result == "TRUE") {
-		print "<div class=\"alert alert-success\">The new contact was created. Please wait while we assign the passenger to the bunk.</div>";
+		print "<div class=\"alert alert-success\">The new contact was created. Please wait while we continue to the next step.</div>";
 		?>
                 <script>
 
                 setTimeout(function() {
-			inventoryID = '<?=$_GET['inventoryID'];?>';
+                        resellerID = '<?=$_GET['resellerID'];?>';
+                        reseller_agentID = '<?=$_GET['reseller_agentID'];?>';
                         contactID = '<?=$contactID;?>';
+                        reservation_sourceID = '<?=$_GET['reservation_sourceID'];?>';
+                        charterID = '<?=$_GET['charterID'];?>';
+                        userID = '<?=$_GET['userID'];?>';
+                        reservation_type = '<?=$_GET['reservation_type'];?>';
 
-			$.get('/ajax/new_reservation_assign_pax_complete.php?inventoryID='+inventoryID+'&passengerID='+contactID,
+			$.get('/ajax/reservations/new_reservation_step5.php?resellerID='+resellerID+'&reseller_agentID='+reseller_agentID+'&contactID='+contactID+'&reservation_sourceID='+reservation_sourceID+'&charterID='+charterID+'&userID='+userID+'&reservation_type='+reservation_type,
+                        $(myform).serialize(), // nothing to really serialize cause the form is lost on the 3rd jQuery layer
                         function(php_msg) {     
-	                        $("#pax_<?=$_GET['inventoryID'];?>").html(php_msg);
-	                        $("#paxtools_<?=$_GET['inventoryID'];?>").html(null);
+                                $("#interactive").html(php_msg);
                         });
 
                 },2000);

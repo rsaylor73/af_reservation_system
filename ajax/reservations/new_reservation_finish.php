@@ -1,8 +1,8 @@
 <?php           
 session_start();
 error_reporting(E_ALL & ~E_NOTICE);
-include "../include/settings.php";
-include "../include/templates.php";
+include "../../include/settings.php";
+include "../../include/templates.php";
 $smarty->error_reporting = E_ALL & ~E_NOTICE;
 $logged = $core->check_login();
 if ($logged == "TRUE") {
@@ -126,7 +126,7 @@ if ($logged == "TRUE") {
 				}
 
 				$data['reservationID'] = $reservationID;
-				$template = "new_reservation_complete.tpl";
+				
 
 				// destroy session data
 				unset($_SESSION['c'][$charter]);
@@ -140,7 +140,9 @@ if ($logged == "TRUE") {
 				unset($_SESSION['reservation_type']);
 				// done data destroy
 
-				$core->load_smarty($data,$template);
+				$template = "new_reservation_complete.tpl";
+				$dir = "/reservations";
+				$core->load_smarty($data,$template,$dir);
 
 			} else {
 				// reservation failed

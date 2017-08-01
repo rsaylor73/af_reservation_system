@@ -1,8 +1,8 @@
 <?php
 session_start();
 error_reporting(E_ALL & ~E_NOTICE);
-include "../include/settings.php";
-include "../include/templates.php";
+include "../../include/settings.php";
+include "../../include/templates.php";
 $smarty->error_reporting = E_ALL & ~E_NOTICE;
 $logged = $core->check_login();
 if ($logged == "TRUE") {
@@ -18,27 +18,27 @@ if ($logged == "TRUE") {
 		$last = "AND `c`.`last` LIKE '%$_GET[last]%'";
 	}
 
-        if ($_GET['phone'] != "") {
-                $phone = "
-                AND replace(replace(replace(replace(replace(c.phone1,' ',''),'(','') ,')',''),'-',''),'/','') = $_GET[phone]
-                OR replace(replace(replace(replace(replace(c.phone2,' ',''),'(','') ,')',''),'-',''),'/','') = $_GET[phone]
-                OR replace(replace(replace(replace(replace(c.phone3,' ',''),'(','') ,')',''),'-',''),'/','') = $_GET[phone]
-                OR replace(replace(replace(replace(replace(c.phone4,' ',''),'(','') ,')',''),'-',''),'/','') = $_GET[phone]
-                ";
-        }
+    if ($_GET['phone'] != "") {
+        $phone = "
+        AND replace(replace(replace(replace(replace(c.phone1,' ',''),'(','') ,')',''),'-',''),'/','') = $_GET[phone]
+        OR replace(replace(replace(replace(replace(c.phone2,' ',''),'(','') ,')',''),'-',''),'/','') = $_GET[phone]
+        OR replace(replace(replace(replace(replace(c.phone3,' ',''),'(','') ,')',''),'-',''),'/','') = $_GET[phone]
+        OR replace(replace(replace(replace(replace(c.phone4,' ',''),'(','') ,')',''),'-',''),'/','') = $_GET[phone]
+        ";
+    }
 
-        if ($_GET['dob'] != "") {
+    if ($_GET['dob'] != "") {
 		$_GET['dob'] = str_replace("-","",$_GET['dob']);
-                $dob = "AND `c`.`date_of_birth` = '$_GET[dob]' AND `c`.`date_of_birth` IS NOT NULL";
-        }
+        $dob = "AND `c`.`date_of_birth` = '$_GET[dob]' AND `c`.`date_of_birth` IS NOT NULL";
+    }
 
-        if ($_GET['zip'] != "") {
-                $zip = "AND `c`.`zip` LIKE '%$_GET[zip]%'";
-        }
+    if ($_GET['zip'] != "") {
+		$zip = "AND `c`.`zip` LIKE '%$_GET[zip]%'";
+    }
 
-        if ($_GET['email'] != "") {
-                $email = "AND `c`.`email` LIKE '$_GET[email]%' AND `c`.`email` IS NOT NULL";
-        }
+    if ($_GET['email'] != "") {
+		$email = "AND `c`.`email` LIKE '$_GET[email]%' AND `c`.`email` IS NOT NULL";
+    }
 
 	$sql = "
 	SELECT
@@ -65,12 +65,12 @@ if ($logged == "TRUE") {
 	$result = $core->new_mysql($sql);
 	while ($row = $result->fetch_assoc()) {
 		$output .= "
-                <tr onclick=\"step5('$_GET[resellerID]','$_GET[reseller_agentID]','$row[contactID]','$_GET[reservation_sourceID]','$_GET[charterID]','$_GET[userID]','$_GET[reservation_type]',this.form)\">
-                        <td>$row[first] $row[last]</td>
-                        <td>$row[city]</td>
-                        <td>$row[phone1]</td>
-                        <td>$row[email]</td>
-                </tr>";
+        <tr onclick=\"step5('$_GET[resellerID]','$_GET[reseller_agentID]','$row[contactID]','$_GET[reservation_sourceID]','$_GET[charterID]','$_GET[userID]','$_GET[reservation_type]',this.form)\">
+            <td>$row[first] $row[last]</td>
+            <td>$row[city]</td>
+            <td>$row[phone1]</td>
+            <td>$row[email]</td>
+        </tr>";
 		$found = "1";
 	}
 	if ($found != "1") {
@@ -109,7 +109,7 @@ if ($logged == "TRUE") {
 
 
 } else {
-        $msg = "Your session has expired. Please log back in.";
-        $core->error($msg);
+    $msg = "Your session has expired. Please log back in.";
+    $core->error($msg);
 }
 ?>

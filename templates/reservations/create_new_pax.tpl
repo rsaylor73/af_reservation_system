@@ -94,7 +94,7 @@
 <script>
 
 function contact_process(myform) {
-        $.get('/ajax/save_new_contact_for_pax.php',
+        $.get('/ajax/reservations/save_new_contact_for_pax.php',
         $(myform).serialize(),
         function(php_msg) {     
                 $("#contact_process").html(php_msg);
@@ -114,7 +114,7 @@ $(function() {
 });
 
 function check_country(myform) {
-        $.get('/ajax/check_country.php',
+        $.get('/ajax/reservations/check_country.php',
         $(myform).serialize(),
         function(php_msg) {
                 $("#state_div2").html(php_msg);
@@ -123,7 +123,7 @@ function check_country(myform) {
 }
 
 function check_state_title(myform) {
-        $.get('/ajax/check_state_title.php',
+        $.get('/ajax/reservations/check_state_title.php',
         $(myform).serialize(),
         function(php_msg) {
                 $("#state_div1").html(php_msg);
@@ -154,7 +154,7 @@ function save_contact(myform) {
 	} else if (email == "") {
 		alert('Email is required.');
 	} else {
-		$.get('/ajax/save_new_contact_for_pax.php',
+		$.get('/ajax/reservations/save_new_contact_for_pax.php',
 		$(myform).serialize(),
 		function(php_msg) {
                 	$("#contact_process").html(php_msg);

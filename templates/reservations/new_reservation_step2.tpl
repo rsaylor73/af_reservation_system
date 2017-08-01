@@ -69,10 +69,10 @@ $( document ).ready(function() {
 });
 
 function search_reseller(myform) {
-        $.get('/ajax/new_reservation_reseller_search.php',
-        $(myform).serialize(),
-        function(php_msg) {     
-                $("#search_results").html(php_msg);
-        });
+    $.get('/ajax/reservations/new_reservation_reseller_search.php',
+    $(myform).serialize(),
+    function(php_msg) {     
+        $("#search_results").html(php_msg);
+    });
 }
 </script>

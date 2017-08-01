@@ -1,8 +1,8 @@
 <?php
 session_start();
 error_reporting(E_ALL & ~E_NOTICE);
-include "../include/settings.php";
-include "../include/templates.php";
+include "../../include/settings.php";
+include "../../include/templates.php";
 $smarty->error_reporting = E_ALL & ~E_NOTICE;
 $logged = $core->check_login();
 if ($logged == "TRUE") {
@@ -18,9 +18,9 @@ if ($logged == "TRUE") {
 		$_GET['reservation_type'] = $_SESSION['c'][$charter]['reservation_type'];
 
 	} else {
-	        $charter = $_GET['charterID'];
-	        $_SESSION['c'][$charter]['s2'] = 'complete';
-	        $_SESSION['c'][$charter]['resellerID'] = $_GET['resellerID'];
+		$charter = $_GET['charterID'];
+		$_SESSION['c'][$charter]['s2'] = 'complete';
+		$_SESSION['c'][$charter]['resellerID'] = $_GET['resellerID'];
 		$_SESSION['c'][$charter]['reservation_sourceID'] = $_GET['reservation_sourceID'];
 		$_SESSION['c'][$charter]['userID'] = $_GET['userID'];
 		$_SESSION['c'][$charter]['reservation_type'] = $_GET['reservation_type'];
@@ -29,19 +29,19 @@ if ($logged == "TRUE") {
 
 	?>
 	<script>
-                document.getElementById('s2').disabled = false;
+		document.getElementById('s2').disabled = false;
 
 		document.getElementById('s2').classList.remove('btn-primary');
-                document.getElementById('s3').classList.remove('btn-default');
-                document.getElementById('s2').classList.add('btn-success');
-                document.getElementById('s3').classList.add('btn-primary');
+		document.getElementById('s3').classList.remove('btn-default');
+		document.getElementById('s2').classList.add('btn-success');
+		document.getElementById('s3').classList.add('btn-primary');
 
 	</script>
 	<?php
 
 	foreach ($_GET as $key=>$value) {
 		$data[$key] = $value;
-                $g[$key] = urlencode($value);
+		$g[$key] = urlencode($value);
 	}
 
 	$sql = "
@@ -82,8 +82,9 @@ if ($logged == "TRUE") {
 		</tr>";
 	}
 	$data['search_results'] = $search_results;
+	$dir = "/reservations";
 	$template = "new_reservation_select_agent.tpl";
-	$core->load_smarty($data,$template);
+	$core->load_smarty($data,$template,$dir);
 
 } else {
         $msg = "Your session has expired. Please log back in.";

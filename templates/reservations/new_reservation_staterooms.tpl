@@ -65,7 +65,7 @@
 
 
 function quick_book(inventoryID,charterID,resellerID,reseller_agentID,reservation_sourceID,reservation_type,userID,myform) {
-        $.get('/ajax/new_reservation_quickbook.php?inventoryID='+inventoryID+'&charterID='+charterID+'&resellerID='+resellerID+'&reseller_agentID='+reseller_agentID+'&reservation_sourceID='+reservation_sourceID+'&userID='+userID+'&reservation_type='+reservation_type,
+        $.get('/ajax/reservations/new_reservation_quickbook.php?inventoryID='+inventoryID+'&charterID='+charterID+'&resellerID='+resellerID+'&reseller_agentID='+reseller_agentID+'&reservation_sourceID='+reservation_sourceID+'&userID='+userID+'&reservation_type='+reservation_type,
         $(myform).serialize(), // nothing to really serialize cause the form is lost on the 3rd jQuery layer
         function(php_msg) {     
                 $("#left_side").html(php_msg);
@@ -74,7 +74,7 @@ function quick_book(inventoryID,charterID,resellerID,reseller_agentID,reservatio
 }
 
 function delete_bunk(inventoryID,charterID,resellerID,reseller_agentID,reservation_sourceID,reservation_type,userID,deletebunk,myform) {
-        $.get('/ajax/new_reservation_getpending.php?inventoryID='+inventoryID+'&charterID='+charterID+'&resellerID='+resellerID+'&reseller_agentID='+reseller_agentID+'&reservation_sourceID='+reservation_sourceID+'&userID='+userID+'&reservation_type='+reservation_type+'&deletebunk='+deletebunk,
+        $.get('/ajax/reservations/new_reservation_getpending.php?inventoryID='+inventoryID+'&charterID='+charterID+'&resellerID='+resellerID+'&reseller_agentID='+reseller_agentID+'&reservation_sourceID='+reservation_sourceID+'&userID='+userID+'&reservation_type='+reservation_type+'&deletebunk='+deletebunk,
         $(myform).serialize(), // nothing to really serialize cause the form is lost on the 3rd jQuery layer
         function(php_msg) {     
                 $("#right_side").html(php_msg);
@@ -83,7 +83,7 @@ function delete_bunk(inventoryID,charterID,resellerID,reseller_agentID,reservati
 }
 
 function refresh_left(inventoryID,charterID,resellerID,reseller_agentID,reservation_sourceID,reservation_type,userID,myform) {
-        $.get('/ajax/new_reservation_refresh_left.php?charterID='+charterID+'&resellerID='+resellerID+'&reseller_agentID='+reseller_agentID+'&reservation_sourceID='+reservation_sourceID+'&userID='+userID+'&reservation_type='+reservation_type,
+        $.get('/ajax/reservations/new_reservation_refresh_left.php?charterID='+charterID+'&resellerID='+resellerID+'&reseller_agentID='+reseller_agentID+'&reservation_sourceID='+reservation_sourceID+'&userID='+userID+'&reservation_type='+reservation_type,
         $(myform).serialize(), // nothing to really serialize cause the form is lost on the 3rd jQuery layer
         function(php_msg) {     
                 $("#left_side").html(php_msg);
@@ -93,7 +93,7 @@ function refresh_left(inventoryID,charterID,resellerID,reseller_agentID,reservat
 
 
 function right_side(inventoryID,charterID,resellerID,reseller_agentID,reservation_sourceID,reservation_type,userID,myform) {
-        $.get('/ajax/new_reservation_getpending.php?inventoryID='+inventoryID+'&charterID='+charterID+'&resellerID='+resellerID+'&reseller_agentID='+reseller_agentID+'&reservation_sourceID='+reservation_sourceID+'&userID='+userID+'&reservation_type='+reservation_type,
+        $.get('/ajax/reservations/new_reservation_getpending.php?inventoryID='+inventoryID+'&charterID='+charterID+'&resellerID='+resellerID+'&reseller_agentID='+reseller_agentID+'&reservation_sourceID='+reservation_sourceID+'&userID='+userID+'&reservation_type='+reservation_type,
         $(myform).serialize(), // nothing to really serialize cause the form is lost on the 3rd jQuery layer
         function(php_msg) {     
                 $("#right_side").html(php_msg);
@@ -101,7 +101,7 @@ function right_side(inventoryID,charterID,resellerID,reseller_agentID,reservatio
 }
 
 function goto_passengers(myform) {
-        $.get('/ajax/new_reservation_step6.php',
+        $.get('/ajax/reservations/new_reservation_step6.php',
         $(myform).serialize(),
         function(php_msg) {     
                 $("#interactive").html(php_msg);

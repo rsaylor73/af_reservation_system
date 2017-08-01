@@ -1,8 +1,8 @@
 <?php
 session_start();
 error_reporting(E_ALL & ~E_NOTICE);
-include "../include/settings.php";
-include "../include/templates.php";
+include "../../include/settings.php";
+include "../../include/templates.php";
 $smarty->error_reporting = E_ALL & ~E_NOTICE;
 $logged = $core->check_login();
 if ($logged == "TRUE") {
@@ -78,7 +78,8 @@ if ($logged == "TRUE") {
 
         // 2020/10/10 12:34:56
         $template = "new_reservation_rightside.tpl";
-        $core->load_smarty($data,$template);
+        $dir = "/reservations";
+        $core->load_smarty($data,$template,$dir);
 
 
 

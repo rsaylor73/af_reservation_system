@@ -1,8 +1,8 @@
 <?php
 session_start();
 error_reporting(E_ALL & ~E_NOTICE);
-include "../include/settings.php";
-include "../include/templates.php";
+include "../../include/settings.php";
+include "../../include/templates.php";
 $smarty->error_reporting = E_ALL & ~E_NOTICE;
 $logged = $core->check_login();
 if ($logged == "TRUE") {
@@ -14,9 +14,9 @@ if ($logged == "TRUE") {
 
 
 		document.getElementById('s1').classList.remove('btn-primary');
-                document.getElementById('s2').classList.remove('btn-default');
-                document.getElementById('s1').classList.add('btn-success');
-                document.getElementById('s2').classList.add('btn-primary');
+		document.getElementById('s2').classList.remove('btn-default');
+		document.getElementById('s1').classList.add('btn-success');
+		document.getElementById('s2').classList.add('btn-primary');
 
 	</script>
 	<?php
@@ -29,13 +29,13 @@ if ($logged == "TRUE") {
 
 	// end history
 
-        if ($_GET['ajax'] != "1") {
-                foreach($_SESSION as $key=>$value) { 
-                        if(preg_match("/c_/",$key)) {
-                                $_GET[$key] = $value;
-                        }
-                }
-        } 
+    if ($_GET['ajax'] != "1") {
+        foreach($_SESSION as $key=>$value) { 
+            if(preg_match("/c_/",$key)) {
+                $_GET[$key] = $value;
+            }
+        }
+    } 
 
 	foreach ($_GET as $key=>$value) {
 		$data[$key] = $value;
@@ -43,12 +43,13 @@ if ($logged == "TRUE") {
 
 
 
-        $data['country'] = $core->list_country(null);
-        $data['state'] = $core->list_states(null);
+	$data['country'] = $core->list_country(null);
+	$data['state'] = $core->list_states(null);
 
 
 	$template = "new_reservation_step2.tpl";
-	$core->load_smarty($data,$template);
+	$dir = "/reservations";
+	$core->load_smarty($data,$template,$dir);
 
 
 } else {
