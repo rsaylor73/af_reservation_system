@@ -3,8 +3,58 @@ include PATH."/class/boats.class.php";
                 
 class inventory extends boats {
 
+	public function clean_inventory($inventoryID) {
+		$sql = "UPDATE `inventory` SET 
+		`passengerID` = '',
+		`status` = 'avail',
+		`reservationID` = '',
+		`manual_discount` = '0',
+		`DWC_discount` = '0',
+		`voucher` = '0',
+		`passenger_discount` = '0',
+		`commission_at_time_of_booking` = '0',
+		`manual_discount_reason` = '',
+		`general_discount_reason` = '',
+		`voucher_reason` = '',
+		`donotmove_passenger` = '',
+		`rental_equipment` = '',
+		`course` = '',
+		`other_rental` = '',
+		`login_key` = '',
+		`certification_level` = '',
+		`certification_date` = '',
+		`certification_agency` = '',
+		`certification_number` = '',
+		`nitrox_agency` = '',
+		`nitrox_number` = '',
+		`nitrox_date` = '',
+		`dive_insurance` = '',
+		`dive_insurance_co` = '',
+		`dive_insurance_number` = '',
+		`dive_insurance_date` = '',
+		`equipment_insurance` = '',
+		`equipment_policy` = '',
+		`trip_insurance` = '',
+		`trip_insurance_co` = '',
+		`trip_insurance_other` = '',
+		`trip_insurance_number` = '',
+		`trip_insurance_date` = '',
+		`application_complete` = '',
+		`timestamp` = '',
+		`userID` = '',
+		`medical_email` = ''
+		WHERE `inventoryID` = '$inventoryID'
+		";
+		$result = $this->new_mysql($sql);
+		if ($result == "TRUE") {
+			return('TRUE');
+		} else {
+			return('FALSE');
+		}
+	}
+
 	public function create_inventory($charterID) {
-                $this->security('create_new_charter',$_SESSION['user_typeID']);
+		$this->security('create_new_charter',$_SESSION['user_typeID']);
 
 		// check if inventory exists
 		$sql = "SELECT `charterID` from `inventory` WHERE `charterID` = '$charterID'";

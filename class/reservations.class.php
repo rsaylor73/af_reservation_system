@@ -185,12 +185,13 @@ class reservation extends charters {
 
         ORDER BY `i`.`bunk` ASC
         ";
+        $id = "0";
         $result = $this->new_mysql($sql);
         while ($row = $result->fetch_assoc()) {
-            $id = $row['passengerID'];
             foreach ($row as $key=>$value) {
                 $data['guests'][$id][$key] = $value;
             }
+            $id++;
         }
 
         $yaml = yaml_parse_file("yaml/reservations_tab_guests.yaml");
@@ -203,6 +204,188 @@ class reservation extends charters {
         $dir = "/reservations";
 		$this->load_smarty($data,$template,$dir);
 	}
+
+    /* This will add a bunk to a current reservation */
+    public function add_inventory() {
+        $this->security('reservations',$_SESSION['user_typeID']);
+        $sql = "SELECT `inventoryID`,`charterID`,`reservationID`,`passengerID`,`bunk` FROM `inventory` WHERE `inventoryID` = '$_GET[inventoryID]' AND `timestamp` = '' AND `status` = 'avail' AND `sessionID` = ''";
+        $found = "0";
+        $result = $this->new_mysql($sql);
+        while ($row = $result->fetch_assoc()) {
+            // get commission amount
+            $sql2 = "
+            SELECT
+                `rs`.`commission`
+            FROM
+                `reservations` r
+
+            INNER JOIN reseller_agents ra ON r.reseller_agentID = ra.reseller_agentID
+            INNER JOIN resellers rs ON ra.resellerID = rs.resellerID
+
+            WHERE
+                `r`.`reservationID` = '$_GET[reservationID]'
+            ";
+            $commission = "0";
+            $result2 = $this->new_mysql($sql2);
+            while ($row2 = $result2->fetch_assoc()) {
+                $commission = $row2['commission'];
+            }
+
+
+            // found continue and book inventory
+            $found = "1";
+            $sql2 = "UPDATE `inventory` SET `passengerID` = '61531879', `reservationID` = '$_GET[reservationID]', `status` = 'booked', `commission_at_time_of_booking` = '$commission'
+            WHERE `inventoryID` = '$_GET[inventoryID]'";
+            $result2 = $this->new_mysql($sql2);
+            if ($result2 == "TRUE") {
+                $title = "Stateroom Added";
+                $note = "Stateroom $row[bunk] was added to reservation $_GET[reservationID]";
+                $this->log_activity($_GET['inventoryID'],$note,'inventory',$title);
+                print "<div class=\"alert alert-success\">The inventory was added to reservation $_GET[reservationID]. Loading...</div>";
+            } else {
+                print "<div class=\"alert alert-danger\">There was an error adding the inventory. Loading...</div>";
+            }
+        }
+        if ($found == "0") {
+            print "<div class=\"alert alert-danger\">Sorry, but the inventory selected is no longer available. Loading...</div>";
+        }
+        $redirect = "/manage_res_pax/$_GET[reservationID]";
+        ?>
+            <script>
+            setTimeout(function() {
+                  window.location.replace('<?=$redirect;?>')
+            }
+            ,2000);
+            </script>
+        <?php
+    }
+
+    /* This will remove inventory from a reservation */
+    public function delete_inventory() {
+        $this->security('reservations',$_SESSION['user_typeID']);
+
+        $sql2 = "SELECT `bunk` FROM `inventory` WHERE `inventoryID` = '$_GET[inventoryID]'";
+        $result2 = $this->new_mysql($sql2);
+        while ($row2 = $result2->fetch_assoc()) {
+            $bunk = $row2['bunk'];
+        }
+
+        $status = $this->clean_inventory($_GET['inventoryID']);
+        if ($status == "TRUE") {
+
+            // This is for info only but the system won't be able
+            // to show this because the notes does not corrolate to
+            // a reservation, only inventory so removing the inventory
+            // will not display the history.
+
+            $title = "Stateroom Removed";
+            $note = "Stateroom $bunk was removed from reservation $_GET[reservationID]";
+            $this->log_activity($_GET['inventoryID'],$note,'inventory',$title);
+
+            print "<div class=\"alert alert-success\">The inventory was removed from $_GET[reservationID]. Loading...</div>";
+        } else {
+            print "<div class=\"alert alert-danger\">The inventory failed to remove from $_GET[reservationID]. Loading...</div>";
+        }
+        $redirect = "/manage_res_pax/$_GET[reservationID]";
+        ?>
+            <script>
+            setTimeout(function() {
+                  window.location.replace('<?=$redirect;?>')
+            }
+            ,2000);
+            </script>
+        <?php
+    }
+
+
+    /* This will allow the user to add or remove passengers in a reservation */
+    public function manage_res_pax() {
+        $this->security('reservations',$_SESSION['user_typeID']);
+        $data['t2'] = "active";
+        $data['reservationID'] = $_GET['reservationID'];
+
+        /* This will get the data for the top of the tab */
+        $reservation_headers = json_decode($this->get_reservations_headers($_GET['reservationID']));
+        $data['start_date'] = $reservation_headers->start_date;
+        $data['end_date'] = $reservation_headers->end_date;
+        $data['boat_name'] = $reservation_headers->boat_name;
+        $data['company'] = $reservation_headers->company;
+        $data['resellerID'] = $reservation_headers->resellerID;
+        /* End top of tab */
+
+        // get inventory
+        $sql = "
+        SELECT
+            `i`.`inventoryID`,
+            `i`.`bunk`,
+            `i`.`passengerID`,
+            `i`.`charterID`,
+            `i`.`reservationID`,
+            `i`.`bunk_price` + `ch`.`add_on_price` + `ch`.`add_on_price_commissionable` AS 'bunk_price',
+            `i`.`commission_at_time_of_booking`,
+            `i`.`donotmove_passenger`,
+            `i`.`gl`,
+            `c`.`first`,
+            `c`.`middle`,
+            `c`.`last`
+
+        FROM
+            `inventory` i
+
+        LEFT JOIN contacts c ON i.passengerID = c.contactID
+        LEFT JOIN charters ch ON i.charterID = ch.charterID
+
+
+        WHERE
+            `i`.`reservationID` = '$_GET[reservationID]'
+
+        ORDER BY `i`.`bunk` ASC
+        ";
+        $id = "0";
+        $result = $this->new_mysql($sql);
+        while ($row = $result->fetch_assoc()) {
+            //$id = $row['passengerID'];
+            $charterID = $row['charterID'];
+            foreach ($row as $key=>$value) {
+                $data['guests'][$id][$key] = $value;
+            }
+            $id++;
+        }
+
+        // get available inventory
+        $sql = "
+        SELECT
+            `i`.`inventoryID`,
+            `i`.`bunk`,
+            `i`.`bunk_price` + `ch`.`add_on_price` + `ch`.`add_on_price_commissionable` AS 'bunk_price',
+            `i`.`bunk_description`
+        FROM
+            `inventory` i
+
+        LEFT JOIN charters ch ON i.charterID = ch.charterID
+
+        WHERE
+            `i`.`charterID` = '$charterID'
+            AND `i`.`status` = 'avail'
+            AND `i`.`timestamp` = ''
+            AND `i`.`sessionID` = ''
+
+        ORDER BY `i`.`bunk` ASC
+        ";
+        $counter = "0";
+        $result = $this->new_mysql($sql);
+        while ($row = $result->fetch_assoc()) {
+            $charterID = $row['charterID'];
+            foreach ($row as $key=>$value) {
+                $data['bunks'][$counter][$key] = $value;
+            }
+            $counter++;
+        }
+
+        $template = "reservation_add_remove_bunk.tpl";
+        $dir = "/reservations";
+        $this->load_smarty($data,$template,$dir);
+    }
 
 	/* This is the 3rd tab */
 	public function reservations_dollars() {

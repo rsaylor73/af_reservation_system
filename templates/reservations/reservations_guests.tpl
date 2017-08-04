@@ -16,7 +16,10 @@
 
 {include file="reservation_navigation.tpl"}
 
-<div class="well">
+<div class="jumbotron">
+        <input type="button" value="Edit {$config_guest}" class="btn btn-success btn-lg"
+        onclick="document.location.href='/manage_res_pax/{$reservationID}'"
+        >
 	<div class="row pad-top">
 		<div class="col-sm-2"><h4>{$config_guest}</h4></div>
 		<div class="col-sm-2"><h4>{$config_bunk}</h4></div>

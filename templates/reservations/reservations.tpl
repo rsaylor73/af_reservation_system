@@ -10,8 +10,7 @@
 
 {include file="reservation_navigation.tpl"}
 
-<div class="well">
-	<div class="well">
+<div class="jumbotron">
 		<div class="row pad-top">
 			<div class="col-sm-12">
 				<div class="alert alert-info">
@@ -52,9 +51,7 @@
 				{if $ra_waiver eq "Yes"}<font color=green><b>{$ra_waiver}</b></font>{/if}
 			</div>
 		</div>
-	</div>
 
-	<div class="well">
 		<div class="row pad-top">
 			<div class="col-sm-12">
 				<div class="alert alert-info">
@@ -81,9 +78,7 @@
 			<div class="col-sm-2">{$type}</div>
 			<div class="col-sm-2">{$commission} %</div>
 		</div>
-	</div>
 
-	<div class="well">
 		<div class="row pad-top">
 			<div class="col-sm-12">
 				<div class="alert alert-info">
@@ -156,9 +151,7 @@
 		<div class="row pad-top">
 			<div class="col-sm-4"><a href="mailto:{$c_email}">{$c_email}</a></div>
 		</div>
-	</div>
 
-	<div class="well">
 		<div class="row pad-top">
 			<div class="col-sm-12">
 				<div class="alert alert-info">
@@ -207,5 +200,4 @@
 			<div class="col-sm-2">{$pax}</div>
 			<div class="col-sm-2"><input type="checkbox" name="default_commission" value="checked" {$default_commission}>&nbsp;&nbsp;Set to 15%</div>
 		</div>
-	</div>
 </div>
