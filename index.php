@@ -11,18 +11,18 @@ $section = "";
 // header
 $logged = $core->check_login();
 if ($logged == "TRUE") {
-		$sql = "SELECT `expire` FROM `users` WHERE `userID` = '$_SESSION[userID]'";
-		$result = $core->new_mysql($sql);
-		while ($row = $result->fetch_assoc()) {
-			$expires = $row['expire'];
-			$time = date("U");
-			$time_left = $expires - $time;
-			$time_left = $time_left - 300;
-			$smarty->assign('counter',$time_left);
-		}
-        $smarty->assign('name',$_SESSION['first'] . " " . $_SESSION['last']);
-        $smarty->assign('logged','yes');
-        $smarty->assign('TINYMCE',TINYMCE);
+	$sql = "SELECT `expire` FROM `users` WHERE `userID` = '$_SESSION[userID]'";
+	$result = $core->new_mysql($sql);
+	while ($row = $result->fetch_assoc()) {
+		$expires = $row['expire'];
+		$time = date("U");
+		$time_left = $expires - $time;
+		$time_left = $time_left - 300;
+		$smarty->assign('counter',$time_left);
+	}
+    $smarty->assign('name',$_SESSION['first'] . " " . $_SESSION['last']);
+    $smarty->assign('logged','yes');
+    $smarty->assign('TINYMCE',TINYMCE);
 }
 
 
@@ -44,6 +44,7 @@ switch ($section) {
 	case "add_historic_reservation":
 	case "edit_charter":
 	case "calendar":
+	case "change_stateroom_guest":
 	// The following items above will not display the header (do the same in the footer)
 	break;
 
@@ -75,31 +76,32 @@ switch ($section) {
 			break;
 		}
 	} else {
-	        if ($section == "") {
+	    if ($section == "") {
 			$core->load_module('dashboard');
-	        }
-	        if ($section != "") {
-	                $core->load_module($section);
-	        }
+	    }
+	    if ($section != "") {
+			$core->load_module($section);
+	    }
 	}
 	break;
 }
 
 switch ($section) {
 	case "api_get_token":
-        case "edit_access":
-        case "edit_bunk":
-        case "new_bunk":
-        case "edit_destination":
-        case "new_destination":
-        case "logout":
-        case "add_historic_reservation":
+    case "edit_access":
+    case "edit_bunk":
+    case "new_bunk":
+    case "edit_destination":
+    case "new_destination":
+    case "logout":
+    case "add_historic_reservation":
 	case "edit_charter":
 	case "calendar":
-        // The following items above will not display the footer (do the same in the header)
-        break;
+	case "change_stateroom_guest":
+    // The following items above will not display the footer (do the same in the header)
+    break;
 
-        default:
+    default:
 	$smarty->assign('toggle_menu',$_SESSION['toggle_menu']);
 	$smarty->display('footer.tpl');
 	break;

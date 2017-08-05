@@ -74,20 +74,27 @@
 				<div class="col-sm-2">
 					<div class="row">
 						<div class="col-sm-4">
-							<i class="fa fa-user-plus" aria-hidden="true"></i>
+
+                        <a data-toggle="modal" class="fa fa-user-plus" aria-hidden="true"
+                        href="/change_stateroom_guest/{$g.inventoryID}" 
+                        data-target="#myModal" data-backdrop="static" data-keyboard="false" 
+                        ></a>
+
 						</div>
 						<div class="col-sm-4">
 							<i class="fa fa-money" aria-hidden="true"></i>
 						</div>
 						<div class="col-sm-4">
+							<a href="/stateroom/{$g.inventoryID}">
 							<i class="fa fa-info" aria-hidden="true"></i>
+							</a>
 						</div>
 					</div>
 				</div>
 				<div class="col-sm-2">{$g.first} {$g.middle} {$g.last}</div>
 				<div class="col-sm-1">
 					<span class="btn btn-primary">
-					<form name="myform_{$g.inventoryID}" style="display:inline">
+					<form name="myform_dnm_{$g.inventoryID}" style="display:inline">
 					<input type="hidden" name="inventoryID" value="{$g.inventoryID}">
 					<input type="hidden" name="donotmove_passenger" value="{$g.donotmove_passenger}">
 					<input type="checkbox" 
@@ -98,7 +105,16 @@
 					</span>
 				</div>
 				<div class="col-sm-1">
-					<span class="btn btn-info"><input type="checkbox"></span>
+					<span class="btn btn-info">
+					<form name="myform_gl_{$g.inventoryID}" style="display:inline">
+					<input type="hidden" name="inventoryID" value="{$g.inventoryID}">
+					<input type="hidden" name="gl" value="{$g.gl}">
+					<input type="checkbox"
+					{if $g.gl eq "1"}checked{/if}
+					onchange="update_gl(this.form)"
+					>
+					</form>
+					</span>
 				</div>
 			</div>
 			{/foreach}
@@ -118,4 +134,36 @@ function update_dnm(myform) {
 
 	window.scrollTo(0, 0);
 }
+
+function update_gl(myform) {
+	$.get('/ajax/reservations/update_gl.php',
+	$(myform).serialize(),
+	function(php_msg) {
+        $("#ajax_results").html(php_msg);
+	});
+
+	window.scrollTo(0, 0);
+}
 </script>
+
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+   <div class="modal-dialog">
+       <div class="modal-content">
+           <div class="modal-header">
+               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title"></h4>
+
+           </div>
+           <div class="modal-body"><div class="te"></div></div>
+           <div class="modal-footer">
+               <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+               <button type="button" class="btn btn-primary">Save changes</button>
+           </div>
+       </div>
+       <!-- /.modal-content -->
+   </div>
+   <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->

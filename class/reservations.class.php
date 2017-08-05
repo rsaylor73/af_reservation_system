@@ -297,7 +297,6 @@ class reservation extends charters {
         <?php
     }
 
-
     /* This will allow the user to add or remove passengers in a reservation */
     public function manage_res_pax() {
         $this->security('reservations',$_SESSION['user_typeID']);

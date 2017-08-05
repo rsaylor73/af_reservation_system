@@ -3,6 +3,15 @@ include PATH."/class/users.class.php";
                 
 class bunks extends users {
 
+    /* This will allow the user to change or add a guest to a stateroom */
+    public function change_stateroom_guest() {
+    	$this->security('reservations',$_SESSION['user_typeID']);
+
+    	$template = "change_stateroom_guest.tpl";
+    	$dir = "/stateroom_bunk";
+    	$this->load_smarty($data,$template,$dir);
+    }
+
 	/* This function will pass basic details to each stateroom tab */
 	private function stateroom_header($inventoryID) {
 		$sql = "
