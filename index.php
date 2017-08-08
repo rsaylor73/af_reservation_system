@@ -45,6 +45,7 @@ switch ($section) {
 	case "edit_charter":
 	case "calendar":
 	case "change_stateroom_guest":
+	case "manage_stateroom_discounts":
 	// The following items above will not display the header (do the same in the footer)
 	break;
 
@@ -98,6 +99,7 @@ switch ($section) {
 	case "edit_charter":
 	case "calendar":
 	case "change_stateroom_guest":
+	case "manage_stateroom_discounts":
     // The following items above will not display the footer (do the same in the header)
     break;
 

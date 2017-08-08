@@ -6,7 +6,7 @@ class bunks extends users {
     /* This will allow the user to change or add a guest to a stateroom */
     public function change_stateroom_guest() {
     	$this->security('reservations',$_SESSION['user_typeID']);
-
+    	$data['inventoryID'] = $_GET['inventoryID'];
     	$template = "change_stateroom_guest.tpl";
     	$dir = "/stateroom_bunk";
     	$this->load_smarty($data,$template,$dir);

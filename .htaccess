@@ -55,6 +55,11 @@ RewriteRule ^stateroom_supplement/([a-zA-Z0-9]+)/?$ index.php?section=stateroom_
 RewriteRule ^stateroom_survey/([a-zA-Z0-9]+)/?$ index.php?section=stateroom_survey&inventoryID=$1 [NC,L]
 RewriteRule ^manage_res_pax/([a-zA-Z0-9]+)/?$ index.php?section=manage_res_pax&reservationID=$1 [NC,L]
 RewriteRule ^change_stateroom_guest/([a-zA-Z0-9]+)/?$ index.php?section=change_stateroom_guest&inventoryID=$1 [NC,L]
+RewriteRule ^manage_stateroom_discounts/([a-zA-Z0-9]+)/?$ index.php?section=manage_stateroom_discounts&inventoryID=$1 [NC,L]
+
+
+
+
 
 # Three params
 # IE: search/12345/676767

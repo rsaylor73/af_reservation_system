@@ -1,4 +1,4 @@
-<h2><a href="/">Main Menu</a> : Add/Remove NAME TO DO</h2>
+<h2><a href="/">Main Menu</a> : Add/Remove Passenger</h2>
 
 {$msg}
 
@@ -82,7 +82,12 @@
 
 						</div>
 						<div class="col-sm-4">
-							<i class="fa fa-money" aria-hidden="true"></i>
+
+                        <a data-toggle="modal" class="fa fa-money" aria-hidden="true"
+                        href="/manage_stateroom_discounts/{$g.inventoryID}" 
+                        data-target="#myModal" data-backdrop="static" data-keyboard="false" 
+                        ></a>
+
 						</div>
 						<div class="col-sm-4">
 							<a href="/stateroom/{$g.inventoryID}">
