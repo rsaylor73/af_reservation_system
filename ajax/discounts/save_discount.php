@@ -20,6 +20,10 @@ if ($logged == "TRUE") {
 	$sql = "UPDATE `inventory` SET `bunk_price` = '$bunk_price', `manual_discount` = '$_GET[manual_discount]', `manual_discount_reason` = '$_GET[manual_discount_reason]', `DWC_discount` = '$_GET[DWC_discount]', `general_discount_reason` = '$_GET[discounts_reason]', `voucher` = '$_GET[voucher]', `voucher_reason` = '$_GET[voucher_reason]', `commission_at_time_of_booking` = '$_GET[commission]' WHERE `inventoryID` = '$_GET[inventoryID]'";
 	$result = $core->new_mysql($sql);
 	if ($result == "TRUE") {
+		$fkey = $_GET['inventoryID'];
+		$title = "Discount Adjustment";
+		$note = "Discount and or voucher was updated.";
+		$core->log_activity($fkey,$note,'inventory',$title);
 		print "<div class=\"alert alert-success\">The stateroom discounts was updated.</div>";
 	} else {
 		print "<div class=\"alert alert-danger\">The stateroom discounts failed to update.</div>";

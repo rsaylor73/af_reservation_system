@@ -1,8 +1,8 @@
 <?php
 session_start();
 error_reporting(E_ALL & ~E_NOTICE);
-include "../include/settings.php";
-include "../include/templates.php";
+include "../../include/settings.php";
+include "../../include/templates.php";
 $smarty->error_reporting = E_ALL & ~E_NOTICE;
 $logged = $core->check_login();
 if ($logged == "TRUE") {
@@ -169,6 +169,14 @@ if ($logged == "TRUE") {
 				onchange=\"reculculate(this.form)\" onblur=\"reculculate(this.form)\"></div>
 		</div>
 
+		<div class=\"row pad-top\">
+			<div class=\"col-sm-3\">Number of consecutive charters:</div>
+			<div class=\"col-sm-3\"><input type=\"number\" name=\"consecutive\" value=\"1\" class=\"form-control\"></div>
+			<div class=\"col-sm-6 alert alert-info\">
+				This will create consecutive charters based on the details entered above. If you wish to create 52 charters enter 52 into the number block.
+			</div>
+		</div>
+
                 <div class=\"row pad-top\">
 			<div class=\"col-sm-3\">Current base rate:</div>
 			<div class=\"col-sm-3\"><b>$".number_format($base_rate,2,'.',',')."</b></div>
@@ -189,21 +197,21 @@ if ($logged == "TRUE") {
 ?>
 <script>
 	function reculculate(myform) {
-		$.get('/ajax/reculculate.php',
+		$.get('/ajax/charters/reculculate.php',
                 $(myform).serialize(),
                 function(php_msg) {
                         $("#re-calculate").html(php_msg);
                 });
 	}
         function calculate_date(myform) {
-                $.get('/ajax/calculate_date.php',
+                $.get('/ajax/charters/calculate_date.php',
                 $(myform).serialize(),
                 function(php_msg) {
                         $("#calculate_date").html(php_msg);
                 });
         }
 	function get_comment(myform) {
-                $.get('/ajax/get_comment.php',
+                $.get('/ajax/charters/get_comment.php',
                 $(myform).serialize(),
                 function(php_msg) {
                         $("#comments").html(php_msg);

@@ -157,7 +157,7 @@
 				<div class="alert alert-info">
 					<div class="row">
 						<div class="col-sm-8"><h4>{$config_buttom2_header}</h4></div>
-						<div class="col-sm-2"><input type="button" value="{$config_button_bottom2_left}" class="btn btn-warning form-control"></div>
+						<div class="col-sm-2"><input type="button" value="{$config_button_bottom2_left}" class="btn btn-warning form-control" onclick="document.location.href='/manage_res_pax/{$reservationID}'"></div>
 						<div class="col-sm-2"><input type="button" value="{$config_button_bottom2_right}" class="btn btn-warning form-control" onclick="document.location.href='/view_charter/{$charterID}'">
 						</div>
 					</div>

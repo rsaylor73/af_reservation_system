@@ -81,6 +81,9 @@ if ($logged == "TRUE") {
 		if ($_GET['c_country'] != "") {
 			$country = "AND `r`.`countryID` = '$_GET[c_country]'";
 		}
+		if ($_GET['c_resellerID'] != "") {
+			$resellerID = "AND `r`.`resellerID` = '$_GET[c_resellerID]'";
+		}
 
         $sql = "
         SELECT
@@ -103,6 +106,7 @@ if ($logged == "TRUE") {
 			$city
 			$state
 			$country
+			$resellerID
 
         LIMIT 50
         ";

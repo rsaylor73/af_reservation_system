@@ -916,7 +916,7 @@ class charters extends inventory {
 
 	/* This will allow the user to create a new charter */
 	public function create_new_charter() {
-                $this->security('create_new_charter',$_SESSION['user_typeID']);
+		$this->security('create_new_charter',$_SESSION['user_typeID']);
 		$sql = "SELECT `boatID`,`name` FROM `boats` WHERE `status` = 'Active' ORDER BY `name` ASC";
 		$result = $this->new_mysql($sql);
 		while ($row = $result->fetch_assoc()) {
@@ -925,12 +925,16 @@ class charters extends inventory {
 		$data['option'] = $option;
 
 		$template = "create_new_charter.tpl";
-		$this->load_smarty($data,$template);
+		$dir = "/charters";
+		$this->load_smarty($data,$template,$dir);
 	}
 
 	/* This will save the new charter */
 	public function save_new_charter() {
-                $this->security('create_new_charter',$_SESSION['user_typeID']);
+
+		// TO DO - loop through $_POST[consecutive]
+
+		$this->security('create_new_charter',$_SESSION['user_typeID']);
 
 		$start_date = date("Ymd", strtotime($_POST['charter_date']));
 
@@ -961,15 +965,15 @@ class charters extends inventory {
 				$inv_msg = " A total of $inventory bunks was added. ";
 			}
 
-                        print '<div class="alert alert-success">Charter '.$charterID.' was created. '.$inv_msg.' Loading in 4 seconds please wait...</div>';
-                        ?>
-                        <script>
-                        setTimeout(function() {
-                              window.location.replace('/')
-                        }
-                        ,6000);
-                        </script>
-                        <?php
+            print '<div class="alert alert-success">Charter '.$charterID.' was created. '.$inv_msg.' Loading in 4 seconds please wait...</div>';
+            ?>
+            <script>
+            setTimeout(function() {
+                  window.location.replace('/')
+            }
+            ,6000);
+            </script>
+            <?php
 
 
 		} else {

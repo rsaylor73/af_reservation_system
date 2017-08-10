@@ -10,6 +10,7 @@ class reservation extends charters {
 		$sql = "
 		SELECT
 			`r`.`reservationID`,
+            `r`.`reservation_contactID`,
 			`r`.`group_name`,
             CONCAT(`u`.`first`,' ',`u`.`last`) AS 'booker_name',
 			`u`.`email` AS 'booker_email',
@@ -27,28 +28,7 @@ class reservation extends charters {
 			`b`.`name` AS 'boat_name',
 			DATE_FORMAT(`ch`.`start_date`, '%m/%d/%Y') AS 'start_date',
             DATE_FORMAT(DATE_ADD(`ch`.`start_date`, INTERVAL `ch`.`nights` DAY), '%m/%d/%Y') AS 'end_date',
-			`ch`.`nights`,
-			`c`.`contactID`,
-			`c`.`first` AS 'c_first',
-			`c`.`middle` AS 'c_middle',
-			`c`.`last` AS 'c_last',
-			`c`.`address1` AS 'c_address1',
-			`c`.`address2` AS 'c_address2',
-			`c`.`city` AS 'c_city',
-			`c`.`state` AS 'c_state',
-			`c`.`province` AS 'c_province',
-			`c`.`zip` AS 'c_zip',
-			`c`.`email` AS 'c_email',
-			`c`.`countryID`,
-			`cn`.`country`,
-			`c`.`phone1_type`,
-			`c`.`phone1`,
-			`c`.`phone2_type`,
-			`c`.`phone2`,
-			`c`.`phone3_type`,
-			`c`.`phone3`,
-			`c`.`phone4_type`,
-			`c`.`phone4`
+			`ch`.`nights`
 
 		FROM
 			`reservations` r,
@@ -57,10 +37,10 @@ class reservation extends charters {
             `resellers` rs,
             `reseller_types` rt,
 			`charters` ch,
-			`boats` b,
-			`contacts` c
+			`boats` b
+			#`contacts` c
 
-        LEFT JOIN `countries` cn ON `c`.`countryID` = `cn`.`countryID`          
+        #LEFT JOIN `countries` cn ON `c`.`countryID` = `cn`.`countryID`          
 
 		WHERE
 			`r`.`reservationID` = '$_GET[reservationID]'
@@ -70,14 +50,59 @@ class reservation extends charters {
             AND `rs`.`reseller_typeID` = `rt`.`reseller_typeID`
 			AND `r`.`charterID` = `ch`.`charterID`
 			AND `ch`.`boatID` = `b`.`boatID`
-			AND `r`.`reservation_contactID` = `c`.`contactID`
+			#AND `r`.`reservation_contactID` = `c`.`contactID`
 		";
+
+        //print "$sql<br>";
 
 		$result = $this->new_mysql($sql);
 		while ($row = $result->fetch_assoc()) {
 			foreach ($row as $key=>$value) {
 				$data[$key] = $value;
 			}
+
+            // get reservation contact
+            /*
+            Fix for bug #5
+            https://github.com/rsaylor73/af_reservation_system/issues/5
+            */
+            $sql2 = "
+            SELECT
+                `c`.`contactID`,
+                `c`.`first` AS 'c_first',
+                `c`.`middle` AS 'c_middle',
+                `c`.`last` AS 'c_last',
+                `c`.`address1` AS 'c_address1',
+                `c`.`address2` AS 'c_address2',
+                `c`.`city` AS 'c_city',
+                `c`.`state` AS 'c_state',
+                `c`.`province` AS 'c_province',
+                `c`.`zip` AS 'c_zip',
+                `c`.`email` AS 'c_email',
+                `c`.`countryID`,
+                `cn`.`country`,
+                `c`.`phone1_type`,
+                `c`.`phone1`,
+                `c`.`phone2_type`,
+                `c`.`phone2`,
+                `c`.`phone3_type`,
+                `c`.`phone3`,
+                `c`.`phone4_type`,
+                `c`.`phone4`
+            FROM
+                `contacts` c
+
+            LEFT JOIN `countries` cn ON `c`.`countryID` = `cn`.`countryID`
+
+            WHERE
+                `c`.`contactID` = '$row[reservation_contactID]'
+            ";
+            $result2 = $this->new_mysql($sql2);
+            while ($row2 = $result2->fetch_assoc()) {
+                foreach ($row2 as $key2=>$value2) {
+                    $data[$key2] = $value2;
+                }
+            }
 
 			$charter_data = $this->objectToArray(json_decode($this->get_charter_stats($row['charterID'],$row['reservationID'])));
 			$data['booked'] = $charter_data['booked'];

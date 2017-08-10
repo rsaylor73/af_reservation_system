@@ -88,6 +88,8 @@ class discounts extends gis {
 			while ($row = $result->fetch_assoc()) {
 				$options .= "<option selected value=\"$row[manual_discount_reasonID]\">$row[manual_discount_reason]</option>";
 			}
+		} else {
+			$options .= "<option selected value=\"\">Select</option>";
 		}
 
 		$sql = "
@@ -125,6 +127,8 @@ class discounts extends gis {
 			while ($row = $result->fetch_assoc()) {
 				$options .= "<option value=\"$row[general_discount_reasonID]\">$row[general_discount_reason]</option>";
 			}
+		} else {
+			$options .= "<option selected value=\"\">Select</option>";
 		}
 
 		$sql = "

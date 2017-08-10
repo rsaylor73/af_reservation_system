@@ -29,7 +29,7 @@
 	}
 
         function check_charter(myform) {
-                $.get('/ajax/check_charter.php',
+                $.get('/ajax/charters/check_charter.php',
                 $(myform).serialize(),
                 function(php_msg) {
                         $("#check_charter").html(php_msg);
