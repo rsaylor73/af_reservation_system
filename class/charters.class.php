@@ -5,21 +5,21 @@ class charters extends inventory {
 
 	/* This will return percent charter booked, bunks left, res pax count */
 	public function get_charter_stats($charterID,$reservationID) {
-                $this->security('reservations',$_SESSION['user_typeID']);
+		$this->security('reservations',$_SESSION['user_typeID']);
 
 		$sql = "
-                SELECT
-                        COUNT(`inventory`.`inventoryID`) AS 'capacity',
-                        COUNT(CASE WHEN `inventory`.`status` = 'booked' THEN `inventory`.`status` END) AS 'booked',
-                        COUNT(CASE WHEN `inventory`.`status` = 'tentative' THEN `inventory`.`status` END) AS 'tentative',
-                        COUNT(CASE WHEN `inventory`.`status` = 'avail' THEN `inventory`.`status` END) AS 'avail'
+        SELECT
+            COUNT(`inventory`.`inventoryID`) AS 'capacity',
+            COUNT(CASE WHEN `inventory`.`status` = 'booked' THEN `inventory`.`status` END) AS 'booked',
+            COUNT(CASE WHEN `inventory`.`status` = 'tentative' THEN `inventory`.`status` END) AS 'tentative',
+            COUNT(CASE WHEN `inventory`.`status` = 'avail' THEN `inventory`.`status` END) AS 'avail'
 
-                FROM
-                        `inventory`
+        FROM
+			`inventory`
 
-                WHERE
-                        `charterID` = '$charterID'
-                ";
+        WHERE
+			`charterID` = '$charterID'
+        ";
 		$result = $this->new_mysql($sql);
 		while ($row = $result->fetch_assoc()) {
 			$data['booked'] = $row['booked'];
@@ -27,25 +27,26 @@ class charters extends inventory {
 			$data['avail'] = $row['avail'];
 		}
 
-		$sql = "SELECT COUNT(`inventoryID`) AS 'pax' FROM `inventory` WHERE `reservationID` = '$reservationID'";
-                $result = $this->new_mysql($sql);
-                while ($row = $result->fetch_assoc()) {
+		$sql = "SELECT COUNT(`inventoryID`) AS 'pax' FROM `inventory` 
+		WHERE `reservationID` = '$reservationID'";
+        $result = $this->new_mysql($sql);
+        while ($row = $result->fetch_assoc()) {
 			$data['pax'] = $row['pax'];
 		}
 
-		$sql = "SELECT `add_on_price` + `add_on_price_commissionable` AS 'add_on' FROM `charters` WHERE `charterID` = '$charterID'";
-                $result = $this->new_mysql($sql);
-                while ($row = $result->fetch_assoc()) {
+		$sql = "SELECT `add_on_price` + `add_on_price_commissionable` AS 'add_on' 
+		FROM `charters` WHERE `charterID` = '$charterID'";
+        $result = $this->new_mysql($sql);
+        while ($row = $result->fetch_assoc()) {
 			$data['add_on'] = $row['add_on'];
 		}
 
 		return(json_encode($data));
-
 	}
 
 	/* This allows the user to view the charter details */
 	public function view_charter() {
-                $this->security('locate_charter',$_SESSION['user_typeID']);
+		$this->security('locate_charter',$_SESSION['user_typeID']);
 
 		// get charter date
 		$sql = "SELECT `start_date`,`boatID` FROM `charters` WHERE `charterID` = '$_GET[charterID]'";
@@ -57,9 +58,10 @@ class charters extends inventory {
 		$date1 = date("Ymd", strtotime($date . "- 10 DAY"));
 		$date2 = date("Ymd", strtotime($date . "+ 10 DAY"));
 
-		$sql = "SELECT `charterID` FROM `charters` WHERE `boatID` = '$boatID' AND `start_date` BETWEEN '$date1' AND '$date2' ORDER BY `start_date` ASC";
-                $result = $this->new_mysql($sql);
-                while ($row = $result->fetch_assoc()) {
+		$sql = "SELECT `charterID` FROM `charters` WHERE `boatID` = '$boatID' 
+		AND `start_date` BETWEEN '$date1' AND '$date2' ORDER BY `start_date` ASC";
+		$result = $this->new_mysql($sql);
+		while ($row = $result->fetch_assoc()) {
 			$charters[] = $row['charterID'];
 		}
 
@@ -107,7 +109,7 @@ class charters extends inventory {
 			$contact = "";
 			if ($row['passengerID'] > 0) {
 				$sql2 = "SELECT `first`,`last` FROM `contacts` WHERE `contactID` = '$row[passengerID]'";
-	 	                $result2 = $this->new_mysql($sql2);
+				$result2 = $this->new_mysql($sql2);
 				while ($row2 = $result2->fetch_assoc()) {
 					$contact = "$row2[first] $row2[last]";
 				}
@@ -132,31 +134,19 @@ class charters extends inventory {
 			$bunk_details .= "
 			<tr class=\"sectionsid $dnm_class \" id=\"$row[bunk]\"";
 			$bunk_details .= ">
-				<td>$row[bunk]</td>
-				<td>$row[description]</td>
-				<td>$row[cabin_type]</td>
-                                <td>$dnm</td>
-                                <td>$row[status]</td>
-                                <td>$contact</td>
-                                <td $link>$reservation</td>
-                                <td>$ ".number_format($row['price'],2,'.',',')."</td>
+			<td>$row[bunk]</td>
+			<td>$row[description]</td>
+			<td>$row[cabin_type]</td>
+            <td>$dnm</td>
+            <td>$row[status]</td>
+            <td>$contact</td>
+            <td $link>$reservation</td>
+            <td>$ ".number_format($row['price'],2,'.',',')."</td>
 			</tr>";
 			$bunks_array .= '"'.$row['cabin'].$row['room'].'",';	
 			if ($row['status'] == "avail") {
 				$data['new_reservation'] = "yes";
 			}
-			/*
-                        $bunk_details .= "
-                        <div class=\"row $dnm_class\">
-                                <div class=\"col-sm-2\">$row[bunk]</div>
-                                <div class=\"col-sm-3\">$row[description]</div>
-                                <div class=\"col-sm-1\">$dnm</div>
-                                <div class=\"col-sm-1\">$row[status]</div>
-                                <div class=\"col-sm-2\">$contact</div>
-                                <div class=\"col-sm-1\">$reservation</div>
-                                <div class=\"col-sm-2\">$ ".number_format($row['price'],2,'.',',')."</div>
-                        </div>";
-			*/
 		}
 		$bunks_array = substr($bunks_array,0,-1);
 		$data['bunks_array'] = $bunks_array;
@@ -183,7 +173,6 @@ class charters extends inventory {
 			`statuses` s,
 			`status_comments` sc
 			
-
 		WHERE
 			`c`.`charterID` = '$_GET[charterID]'
 			AND `c`.`boatID` = `b`.`boatID`
@@ -191,8 +180,8 @@ class charters extends inventory {
 			AND `c`.`statusID` = `s`.`statusID`
 			AND `c`.`status_commentID` = `sc`.`status_commentID`
 		";
-                $result = $this->new_mysql($sql);
-                while ($row = $result->fetch_assoc()) {
+		$result = $this->new_mysql($sql);
+		while ($row = $result->fetch_assoc()) {
 			$data['name'] = $row['name'];
 			$data['start_date'] = $row['start_date'];
 			$data['end_date'] = $row['end_date'];
@@ -220,8 +209,8 @@ class charters extends inventory {
 		WHERE
 			`charterID` = '$_GET[charterID]'
 		";
-                $result = $this->new_mysql($sql);
-                while ($row = $result->fetch_assoc()) {
+		$result = $this->new_mysql($sql);
+		while ($row = $result->fetch_assoc()) {
 			$data['capacity'] = $row['capacity'];
 			$data['booked'] = $row['booked'];
 			$data['tentative'] = $row['tentative'];
@@ -234,63 +223,64 @@ class charters extends inventory {
 			$data['complete'] = $_GET['complete'];
 		}
 		$template = "view_charter.tpl";
-		$this->load_smarty($data,$template);
+		$dir = "/charters";
+		$this->load_smarty($data,$template,$dir);
 	}
 
 	/* This will get inventory info to swap a bunk */
 	public function get_inventory_swap($charterID,$bunk) {
-                $this->security('locate_charter',$_SESSION['user_typeID']);
+		$this->security('locate_charter',$_SESSION['user_typeID']);
 
 		$sql = "
 		SELECT
-		        `i`.`inventoryID`,
-		        `i`.`passengerID`,
-				`i`.`reservationID`,
-		        `i`.`manual_discount`,
-		        `i`.`DWC_discount`,
-		        `i`.`voucher`,
-		        `i`.`commission_at_time_of_booking`,
-		        `i`.`liability_date`,
-		        `i`.`status`,
-		        `i`.`manual_discount_reason`,
-		        `i`.`general_discount_reason`,
-		        `i`.`voucher_reason`,
-		        `i`.`rental_equipment`,
-		        `i`.`course`,
-		        `i`.`other_rental`,
-		        `i`.`login_key`,
-		        `i`.`certification_level`,
-		        `i`.`certification_date`,
-		        `i`.`certification_agency`,
-		        `i`.`certification_number`,
-		        `i`.`nitrox_agency`,
-		        `i`.`nitrox_number`,
-		        `i`.`nitrox_date`,
-		        `i`.`dive_insurance`,
-		        `i`.`dive_insurance_co`,
-		        `i`.`dive_insurance_other`,
-		        `i`.`dive_insurance_number`,
-		        `i`.`dive_insurance_date`,
-		        `i`.`equipment_insurance`,
-		        `i`.`equipment_policy`,
-		        `i`.`trip_insurance`,
-		        `i`.`trip_insurance_co`,
-		        `i`.`trip_insurance_other`,
-		        `i`.`trip_insurance_number`,
-		        `i`.`trip_insurance_date`,
-		        `i`.`application_complete`,
-		        `i`.`medical_email`
+	        `i`.`inventoryID`,
+	        `i`.`passengerID`,
+			`i`.`reservationID`,
+	        `i`.`manual_discount`,
+	        `i`.`DWC_discount`,
+	        `i`.`voucher`,
+	        `i`.`commission_at_time_of_booking`,
+	        `i`.`liability_date`,
+	        `i`.`status`,
+	        `i`.`manual_discount_reason`,
+	        `i`.`general_discount_reason`,
+	        `i`.`voucher_reason`,
+	        `i`.`rental_equipment`,
+	        `i`.`course`,
+	        `i`.`other_rental`,
+	        `i`.`login_key`,
+	        `i`.`certification_level`,
+	        `i`.`certification_date`,
+	        `i`.`certification_agency`,
+	        `i`.`certification_number`,
+	        `i`.`nitrox_agency`,
+	        `i`.`nitrox_number`,
+	        `i`.`nitrox_date`,
+	        `i`.`dive_insurance`,
+	        `i`.`dive_insurance_co`,
+	        `i`.`dive_insurance_other`,
+	        `i`.`dive_insurance_number`,
+	        `i`.`dive_insurance_date`,
+	        `i`.`equipment_insurance`,
+	        `i`.`equipment_policy`,
+	        `i`.`trip_insurance`,
+	        `i`.`trip_insurance_co`,
+	        `i`.`trip_insurance_other`,
+	        `i`.`trip_insurance_number`,
+	        `i`.`trip_insurance_date`,
+	        `i`.`application_complete`,
+	        `i`.`medical_email`
 
-		    FROM 
-		        `inventory` i,
-		        `boats` b,
-		        `charters` c
+	    FROM 
+	        `inventory` i,
+	        `boats` b,
+	        `charters` c
 
-		    WHERE 
-		        `i`.`charterID` = '$charterID'
-		        AND `i`.`charterID` = `c`.`charterID`
-		        AND `c`.`boatID` = `b`.`boatID`
-		        AND `i`.`bunk` = CONCAT(`b`.`abbreviation`,'-','$bunk')
+	    WHERE 
+	        `i`.`charterID` = '$charterID'
+	        AND `i`.`charterID` = `c`.`charterID`
+	        AND `c`.`boatID` = `b`.`boatID`
+	        AND `i`.`bunk` = CONCAT(`b`.`abbreviation`,'-','$bunk')
 		";
 		$result = $this->new_mysql($sql);
 		while ($row = $result->fetch_assoc()) {
@@ -345,16 +335,13 @@ class charters extends inventory {
 
 		WHERE `inventoryID` = '$inventoryID'
 		";
-		//print "$sql<br><br>";
 		$result = $this->new_mysql($sql);
     }
 
 
 	/* This will generate the calendar from locate charters */
 	public function calendar() {
-                $this->security('locate_charter',$_SESSION['user_typeID']);
-
-                $template = "calendar.tpl";
+		$this->security('locate_charter',$_SESSION['user_typeID']);
 
 		if(is_array($_GET['lc_boatID'])) {
 			foreach($_GET['lc_boatID'] as $key=>$value) {
@@ -379,8 +366,9 @@ class charters extends inventory {
 			$this->load_smarty(null,$template);
 			$this->error('You did not select a boat. Please close this window and try again.','1');
 		}
-                $this->load_smarty($data,$template);
-
+		$template = "calendar.tpl";
+		$dir = "/charters";
+		$this->load_smarty($data,$template,$dir);
 	}
 
 	private function paint_calendar($boatID,$start,$end) {
@@ -404,7 +392,7 @@ class charters extends inventory {
 		ORDER BY `c`.`start_date`
 		";
 		$result = $this->new_mysql($sql);
-                while ($row = $result->fetch_assoc()) {
+		while ($row = $result->fetch_assoc()) {
 			$i++;
 		}
 
@@ -436,7 +424,6 @@ class charters extends inventory {
 			</div>
 		</div>
 		';
-
 		return($output);
 	}
 
@@ -502,7 +489,6 @@ class charters extends inventory {
 				$total_due = "0";
 			}
 
-
 			$charter_dates = $this->objectToArray(json_decode($this->get_charter_days($row['charterID'])));
 			$days = $charter_dates['days'];
 			$first_date = $charter_dates['first'];
@@ -530,7 +516,6 @@ class charters extends inventory {
 			';
 			$counter++;
 		}
-
 		return($html);
 	}
 
@@ -682,27 +667,26 @@ class charters extends inventory {
 	public function locate_charter() {
 		$this->security('locate_charter',$_SESSION['user_typeID']);
 
-                if ($_GET['clear'] == "yes") {
-                        foreach ($_SESSION as $key=>$value) {
-                                if(preg_match("/lc/",$key)) {
-                                        $_SESSION[$key] = ""; // clear
-                                }
-                        }
-                        // redirect to safe URL
-                        ?>
-                        <script>
-                        setTimeout(function() {
-                              window.location.replace('/locate_charter')
-                        }
-                        ,1);
-                        </script>
-                        <?php
+        if ($_GET['clear'] == "yes") {
+            foreach ($_SESSION as $key=>$value) {
+                if(preg_match("/lc/",$key)) {
+                    $_SESSION[$key] = ""; // clear
                 }
+            }
+            // redirect to safe URL
+            ?>
+            <script>
+            setTimeout(function() {
+              window.location.replace('/locate_charter')
+            }
+            ,1);
+            </script>
+            <?php
+        }
 
-
-                $sql = "SELECT `boatID`,`name` FROM `boats` WHERE `status` = 'Active' ORDER BY `name` ASC";
-                $result = $this->new_mysql($sql);
-                while ($row = $result->fetch_assoc()) {
+        $sql = "SELECT `boatID`,`name` FROM `boats` WHERE `status` = 'Active' ORDER BY `name` ASC";
+        $result = $this->new_mysql($sql);
+        while ($row = $result->fetch_assoc()) {
 			if(is_array($_SESSION['lc_boatID'])) {
 				$selected = "";
 				$data['load_form'] = "1";
@@ -712,11 +696,10 @@ class charters extends inventory {
 					}
 				}
 			}
-                        $option .= "<option $selected value=\"$row[boatID]\">$row[name]</option>";
-                }
-                $data['option'] = $option;
-
-		
+			$option .= "<option $selected value=\"$row[boatID]\">$row[name]</option>";
+		}
+		$data['option'] = $option;
+	
 		if ($_SESSION['lc_date1'] == "") {
 			$data['date1'] = date("d-M-Y");
 			$data['date2'] = date("d-M-Y", strtotime($data['date1'] . "+1 month"));
@@ -728,22 +711,23 @@ class charters extends inventory {
 		$data['status'] = $this->get_charter_status();
 
 		if ($_SESSION['lc_status_comment'] != "") {
-		        $sql = "SELECT `status_commentID`,`comment` FROM `status_comments` WHERE `statusID` = '$_SESSION[lc_status]' 
+			$sql = "SELECT `status_commentID`,`comment` FROM `status_comments` 
+			WHERE `statusID` = '$_SESSION[lc_status]' 
 			AND `status` = 'Active' AND `comment` != '' ORDER BY `comment` ASC";
-        		$result = $this->new_mysql($sql);
-        		while ($row = $result->fetch_assoc()) {
+			$result = $this->new_mysql($sql);
+    		while ($row = $result->fetch_assoc()) {
 				if ($row['status_commentID'] == $_SESSION['lc_status_comment']) {
-                			$comment .= "<option selected value=\"$row[status_commentID]\">$row[comment]</option>";
+					$comment .= "<option selected value=\"$row[status_commentID]\">$row[comment]</option>";
 				} else {
-	                                $comment .= "<option value=\"$row[status_commentID]\">$row[comment]</option>";
+					$comment .= "<option value=\"$row[status_commentID]\">$row[comment]</option>";
 				}
-		        }
+			}
 			$data['comment'] = $comment;
 		}
 
 		for ($i=1; $i < 30; $i++) {
 			if ($_SESSION['lc_bunks_remaining'] == $i) {
-	                        $bunks_avail .= "<option selected>$i</option>";
+				$bunks_avail .= "<option selected>$i</option>";
 			} else {
 				$bunks_avail .= "<option>$i</option>";
 			}
@@ -755,163 +739,166 @@ class charters extends inventory {
 		}
 
 		$template = "locate_charter.tpl";
-		$this->load_smarty($data,$template);
+		$dir = "/charters";
+		$this->load_smarty($data,$template,$dir);
 	}
 
 	/* This will get the list of charter status */
 	public function get_charter_status($statusID='') {
-                // get status
-                $status = "<option value=\"\">Select</option>";
-                $sql2 = "SELECT `statusID`,`name` FROM `statuses` WHERE `status` = 'Active' AND `name` != '' ORDER BY `name` ASC";
-                $result2 = $this->new_mysql($sql2);
-                while ($row2 = $result2->fetch_assoc()) {
+	    // get status
+	    $status = "<option value=\"\">Select</option>";
+	    $sql2 = "SELECT `statusID`,`name` FROM `statuses` WHERE `status` = 'Active' 
+	    AND `name` != '' ORDER BY `name` ASC";
+	    $result2 = $this->new_mysql($sql2);
+	    while ($row2 = $result2->fetch_assoc()) {
 			if ($statusID != "") {
 				// use the passed var
-                                if ($row2['statusID'] == $statusID) {
-                                        $status .= "<option selected value=\"$row2[statusID]\">$row2[name]</option>";
-                                } else {
-                                        $status .= "<option value=\"$row2[statusID]\">$row2[name]</option>";
-                                }
+                if ($row2['statusID'] == $statusID) {
+                    $status .= "<option selected value=\"$row2[statusID]\">$row2[name]</option>";
+                } else {
+                    $status .= "<option value=\"$row2[statusID]\">$row2[name]</option>";
+                }
 			} else {
 				// use the session var
 				if ($row2['statusID'] == $_SESSION['lc_status']) {
-		                        $status .= "<option selected value=\"$row2[statusID]\">$row2[name]</option>";
+                    $status .= "<option selected value=\"$row2[statusID]\">$row2[name]</option>";
 				} else {
-                        		$status .= "<option value=\"$row2[statusID]\">$row2[name]</option>";
+            		$status .= "<option value=\"$row2[statusID]\">$row2[name]</option>";
 				}
 			}
-                }
+        }
 		return($status);
 	}
 
 	/* This will display a list of charter statuses that can be edited */
 	public function charter_status($msg='') {
-                $this->security('charter_status',$_SESSION['user_typeID']);
+        $this->security('charter_status',$_SESSION['user_typeID']);
 
-                // load data
-                if ($_GET['status'] != "") {
-                        $status = $_GET['status'];
-                }
-                if ($_POST['status'] != "") {
-                        $status = $_POST['status'];
-                }       
-                switch ($status) {
-                        case "on":
-                        $charter_status = "Active";
-                        $data['status_button'] = "<input type=\"button\" value=\"Show Inactive\" onclick=\"document.location.href='/charter_status/off'\" class=\"btn btn-warning\">";
-                        break;  
-                        
-                        case "off":
-                        $charter_status = "Inactive";
-                        $data['status_button'] = "<input type=\"button\" value=\"Show Active\" onclick=\"document.location.href='/charter_status/on'\" class=\"btn btn-primary\">";
-                        break;
-        
-                        default:
-                        $charter_status = "Active";
-                        $data['status_button'] = "<input type=\"button\" value=\"Show Inactive\" onclick=\"document.location.href='/charter_status/off'\" class=\"btn btn-warning\">";
-                        break;
-                } 
+        // load data
+        if ($_GET['status'] != "") {
+            $status = $_GET['status'];
+        }
+        if ($_POST['status'] != "") {
+            $status = $_POST['status'];
+        }       
+        switch ($status) {
+            case "on":
+            $charter_status = "Active";
+            $data['status_button'] = "<input type=\"button\" value=\"Show Inactive\" onclick=\"document.location.href='/charter_status/off'\" class=\"btn btn-warning\">";
+            break;  
+            
+            case "off":
+            $charter_status = "Inactive";
+            $data['status_button'] = "<input type=\"button\" value=\"Show Active\" onclick=\"document.location.href='/charter_status/on'\" class=\"btn btn-primary\">";
+            break;
+
+            default:
+            $charter_status = "Active";
+            $data['status_button'] = "<input type=\"button\" value=\"Show Inactive\" onclick=\"document.location.href='/charter_status/off'\" class=\"btn btn-warning\">";
+            break;
+        } 
 
 		$sql = "SELECT `statusID`,`name`,`status` FROM `statuses` WHERE `status` = '$charter_status' AND `name` != '' ORDER BY `name` ASC";
 		$result = $this->new_mysql($sql);
 		while ($row = $result->fetch_assoc()) {
-                        $html .= "<tr><td>
-                        <a href=\"/edit_charter_status/$row[statusID]\" data-toggle=\"tooltip\" title=\"Edit Charter Status\">
+            $html .= "<tr><td>
+            <a href=\"/edit_charter_status/$row[statusID]\" data-toggle=\"tooltip\" title=\"Edit Charter Status\">
 			<i class=\"fa fa-pencil-square-o\" aria-hidden=\"true\"></i></a>&nbsp;
 
-                        <a href=\"javascript:void(0);\" data-toggle=\"tooltip\" title=\"Delete Charter Status\"
-                        onclick=\"
-                        if(confirm('You are about to delete $row[name]. If there are linked charter the system will not delete the status. Click OK to continue.')) {
-                                document.location.href='/delete_charter_status/$row[statusID]';
-                        }
-                        \"
-
-                        ><i class=\"fa fa-trash-o\" aria-hidden=\"true\"></i></a>&nbsp;
-
-                        </td><td>$row[name]</td><td>$row[status]</td></tr>";
+            <a href=\"javascript:void(0);\" data-toggle=\"tooltip\" title=\"Delete Charter Status\"
+            onclick=\"
+            if(confirm('You are about to delete $row[name]. If there are linked charter the system will not delete the status. Click OK to continue.')) {
+                    document.location.href='/delete_charter_status/$row[statusID]';
+            }
+            \"
+            ><i class=\"fa fa-trash-o\" aria-hidden=\"true\"></i></a>&nbsp;
+            </td><td>$row[name]</td><td>$row[status]</td></tr>";
 		}
 		$data['html'] = $html;
 		$data['msg'] = $msg;
 		$template = "charter_status.tpl";
-		$this->load_smarty($data,$template);
+		$dir = "/charters";
+		$this->load_smarty($data,$template,$dir);
 	}
 
 	// allow the user to edit a charter status but do not allow the user to take the name out like in the past
 	public function edit_charter_status() {
-                $this->security('charter_status',$_SESSION['user_typeID']);
+		$this->security('charter_status',$_SESSION['user_typeID']);
 		$sql = "SELECT `statusID`,`name`,`status` FROM `statuses` WHERE `statusID` = '$_GET[statusID]'";
-                $result = $this->new_mysql($sql);
-                while ($row = $result->fetch_assoc()) {
+		$result = $this->new_mysql($sql);
+		while ($row = $result->fetch_assoc()) {
 			foreach ($row as $key=>$value) {
 				$data[$key] = $value;
 			}
 		}
 		$template = "edit_charter_status.tpl";
-		$this->load_smarty($data,$template);
+		$dir = "/charters";
+		$this->load_smarty($data,$template,$dir);
 	}
 
 	// This will allow the user to create a new charter status
 	public function new_charter_status() {
-                $this->security('charter_status',$_SESSION['user_typeID']);
+		$this->security('charter_status',$_SESSION['user_typeID']);
 		$template = "new_charter_status.tpl";
-		$this->load_smarty(null,$template);
+		$dir = "/charters";
+		$this->load_smarty(null,$template,$dir);
 	}
 
 	// This will save the changes to the charter status
 	public function update_charter_status() {
-                $this->security('charter_status',$_SESSION['user_typeID']);
-		$sql = "UPDATE `statuses` SET `name` = '$_POST[name]', `status` = '$_POST[status]' WHERE `statusID` = '$_POST[statusID]'";
+		$this->security('charter_status',$_SESSION['user_typeID']);
+		$sql = "UPDATE `statuses` SET `name` = '$_POST[name]', `status` = '$_POST[status]' 
+		WHERE `statusID` = '$_POST[statusID]'";
 		$result = $this->new_mysql($sql);
-                if ($result == "TRUE") {
-                        $msg = '<div class="alert alert-success">'.$_POST['name'].' was updated.</div>';
-                } else {
-                        $msg = '<div class="alert alert-danger">'.$_POST['name'].' failed to update.</div>';
-                }
-                $this->charter_status($msg);
+        if ($result == "TRUE") {
+			$msg = '<div class="alert alert-success">'.$_POST['name'].' was updated.</div>';
+        } else {
+			$msg = '<div class="alert alert-danger">'.$_POST['name'].' failed to update.</div>';
+        }
+        $this->charter_status($msg);
 	}
 
 	// This will save a new charter status
 	public function save_charter_status() {
-                $this->security('charter_status',$_SESSION['user_typeID']);
+		$this->security('charter_status',$_SESSION['user_typeID']);
 		$sql = "INSERT INTO `statuses` (`name`,`status`) VALUES ('$_POST[name]','$_POST[status]')";
-                $result = $this->new_mysql($sql);
-                if ($result == "TRUE") {
-                        $msg = '<div class="alert alert-success">'.$_POST['name'].' was added.</div>';
-                } else {
-                        $msg = '<div class="alert alert-danger">'.$_POST['name'].' failed to add.</div>';
-                }
-                $this->charter_status($msg);
+		$result = $this->new_mysql($sql);
+        if ($result == "TRUE") {
+			$msg = '<div class="alert alert-success">'.$_POST['name'].' was added.</div>';
+        } else {
+			$msg = '<div class="alert alert-danger">'.$_POST['name'].' failed to add.</div>';
+        }
+        $this->charter_status($msg);
 	}
 
 	// this will allow the user to delete a status if it is not linked to a charter
 	public function delete_charter_status() {
-                $this->security('charter_status',$_SESSION['user_typeID']);
+		$this->security('charter_status',$_SESSION['user_typeID']);
 
 		$sql = "SELECT `name` FROM `statuses` WHERE `statusID` = '$_GET[statusID]'";
-                $result = $this->new_mysql($sql);
-                while ($row = $result->fetch_assoc()) {
-                        $name = $row['name'];
+		$result = $this->new_mysql($sql);
+		while ($row = $result->fetch_assoc()) {
+			$name = $row['name'];
 		}
 
 		$sql = "SELECT `statusID` FROM `charters` WHERE `statusID` = '$_GET[statusID]'";
 		$counter = "0";
 		$result = $this->new_mysql($sql);
-                while ($row = $result->fetch_assoc()) {
-                        $counter++;
-                }
-                if ($counter > 0) {
-                        $msg = '<div class="alert alert-danger">'.$name.' has linked charters and can not be deleted.</div>';
-                } else {
-                        $sql = "DELETE FROM `statuses` WHERE `statusID` = '$_GET[statusID]'";
-                        $result = $this->new_mysql($sql);
-                        if ($result == "TRUE") {
-                                $msg = '<div class="alert alert-success">'.$name.' was deleted.</div>';
-                        } else {
-                                $msg = '<div class="alert alert-danger">'.$name.' failed to delete.</div>';
-                        }
-                }
-                $this->charter_status($msg);
-
+        while ($row = $result->fetch_assoc()) {
+			$counter++;
+        }
+        if ($counter > 0) {
+			$msg = '<div class="alert alert-danger">'.$name.' has linked charters and can not be deleted.</div>';
+        } else {
+            $sql = "DELETE FROM `statuses` WHERE `statusID` = '$_GET[statusID]'";
+            $result = $this->new_mysql($sql);
+            if ($result == "TRUE") {
+				$msg = '<div class="alert alert-success">'.$name.' was deleted.</div>';
+            } else {
+				$msg = '<div class="alert alert-danger">'.$name.' failed to delete.</div>';
+            }
+        }
+        $this->charter_status($msg);
 	}
 
 	/* This will allow the user to create a new charter */
@@ -932,10 +919,8 @@ class charters extends inventory {
 	/* This will save the new charter */
 	public function save_new_charter() {
 
-		// TO DO - loop through $_POST[consecutive]
-
 		$this->security('create_new_charter',$_SESSION['user_typeID']);
-
+		print "<h3>Create New Charter</h3>";
 		$start_date = date("Ymd", strtotime($_POST['charter_date']));
 
 		$sql = "SELECT `charter_rate` AS 'base_rate' FROM `boats` WHERE `boatID` = '$_POST[boatID]'";
@@ -952,10 +937,17 @@ class charters extends inventory {
 			$this->error($msg);
 		}
 
-		$sql = "INSERT INTO `charters` (`start_date`,`statusID`,`boatID`,`nights`,`base_rate`,`add_on_price`,`status_commentID`,`add_on_price_commissionable`,
-		`overriding_comment`,`destinationID`,`itinerary`,`embarkment`,`disembarkment`,`destination`) VALUES ('$start_date','$_POST[status]','$_POST[boatID]',
-		'$_POST[nights]','$base_rate','$_POST[add_on_price]','$_POST[status_comment]','$_POST[add_on_price_commissionable]','$_POST[overriding_comment]',
-		'$_POST[kbyg]','$_POST[itinerary]','$_POST[embarkment]','$_POST[disembarkment]','$_POST[destination]')";
+		$sql = "INSERT INTO `charters` (
+		`start_date`,`statusID`,`boatID`,`nights`,`base_rate`,`add_on_price`,`status_commentID`,
+		`add_on_price_commissionable`,`overriding_comment`,`destinationID`,`itinerary`,`embarkment`,
+		`disembarkment`,`destination`
+		) VALUES (
+		'$start_date','$_POST[status]','$_POST[boatID]','$_POST[nights]','$base_rate',
+		'$_POST[add_on_price]','$_POST[status_comment]','$_POST[add_on_price_commissionable]',
+		'$_POST[overriding_comment]','$_POST[kbyg]','$_POST[itinerary]','$_POST[embarkment]',
+		'$_POST[disembarkment]','$_POST[destination]'
+		)";
+
 		$result = $this->new_mysql($sql);
 		if ($result == "TRUE") {
 			$charterID = $this->linkID->insert_id;
@@ -965,15 +957,49 @@ class charters extends inventory {
 				$inv_msg = " A total of $inventory bunks was added. ";
 			}
 
-            print '<div class="alert alert-success">Charter '.$charterID.' was created. '.$inv_msg.' Loading in 4 seconds please wait...</div>';
+            print '<div class="alert alert-success">
+            Charter <a href="/view_charter/'.$charterID.'" target=_blank>'.$charterID.'</a> was created. '.$inv_msg.' </div>';
+
+
+            if ($_POST['consecutive'] > 1) {
+            	for ($i=1; $i < $_POST['consecutive']; $i++) {
+            		$next_charter = date("Ymd", strtotime($start_date . "+$_POST[nights] days"));
+					$sql2 = "INSERT INTO `charters` (
+					`start_date`,`statusID`,`boatID`,`nights`,`base_rate`,`add_on_price`,
+					`status_commentID`,`add_on_price_commissionable`,`overriding_comment`,
+					`destinationID`,`itinerary`,`embarkment`,`disembarkment`,`destination`
+					) VALUES (
+					'$next_charter','$_POST[status]','$_POST[boatID]','$_POST[nights]','$base_rate',
+					'$_POST[add_on_price]','$_POST[status_comment]','$_POST[add_on_price_commissionable]',
+					'$_POST[overriding_comment]','$_POST[kbyg]','$_POST[itinerary]','$_POST[embarkment]',
+					'$_POST[disembarkment]','$_POST[destination]'
+					)";
+					$result2 = $this->new_mysql($sql2);
+					$next_charterID = $this->linkID->insert_id;
+					if ($_POST['inventory'] == "yes") {
+						$inventory = $this->create_inventory($next_charterID);
+						$inv_msg = " A total of $inventory bunks was added. ";
+					}
+					print '<div class="alert alert-success">Charter 
+					<a href="/view_charter/'.$next_charterID.'" target=_blank>'.$next_charterID.'</a> 
+					was created. '.$inv_msg.' </div>';
+					$start_date = $next_charter;
+            	}
+            }
+            print '<div class="alert alert-info">
+            The system has completed the process of creating '.$_POST['consecutive'].' charters. If inventory was set to yes then the inventory should have also been created. You can return to the main menu or click on the link by each charter to inspect.
+            </div>';
+
+            /* No longer valid to auto load the home page
             ?>
             <script>
             setTimeout(function() {
-                  window.location.replace('/')
+				window.location.replace('/')
             }
             ,6000);
             </script>
             <?php
+            */
 
 
 		} else {
@@ -984,7 +1010,7 @@ class charters extends inventory {
 
 	/* This will allow the user to edit a charter in a modal window */
 	public function edit_charter() {
-                $this->security('create_new_charter',$_SESSION['user_typeID']);
+		$this->security('create_new_charter',$_SESSION['user_typeID']);
 
 		$data['charterID'] = $_GET['charterID'];
 
@@ -1037,71 +1063,71 @@ class charters extends inventory {
 			$data['status'] = $this->get_charter_status($row['statusID']);
 
 			// comments
-		        $sql2 = "SELECT `status_commentID`,`comment` FROM `status_comments` WHERE `statusID` = '$row[statusID]' AND `status` = 'Active' AND `comment` != '' 
+			$sql2 = "SELECT `status_commentID`,`comment` FROM `status_comments` WHERE `statusID` = '$row[statusID]' AND `status` = 'Active' AND `comment` != '' 
 			ORDER BY `comment` ASC";
-		        $result2 = $this->new_mysql($sql2);
-		        while ($row2 = $result2->fetch_assoc()) {
+			$result2 = $this->new_mysql($sql2);
+			while ($row2 = $result2->fetch_assoc()) {
 				if ($row2['status_commentID'] == $row['status_commentID']) {
 					$comment .= "<option selected value=\"$row2[status_commentID]\">$row2[comment]</option>";
 				} else {
-		                	$comment .= "<option value=\"$row2[status_commentID]\">$row2[comment]</option>";
+					$comment .= "<option value=\"$row2[status_commentID]\">$row2[comment]</option>";
 				}
-		        }
+			}
 
-	                // itinerary
-        	        $itinerary = "<option selected value=\"$row[itinerary]\">$row[itinerary]</option>";
-                	$sql2 = "SELECT `itinerary` FROM `itinerary` WHERE `boatID` = '$_GET[boatID]' ORDER BY `itinerary` ASC";
-	                $result2 = $this->new_mysql($sql2);
-        	        while ($row2 = $result2->fetch_assoc()) {
-                	        $itinerary .= "<option>$row2[itinerary]</option>";
-                	}
+            // itinerary
+	        $itinerary = "<option selected value=\"$row[itinerary]\">$row[itinerary]</option>";
+        	$sql2 = "SELECT `itinerary` FROM `itinerary` WHERE `boatID` = '$_GET[boatID]' ORDER BY `itinerary` ASC";
+            $result2 = $this->new_mysql($sql2);
+	        while ($row2 = $result2->fetch_assoc()) {
+				$itinerary .= "<option>$row2[itinerary]</option>";
+        	}
 			$data['itinerary'] = $itinerary;
 
-	                // destination
-        	        $destination = "<option selected value=\"$row[destination]\">$row[destination]</option>";
-                	$sql2 = "
-	                SELECT
-        	                `d`.`destination`
-                	FROM
-                        	`new_destinations` d
-	                WHERE
-        	                `d`.`boatID` = '$_GET[boatID]'
+            // destination
+	        $destination = "<option selected value=\"$row[destination]\">$row[destination]</option>";
+        	$sql2 = "
+            SELECT
+				`d`.`destination`
+        	FROM
+				`new_destinations` d
+            WHERE
+				`d`.`boatID` = '$_GET[boatID]'
 
-                	ORDER BY `d`.`destination` ASC
-	                ";
-        	        $result2 = $this->new_mysql($sql2);
-                	while ($row2 = $result2->fetch_assoc()) {
-                        	$destination .= "<option>$row2[destination]</option>";
-	                }
+        	ORDER BY `d`.`destination` ASC
+            ";
+	        $result2 = $this->new_mysql($sql2);
+        	while ($row2 = $result2->fetch_assoc()) {
+				$destination .= "<option>$row2[destination]</option>";
+            }
 			$data['destination'] = $destination;
 
-        	        // embarkment
-                	$embarkment = "<option selected value=\"$row[embarkment]\">$row[embarkment]</option>";
-	                $sql2 = "SELECT `embarkment` FROM `embarkment` WHERE `boatID` = '$_GET[boatID]' AND `embarkment` != '' ORDER BY `embarkment` ASC";
-        	        $result2 = $this->new_mysql($sql2);
-                	while ($row2 = $result2->fetch_assoc()) {
-                        	$embarkment .= "<option>$row2[embarkment]</option>";
-	                }
+	        // embarkment
+        	$embarkment = "<option selected value=\"$row[embarkment]\">$row[embarkment]</option>";
+            $sql2 = "SELECT `embarkment` FROM `embarkment` WHERE `boatID` = '$_GET[boatID]' AND `embarkment` != '' ORDER BY `embarkment` ASC";
+	        $result2 = $this->new_mysql($sql2);
+        	while ($row2 = $result2->fetch_assoc()) {
+				$embarkment .= "<option>$row2[embarkment]</option>";
+            }
 			$data['embarkment'] = $embarkment;
 
-        	        // disembarkment
-                	$disembarkment = "<option selected value=\"$row[disembarkment]\">$row[disembarkment]</option>";
-	                $sql2 = "SELECT `disembarkment` FROM `disembarkment` WHERE `boatID` = '$_GET[boatID]' AND `disembarkment` != '' ORDER BY `disembarkment` ASC";
-        	        $result2 = $this->new_mysql($sql2);
-                	while ($row2 = $result2->fetch_assoc()) {
-                        	$disembarkment .= "<option>$row2[disembarkment]</option>";
-	                }
+	        // disembarkment
+        	$disembarkment = "<option selected value=\"$row[disembarkment]\">$row[disembarkment]</option>";
+            $sql2 = "SELECT `disembarkment` FROM `disembarkment` WHERE `boatID` = '$_GET[boatID]' AND `disembarkment` != '' ORDER BY `disembarkment` ASC";
+	        $result2 = $this->new_mysql($sql2);
+        	while ($row2 = $result2->fetch_assoc()) {
+				$disembarkment .= "<option>$row2[disembarkment]</option>";
+            }
 			$data['disembarkment'] = $disembarkment;
 
 			// kbyg
 			$sql2 = "SELECT `destinationID`,`code`,`description` FROM `destinations` WHERE `boatID` = '$row[boatID]' AND `status` = 'Active'
 			AND `description` != '' ORDER BY `description` ASC";
-                        $result2 = $this->new_mysql($sql2);
-                        while ($row2 = $result2->fetch_assoc()) {
+			$result2 = $this->new_mysql($sql2);
+			while ($row2 = $result2->fetch_assoc()) {
 				if ($row['destinationID'] == $row2['destinationID']) {
 					$kbyg .= "<option selected value=\"$row2[destinationID]\">$row2[description] ($row2[code])</option>";
 				} else {
-                                        $kbyg .= "<option value=\"$row2[destinationID]\">$row2[description] ($row2[code])</option>";
+					$kbyg .= "<option value=\"$row2[destinationID]\">$row2[description] ($row2[code])</option>";
 				}
 			}
 			$data['kbyg'] = $kbyg;
@@ -1110,12 +1136,13 @@ class charters extends inventory {
 		$data['nights_list'] = $nights_list;
 		
 		$template = "edit_charter.tpl";
-		$this->load_smarty($data,$template);		
-	}
+		$dir = "/charters";
+		$this->load_smarty($data,$template,$dir);		
+	} // public function edit_charter
 
 	/* This will save the changes to the charter then return to the search results */
 	public function update_charter() {
-                $this->security('create_new_charter',$_SESSION['user_typeID']);
+		$this->security('create_new_charter',$_SESSION['user_typeID']);
 
 		$start_date = date("Ymd", strtotime($_POST['charter_date']));
 		$sql = "UPDATE `charters` SET `nights` = '$_POST[nights]', `start_date` = '$start_date', `statusID` = '$_POST[status]', `status_commentID` = '$_POST[status_commentID]',
@@ -1124,24 +1151,22 @@ class charters extends inventory {
 		`group2` = '$_POST[group2]', `add_on_price_commissionable` = '$_POST[add_on_price_commissionable]', `add_on_price` = '$_POST[add_on_price]'
 		WHERE `charterID` = '$_POST[charterID]'";
 
-                $result = $this->new_mysql($sql);
-                if ($result == "true") {
-                        print '<div class="alert alert-success">The charter was updated. Loading please wait...</div>';
-                        ?>
-                        <script>
-                        setTimeout(function() {
-                              window.location.replace('/locate_charter')
-                        }
-                        ,3000);
-                        </script>
-                        <?php
-                } else {
-                        print '<div class="alert alert-success">The charter failed to update.</div>';
+        $result = $this->new_mysql($sql);
+        if ($result == "true") {
+            print '<div class="alert alert-success">The charter was updated. Loading please wait...</div>';
+            ?>
+            <script>
+            setTimeout(function() {
+				window.location.replace('/locate_charter')
+            }
+            ,3000);
+            </script>
+            <?php
+        } else {
+			print '<div class="alert alert-success">The charter failed to update.</div>';
 			print "<br><font color=red>SQL Query:<br><pre>$sql</pre>";
-                }
-
-
+        }
 	}
 
-}
+} // class charters extends inventory
 ?>
