@@ -426,10 +426,106 @@ class reservation extends charters {
         $data['resellerID'] = $reservation_headers->resellerID;
         /* End top of tab */
 
+        $sql = "
+        SELECT
+            DATE_FORMAT(`r`.`reservation_date`, '%m/%d/%Y') AS 'reservation_date',
+            `r`.`reservation_date` AS 'r_date',
+            `r`.`reservation_type`,
+            `c`.`start_date`
+
+        FROM
+            `reservations` r, `charters` c
+
+        WHERE
+            `r`.`reservationID` = '$_GET[reservationID]'
+            AND `r`.`charterID` = `c`.`charterID`
+        ";      
+
+        $result = $this->new_mysql($sql);
+        while ($row = $result->fetch_assoc()) {
+            foreach ($row as $key=>$value) {
+                $data[$key] = $value;
+            }
+            $deposit_info = $this->due_dates($row['r_date'],$row['reservation_type'], $row['start_date']);
+            $data['deposit_date'] = date("m/d/Y", strtotime($deposit_info[0]));
+            $data['balance_date'] = date("m/d/Y", strtotime($deposit_info[1]));
+        }
+
+        // get reservation amount
+        $data['beginning_balance_with_manual_discount'] = $this->get_reservation_begining_balance($_GET['reservationID']);
+
+        // get reservation payments
+        $data['payments'] = $this->get_reservation_payments($_GET['reservationID']);
+        if ($data['payments'] == "") {
+            $data['payment_error'] = "1";
+        }
+        $payment_amount = "0";
+        if(is_array($data['payments'])) {
+            foreach ($data['payments'] as $key=>$value) {
+                if (is_array($value)) {
+                    foreach ($value as $key2=>$value2) {
+                        if ($key2 == "payment_amount") {
+                            $payment_amount = $payment_amount + $value2;
+                        }
+                    }
+                }
+            }
+        }
+        $data['payment_amount'] = $payment_amount;
+        $data['balance'] = $data['beginning_balance_with_manual_discount'] - $data['payment_amount'];
         $template = "reservations_dollars.tpl";
         $dir = "/reservations";
         $this->load_smarty($data,$template,$dir);
 	}
+
+    private function get_reservation_payments($reservationID) {
+        $sql = "
+        SELECT
+            `p`.`reservation_paymentID`,
+            `p`.`payment_amount`,
+            `p`.`payment_type`,
+            `p`.`comment`,
+            DATE_FORMAT(`p`.`payment_date`, '%m/%d/%Y') AS 'payment_date'
+
+        FROM
+            `reservation_payments` p
+
+        WHERE
+            `p`.`reservationID` = '$reservationID'
+        ";
+        $i = "0";
+        $data = array();
+        $result = $this->new_mysql($sql);
+        while ($row = $result->fetch_assoc()) {
+            foreach($row as $key=>$value) {
+                $data[$i][$key] = $value;
+            }
+            $i++;
+        }
+        return($data);
+    }
+
+    private function get_reservation_begining_balance($reservationID) {
+        $sql = "
+        SELECT
+            SUM(`i`.`bunk_price` + `c`.`add_on_price` + `c`.`add_on_price_commissionable` - `i`.`manual_discount`) AS 'beginning_balance_with_manual_discount'
+        FROM
+            `reservations` r,
+            `inventory` i,
+            `charters` c
+
+        WHERE
+            `r`.`reservationID` = '$reservationID'
+            AND `r`.`reservationID` = `i`.`reservationID`
+            AND `r`.`charterID` = `c`.`charterID`
+        ";
+        $balance = "0";
+        $result = $this->new_mysql($sql);
+        while ($row = $result->fetch_assoc()) {
+            $balance = $row['beginning_balance_with_manual_discount'];
+        }
+        return($balance);
+    }
 
         /* This is the 4th tab */
         public function reservations_timeline() {
@@ -1059,6 +1155,27 @@ class reservation extends charters {
                 $json_data = $this->return_json($sql);
 		return($json_data);
 	}
+
+    public function due_dates($reservation_date= "", $reservation_type="", $charter_date=""){
+        $charter_date = strtotime(substr($charter_date,0,4)."-".substr($charter_date,4,2)."-".substr($charter_date,6,2));
+        $reservation_date = strtotime(substr($reservation_date,0,4)."-".substr($reservation_date,4,2)."-".substr($reservation_date,6,2));
+
+        $date_diff = $this->datediff('d',$reservation_date,$charter_date,true);
+
+        if($date_diff <= 2){
+            $deposit_due = date("Ymd",$reservation_date);
+            $balance_due = date("Ymd",$reservation_date);
+        } else if($date_diff <= 90){
+            $deposit_due = date("Ymd",strtotime("+2 day",$reservation_date));
+            $balance_due = date("Ymd",strtotime("+2 day",$reservation_date));
+        } else{
+            $deposit_due = date("Ymd",strtotime("+2 weeks",$reservation_date));
+            $balance_due = date("Ymd",strtotime("-90 day",$charter_date)); // was -60
+        }
+
+        if($balance_due < $deposit_due){$deposit_due=$balance_due;}
+        return array($deposit_due,$balance_due, $date_diff);
+    }
 
 }
 ?>
