@@ -429,9 +429,10 @@ class reservation extends charters {
         $sql = "
         SELECT
             DATE_FORMAT(`r`.`reservation_date`, '%m/%d/%Y') AS 'reservation_date',
-            `r`.`reservation_date` AS 'r_date',
+            `r`.`reservation_date` AS 'res_date',
             `r`.`reservation_type`,
-            `c`.`start_date`
+            `c`.`start_date` AS 's_date',
+            `c`.`charterID`
 
         FROM
             `reservations` r, `charters` c
@@ -446,9 +447,10 @@ class reservation extends charters {
             foreach ($row as $key=>$value) {
                 $data[$key] = $value;
             }
-            $deposit_info = $this->due_dates($row['r_date'],$row['reservation_type'], $row['start_date']);
+            $deposit_info = $this->due_dates($row['res_date'],$row['reservation_type'], $row['s_date']);
             $data['deposit_date'] = date("m/d/Y", strtotime($deposit_info[0]));
             $data['balance_date'] = date("m/d/Y", strtotime($deposit_info[1]));
+            $charterID = $row['charterID'];
         }
 
         // get reservation amount
@@ -473,6 +475,79 @@ class reservation extends charters {
         }
         $data['payment_amount'] = $payment_amount;
         $data['balance'] = $data['beginning_balance_with_manual_discount'] - $data['payment_amount'];
+        
+        // get inventory
+        $sql = "
+        SELECT
+            `i`.`inventoryID`,
+            `i`.`bunk`,
+            `i`.`passengerID`,
+            `i`.`charterID`,
+            `i`.`reservationID`,
+            `c`.`first`,
+            `c`.`middle`,
+            `c`.`last`,
+            `i`.`commission_at_time_of_booking`,
+            `i`.`DWC_discount`,
+            `i`.`manual_discount`,
+            `i`.`voucher`,
+            `i`.`bunk_price`,
+            `ch`.`add_on_price`,
+            `ch`.`add_on_price_commissionable`
+
+
+        FROM
+            `inventory` i
+
+        LEFT JOIN contacts c ON i.passengerID = c.contactID
+        LEFT JOIN charters ch ON '$row[charterID]' = ch.charterID
+
+        WHERE
+            `i`.`reservationID` = '$_GET[reservationID]'
+
+        ORDER BY `i`.`bunk` ASC
+        ";
+        $id = "0";
+        $result = $this->new_mysql($sql);
+        while ($row = $result->fetch_assoc()) {
+            $credit = $row['DWC_discount'] + $row['voucher'] + $row['manual_discount'];
+            $discount = $row['DWC_discount'] + $row['manual_discount'];
+            $bunk_price = $row['bunk_price'] + $row['add_on_price_commissionable'];
+            $base_price = $base_price + $row['bunk_price'];
+            $pax_credit = $pax_credit + $row['DWC_discount'] + $row['manual_discount'] + $row['voucher'];
+            $commission_amount = ($bunk_price - $credit) * ($row['commission_at_time_of_booking'] / 100);
+            
+            $amount_for_comm = $row['bunk_price'] + $row['add_on_price_commissionable'] - $row['manual_discount'];
+
+            $bunk_comm = $amount_for_comm * ($row['commission_at_time_of_booking'] / 100);
+            $bunk_comm_total = $bunk_comm_total + $bunk_comm;
+
+            $pre_comm = $row['bunk_price'] + $row['add_on_price'] + $row['add_on_price_commissionable']
+- $row['manual_discount'] - $row['DWC_discount'] - $row['voucher'];
+            $pre_comm_total = $pre_comm_total + $pre_comm;
+
+            $amount = $bunk_price + $row['add_on_price'];
+            $cash_value = ($bunk_price + $row['add_on_price']) - $credit;
+            foreach ($row as $key=>$value) {
+                $data['guests'][$id][$key] = $value;
+            }
+            $data['guests'][$id]['commission_amount'] = $commission_amount;
+            $data['guests'][$id]['amount'] = $amount;
+            $data['guests'][$id]['discount'] = $discount;
+            $data['guests'][$id]['cash_value'] = $cash_value;
+            $id++;
+        }
+        $data['base_price'] = $base_price;
+        $data['pax_credit'] = $pax_credit;
+        $data['bunk_comm_total'] = $bunk_comm_total;
+        $data['pre_comm_total'] = $pre_comm_total;
+
+
+
+
+
+
+
         $template = "reservations_dollars.tpl";
         $dir = "/reservations";
         $this->load_smarty($data,$template,$dir);

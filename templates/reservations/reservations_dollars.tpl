@@ -37,7 +37,8 @@
 			</div>
 			<div class="row pad-top">
 				<div class="col-sm-12">
-					<input type="button" value="Edit Passengers" class="btn btn-primary btn-block">
+					<input type="button" value="Edit Passengers" class="btn btn-primary btn-block"
+					onclick="document.location.href='/manage_res_pax/{$reservationID}'">
 				</div>
 			</div>
 			<div class="row pad-top">
@@ -47,7 +48,8 @@
 			</div>
 			<div class="row pad-top">
 				<div class="col-sm-12">
-					<input type="button" value="Review Charter" class="btn btn-primary btn-block">
+					<input type="button" value="Review Charter" class="btn btn-primary btn-block"
+					onclick="document.location.href='/view_charter/{$charterID}'">
 				</div>
 			</div>
 
@@ -120,15 +122,130 @@
 			<div class="row pad-top">
 				<div class="col-sm-3"><b>Name</b></div>
 				<div class="col-sm-1"><b>Comm</b></div>
-				<div class="col-sm-2"><b>bc red.</b></div>
+				<div class="col-sm-2"><b>Comm Amount.</b></div>
 				<div class="col-sm-2"><b>Balance</b></div>
 				<div class="col-sm-2"><b>Discounts</b></div>
-				<div class="col-sm-2"><b>Cash Paid</b></div>
+				<div class="col-sm-2"><b>Cash Value</b></div>
 			</div>
+
+			{foreach $guests as $g}
+			<div class="row pad-top">
+				<div class="col-sm-3">{$g.first} {$g.middle} {$g.last}</div>
+				<div class="col-sm-1">{$g.commission_at_time_of_booking} %</div>
+				<div class="col-sm-2">$ {$g.commission_amount|number_format:2:".":","}</div>
+				<div class="col-sm-2">$ {$g.amount|number_format:2:".":","}</div>
+				<div class="col-sm-2">$ {$g.discount|number_format:2:".":","}</div>
+				<div class="col-sm-2">$ {$g.cash_value|number_format:2:".":","}</div>
+			</div>
+			{/foreach}
+
 			<!--end right-->
 		</div>
 	</div>
 
+	<div class="row pad-top">
+		<div class="col-sm-12 alert alert-info"><b>Summary:</b></div>
+	</div>
+
+	<div class="row pad-top">
+		<div class="col-sm-3">
+			<b>Comm original balance:</b>
+		</div>
+		<div class="col-sm-3">
+			{* This is the bunk price only, no addon, no discount *}
+			$ {$base_price|number_format:2:".":","}
+		</div>
+		<div class="col-sm-3">
+			<b>Total passenger credits:</b>
+		</div>
+		<div class="col-sm-3">
+			{* This is the DWC discount, manual discount and voucher *}
+			$ {$pax_credit|number_format:2:".":","}
+			
+		</div>
+	</div>
+
+	<div class="row pad-top">
+		<div class="col-sm-3">
+			<b>Commission origin:</b>
+		</div>
+		<div class="col-sm-3">
+			$ {$bunk_comm_total|number_format:2:".":","}
+		</div>
+		<div class="col-sm-3">
+			<b>Balance before applied commission:</b>
+		</div>
+		<div class="col-sm-3">
+			$ {$pre_comm_total|number_format:2:".":","}
+		</div>
+	</div>
+
+	<div class="row pad-top">
+		<div class="col-sm-3">
+			<b>Bunk comm red.:</b>
+		</div>
+		<div class="col-sm-3">
+			{$bunk_comm_red}
+		</div>
+		<div class="col-sm-3">
+			<b>Final balance:</b>
+		</div>
+		<div class="col-sm-3">
+			{$final_balance}
+		</div>
+	</div>
+
+	<div class="row pad-top">
+		<div class="col-sm-3">
+			<b>Reservation commission red.:</b>
+		</div>
+		<div class="col-sm-3">
+			{$reservation_commission_red}
+		</div>
+		<div class="col-sm-3">
+			<b>Payment notes:</b>
+		</div>
+	</div>
+
+	<div class="row pad-top">
+		<div class="col-sm-6">
+			<!-- left -->
+			<div class="row">
+				<div class="col-sm-6">
+					<b>Manual commission reduction:</b>
+				</div>
+			</div>
+
+			<div class="row pad-top">
+				<div class="col-sm-2"><b>Reason:</b></div>
+				<div class="col-sm-4">
+					<input type="text" name="reason" value="{$reason}" class="form-control">
+				</div>
+			</div>
+
+			<div class="row pad-top">
+				<div class="col-sm-2"><b>Adjustment:</b></div>
+				<div class="col-sm-4">
+					<input type="text" name="adjustment" value="{$adjustment}" class="form-control">
+				</div>
+			</div>
+
+			<div class="row pad-top">
+				<div class="col-sm-6"><b>Final commission balance:</b></div>
+				<div class="col-sm-6">
+					{$final_commission_balance}
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-6">
+			<!-- right -->
+			<div class="row">
+				<div class="col-sm-12">
+					<textarea name="payment_notes" class="form-control">{$payment_notes}</textarea>
+				</div>
+			</div>
+		</div>
+	</div>
 
 
 
