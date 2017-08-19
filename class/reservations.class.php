@@ -543,11 +543,6 @@ class reservation extends charters {
         $data['pre_comm_total'] = $pre_comm_total;
 
 
-
-
-
-
-
         $template = "reservations_dollars.tpl";
         $dir = "/reservations";
         $this->load_smarty($data,$template,$dir);

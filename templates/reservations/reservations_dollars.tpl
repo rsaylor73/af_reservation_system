@@ -59,7 +59,7 @@
 			<!--end left-->
 		</div>
 		<div class="col-sm-1">&nbsp;</div>
-		<div class="col-sm-6">
+		<div class="col-sm-8">
 			<!--right-->
 			<div class="row pad-top">
 				<div class="col-sm-4"><b>Deposit Due</b></div>
