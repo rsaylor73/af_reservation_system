@@ -719,6 +719,31 @@ class reservation extends charters {
                 $data['resellerID'] = $reservation_headers->resellerID;
                 /* End top of tab */
 
+                $sql = "
+                SELECT
+                    `r`.`reservationID`,
+                    `r`.`air_itinerary`,
+                    `r`.`airline_amount_due`,
+                    `r`.`hotel_amount_due`,
+                    `r`.`arrival_transfer`,
+                    `r`.`departure_transfer`,
+                    `r`.`hotel`,
+                    `r`.`backpack_notes`,
+                    `r`.`internal_reservation_notes`,
+                    `r`.`group_charter_notes`
+                FROM
+                    `reservations` r
+
+                WHERE
+                    `r`.`reservationID` = '$_GET[reservationID]'
+                ";
+                $result = $this->new_mysql($sql);
+                while ($row = $result->fetch_assoc()) {
+                    foreach ($row as $key=>$value) {
+                        $data[$key] = $value;
+                    }
+                }
+
                 $template = "reservations_notes.tpl";
                 $dir = "/reservations";
                 $this->load_smarty($data,$template,$dir);
