@@ -142,6 +142,16 @@ $(function() {
 
 });
 
+$(function() {
+        $( ".date" ).datepicker({ 
+                dateFormat: "yy-mm-dd",
+                changeMonth: true,
+                changeYear: true,
+                minDate: "-1Y", 
+                maxDate: "0"
+        });
+
+});
 
 $(function() {
 	$( "#date1" ).datepicker({

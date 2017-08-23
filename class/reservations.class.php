@@ -764,6 +764,56 @@ class reservation extends charters {
                 $data['resellerID'] = $reservation_headers->resellerID;
                 /* End top of tab */
 
+                // payments
+                $sql = "
+                SELECT
+                    DATE_FORMAT(`a`.`payment_date`, '%Y-%m-%d') AS 'payment_date',
+                    `a`.`payment_amount`,
+                    `a`.`payment_type`,
+                    `a`.`comment`
+                FROM
+                    `airline_payments` a
+
+                WHERE
+                    `a`.`reservationID` = '$_GET[reservationID]'
+                    AND `a`.`payment_date` IS NOT NULL
+
+                ORDER BY `a`.`payment_date` ASC
+                ";
+                $i = "0";
+                $result = $this->new_mysql($sql);
+                while ($row = $result->fetch_assoc()) {
+                    foreach ($row as $key=>$value) {
+                        $data['payment'][$i][$key] = $value;
+                    }
+                    $i++;
+                }
+
+                // vendor payments
+                $sql = "
+                SELECT
+                    DATE_FORMAT(`a`.`vendor_payment_date`, '%Y-%m-%d') AS 'vendor_payment_date',
+                    `a`.`vendor_payment_amount`,
+                    `a`.`vendor_payment_type`,
+                    `a`.`vendor_comment`
+                FROM
+                    `airline_payments` a
+
+                WHERE
+                    `a`.`reservationID` = '$_GET[reservationID]'
+                    AND `a`.`vendor_payment_date` IS NOT NULL
+
+                ORDER BY `a`.`vendor_payment_date` ASC
+                ";
+                $i = "0";
+                $result = $this->new_mysql($sql);
+                while ($row = $result->fetch_assoc()) {
+                    foreach ($row as $key=>$value) {
+                        $data['vendor_payment'][$i][$key] = $value;
+                    }
+                    $i++;
+                }
+
                 $template = "reservations_airline.tpl";
                 $dir = "/reservations";
                 $this->load_smarty($data,$template,$dir);
