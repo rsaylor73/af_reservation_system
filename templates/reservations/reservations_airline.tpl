@@ -45,7 +45,7 @@
 		<div class="col-sm-2"><input type="number" name="amount1" id="amount1" class="form-control"></div>
 		<div class="col-sm-4"><input type="text" name="details1" id="details1" class="form-control"></div>
 		<div class="col-sm-2">
-			<input type="button" value="Add Payment" class="btn btn-primary" onclick="add_payment(this.form)">
+			<input type="button" value="Add Payment" class="btn btn-success" onclick="add_payment(this.form)">
 		</div>
 	</div>
 	</form>
@@ -53,6 +53,10 @@
 	<div id="ajax_payments">
 
 		{foreach $payment as $p}
+		<form name="myform1_{$p.airline_paymentID}" style="display:inline">
+		<input type="hidden" name="id" value="{$p.airline_paymentID}">
+		<input type="hidden" name="divID" value="#p_{$p.airline_paymentID}">
+		<div id="p_{$p.airline_paymentID}">
 		<div class="row pad-top">
 			<div class="col-sm-2">{$p.payment_date}</div>
 			<div class="col-sm-2">{$p.payment_type}</div>
@@ -60,9 +64,11 @@
 			<div class="col-sm-4">{$p.comment}</div>
 			<div class="col-sm-2">
 				<input type="button" value="Edit" class="btn btn-primary">&nbsp;
-				<input type="button" value="Delete" class="btn btn-danger">
+				<input type="button" value="Delete" onclick="remove_payment(this.form)" class="btn btn-danger">
 			</div>
 		</div>
+		</div>
+		</form>
 		{/foreach}
 
 	</div>
@@ -99,25 +105,29 @@
 		<div class="col-sm-2"><input type="number" name="amount2" id="amount2" class="form-control"></div>
 		<div class="col-sm-4"><input type="text" name="details2" id="details2" class="form-control"></div>
 		<div class="col-sm-2">
-			<input type="button" value="Add Payment" class="btn btn-primary" onclick="add_vendor(this.form)">
+			<input type="button" value="Add Payment" class="btn btn-success" onclick="add_vendor(this.form)">
 		</div>
 	</div>
 	</form>
 
 	<div id="ajax_payments2">
 
-		{foreach $vendor as $v}
+		{foreach $vendor_payment as $v}
+		<form name="myform2_{$v.airline_paymentID}" style="display:inline">
+		<div id="v_{$v.airline_paymentID}">
 		<div class="row pad-top">
-			<div class="col-sm-2">{$v.payment_date}</div>
-			<div class="col-sm-2">{$v.payment_type}</div>
-			<div class="col-sm-2">$ {$v.payment_amount}</div>
-			<div class="col-sm-4">{$v.comment}</div>
+			<div class="col-sm-2">{$v.vendor_payment_date}</div>
+			<div class="col-sm-2">{$v.vendor_payment_type}</div>
+			<div class="col-sm-2">$ {$v.vendor_payment_amount}</div>
+			<div class="col-sm-4">{$v.vendor_comment}</div>
 			<div class="col-sm-2">
 				<input type="button" value="Edit" class="btn btn-primary">&nbsp;
 				<input type="button" value="Delete" class="btn btn-danger">
 			</div>
 		</div>
 		{/foreach}
+		</div>
+		</form>
 
 	</div>
 
@@ -137,6 +147,26 @@ function add_payment(myform) {
 	document.getElementById('type1').value='';
 	document.getElementById('amount1').value='';
 	document.getElementById('details1').value='';
+}
+
+function remove_payment(myform) {
+	var dataArray = $(myform).serializeArray(), dataObj = {};
+
+	$(dataArray).each(function(i, field){
+	  dataObj[field.name] = field.value;
+	});
+
+	var id = dataObj['id'];
+	var divID = dataObj['divID'];
+	$(divID).remove();
+	console.log(divID);
+	console.log(myform);
+	//$.get('/ajax/reservations/ajax_airline_remove_payments.php',
+	//$(myform).serialize(),
+	//function(php_msg) {
+    //    $("#ajax_payments").html(php_msg);
+	//});
+
 }
 
 function add_vendor(myform) {

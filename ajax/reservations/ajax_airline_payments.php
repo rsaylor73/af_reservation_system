@@ -28,6 +28,7 @@ if ($logged == "TRUE") {
 
 		$sql = "
 		SELECT
+			`a`.`airline_paymentID`,
 			DATE_FORMAT(`a`.`payment_date`, '%Y-%m-%d') AS 'payment_date',
 			`a`.`payment_amount`,
 			`a`.`payment_type`,

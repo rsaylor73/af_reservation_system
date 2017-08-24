@@ -767,6 +767,7 @@ class reservation extends charters {
                 // payments
                 $sql = "
                 SELECT
+                    `a`.`airline_paymentID`,
                     DATE_FORMAT(`a`.`payment_date`, '%Y-%m-%d') AS 'payment_date',
                     `a`.`payment_amount`,
                     `a`.`payment_type`,
@@ -792,6 +793,7 @@ class reservation extends charters {
                 // vendor payments
                 $sql = "
                 SELECT
+                    `a`.`airline_paymentID`,
                     DATE_FORMAT(`a`.`vendor_payment_date`, '%Y-%m-%d') AS 'vendor_payment_date',
                     `a`.`vendor_payment_amount`,
                     `a`.`vendor_payment_type`,
