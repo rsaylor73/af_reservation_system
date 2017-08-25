@@ -63,7 +63,7 @@
 			<div class="col-sm-2">$ {$p.payment_amount}</div>
 			<div class="col-sm-4">{$p.comment}</div>
 			<div class="col-sm-2">
-				<input type="button" value="Edit" class="btn btn-primary">&nbsp;
+				<input type="button" value="Edit" onclick="edit_payment(this.form)" class="btn btn-primary">&nbsp;
 				<input type="button" value="Delete" onclick="remove_payment(this.form)" class="btn btn-danger">
 			</div>
 		</div>
@@ -114,6 +114,8 @@
 
 		{foreach $vendor_payment as $v}
 		<form name="myform2_{$v.airline_paymentID}" style="display:inline">
+		<input type="hidden" name="id" value="{$v.airline_paymentID}">
+		<input type="hidden" name="divID" value="#v_{$v.airline_paymentID}">
 		<div id="v_{$v.airline_paymentID}">
 		<div class="row pad-top">
 			<div class="col-sm-2">{$v.vendor_payment_date}</div>
@@ -121,13 +123,13 @@
 			<div class="col-sm-2">$ {$v.vendor_payment_amount}</div>
 			<div class="col-sm-4">{$v.vendor_comment}</div>
 			<div class="col-sm-2">
-				<input type="button" value="Edit" class="btn btn-primary">&nbsp;
-				<input type="button" value="Delete" class="btn btn-danger">
+				<input type="button" value="Edit" onclick="edit_vendor_payment(this.form)" class="btn btn-primary">&nbsp;
+				<input type="button" value="Delete" onclick="remove_payment(this.form)" class="btn btn-danger">
 			</div>
 		</div>
-		{/foreach}
 		</div>
 		</form>
+		{/foreach}
 
 	</div>
 
@@ -149,6 +151,38 @@ function add_payment(myform) {
 	document.getElementById('details1').value='';
 }
 
+function edit_payment(myform) {
+	var dataArray = $(myform).serializeArray(), dataObj = {};
+
+	$(dataArray).each(function(i, field){
+	  dataObj[field.name] = field.value;
+	});
+
+	var id = dataObj['id'];
+	var divID = dataObj['divID'];
+	$.get('/ajax/reservations/ajax_airline_payments_edit.php',
+	$(myform).serialize(),
+	function(php_msg) {
+        $(divID).html(php_msg);
+	});		
+}
+
+function edit_vendor_payment(myform) {
+	var dataArray = $(myform).serializeArray(), dataObj = {};
+
+	$(dataArray).each(function(i, field){
+	  dataObj[field.name] = field.value;
+	});
+
+	var id = dataObj['id'];
+	var divID = dataObj['divID'];
+	$.get('/ajax/reservations/ajax_airline_payments_vendor_edit.php',
+	$(myform).serialize(),
+	function(php_msg) {
+        $(divID).html(php_msg);
+	});		
+}
+
 function remove_payment(myform) {
 	var dataArray = $(myform).serializeArray(), dataObj = {};
 
@@ -159,13 +193,13 @@ function remove_payment(myform) {
 	var id = dataObj['id'];
 	var divID = dataObj['divID'];
 	$(divID).remove();
-	console.log(divID);
-	console.log(myform);
-	//$.get('/ajax/reservations/ajax_airline_remove_payments.php',
-	//$(myform).serialize(),
-	//function(php_msg) {
-    //    $("#ajax_payments").html(php_msg);
-	//});
+	//console.log(divID);
+	//console.log(myform);
+	$.get('/ajax/reservations/ajax_airline_remove_payments.php',
+	$(myform).serialize(),
+	function(php_msg) {
+        $("#null").html(php_msg);
+	});
 
 }
 
