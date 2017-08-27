@@ -9,7 +9,7 @@
 	<div class="col-sm-2">$ {$p.payment_amount}</div>
 	<div class="col-sm-4">{$p.comment}</div>
 	<div class="col-sm-2">
-		<input type="button" value="Edit" class="btn btn-primary">&nbsp;
+		<input type="button" value="Edit" onclick="edit_payment(this.form)" class="btn btn-primary">&nbsp;
 		<input type="button" value="Delete" onclick="remove_payment(this.form)" class="btn btn-danger">
 	</div>
 </div>
@@ -18,6 +18,23 @@
 {/foreach}
 
 <script>
+
+function edit_payment(myform) {
+	var dataArray = $(myform).serializeArray(), dataObj = {};
+
+	$(dataArray).each(function(i, field){
+	  dataObj[field.name] = field.value;
+	});
+
+	var id = dataObj['id'];
+	var divID = dataObj['divID'];
+	$.get('/ajax/reservations/ajax_airline_payments_edit.php',
+	$(myform).serialize(),
+	function(php_msg) {
+        $(divID).html(php_msg);
+	});		
+}
+
 function remove_payment(myform) {
 	var dataArray = $(myform).serializeArray(), dataObj = {};
 
