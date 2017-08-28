@@ -47,8 +47,6 @@
 		<div class="col-sm-2"><input type="button" value="Add" class="btn btn-primary"></div>
 	</div>
 
-	<!-- loop here -->
-
 	<div class="row pad-top">
 		<div class="col-sm-12 alert alert-info">
 			<b>Payments</b>
@@ -63,12 +61,14 @@
 		<div class="col-sm-2">&nbsp;</div>
 	</div>
 
+	<form name="myform1">
+	<input type="hidden" name="reservationID" value="{$reservationID}">
 	<div class="row pad-top">
 		<div class="col-sm-2">
-			<input type="text" name="payment_date" class="form-control date">
+			<input type="text" name="date1" id="date1" class="form-control date">
 		</div>
 		<div class="col-sm-2">
-			<select name="type" class="form-control">
+			<select name="type1" id="type1" class="form-control">
 			<option selected value="">Select</option>
 			<option value="ARC">ARC</option>
 			<option value="Cash Transfer">Cash Transfer</option>
@@ -80,18 +80,40 @@
 			</select>
 		</div>
 		<div class="col-sm-2">
-			<input type="number" name="amount" class="form-control">
+			<input type="number" name="amount1" id="amount1" class="form-control">
 		</div>
 		<div class="col-sm-4">
-			<input type="text" name="comments" class="form-control">
+			<input type="text" name="details1" id="details1" class="form-control">
 		</div>
 		<div class="col-sm-2">
-			<input type="button" value="Add Payment" class="btn btn-primary">
+			<input type="button" value="Add Payment" onclick="add_payment(this.form)" class="btn btn-primary">
 		</div>
 	</div>
+	</form>
 
 	<!-- loop payments -->
+	<div id="ajax_payments">
 
+		{foreach $payment as $p}
+		<form name="myform1_{$p.airline_paymentID}" style="display:inline">
+		<input type="hidden" name="id" value="{$p.airline_paymentID}">
+		<input type="hidden" name="divID" value="#p_{$p.airline_paymentID}">
+		<div id="p_{$p.airline_paymentID}">
+		<div class="row pad-top">
+			<div class="col-sm-2">{$p.payment_date}</div>
+			<div class="col-sm-2">{$p.payment_type}</div>
+			<div class="col-sm-2">$ {$p.payment_amount}</div>
+			<div class="col-sm-4">{$p.comment}</div>
+			<div class="col-sm-2">
+				<input type="button" value="Edit" onclick="edit_payment(this.form)" class="btn btn-primary">&nbsp;
+				<input type="button" value="Delete" onclick="remove_payment(this.form)" class="btn btn-danger">
+			</div>
+		</div>
+		</div>
+		</form>
+		{/foreach}
+
+	</div>
 	<div class="row pad-top">
 		<div class="col-sm-8">&nbsp;</div>
 		<div class="col-sm-2"><b><i>total hotel payments:</i></b></div>
@@ -153,3 +175,81 @@
 
 
 </div>
+
+<script>
+function add_payment(myform) {
+	$.get('/ajax/reservations/ajax_hotel_payments.php',
+	$(myform).serialize(),
+	function(php_msg) {
+        $("#ajax_payments").html(php_msg);
+	});
+	document.getElementById('date1').value='';
+	document.getElementById('type1').value='';
+	document.getElementById('amount1').value='';
+	document.getElementById('details1').value='';
+}
+
+function edit_payment(myform) {
+	var dataArray = $(myform).serializeArray(), dataObj = {};
+
+	$(dataArray).each(function(i, field){
+	  dataObj[field.name] = field.value;
+	});
+
+	var id = dataObj['id'];
+	var divID = dataObj['divID'];
+	$.get('/ajax/reservations/ajax_hotel_payments_edit.php',
+	$(myform).serialize(),
+	function(php_msg) {
+        $(divID).html(php_msg);
+	});		
+}
+
+function edit_vendor_payment(myform) {
+	var dataArray = $(myform).serializeArray(), dataObj = {};
+
+	$(dataArray).each(function(i, field){
+	  dataObj[field.name] = field.value;
+	});
+
+	var id = dataObj['id'];
+	var divID = dataObj['divID'];
+	$.get('/ajax/reservations/ajax_hotel_payments_vendor_edit.php',
+	$(myform).serialize(),
+	function(php_msg) {
+        $(divID).html(php_msg);
+	});		
+}
+
+function remove_payment(myform) {
+	var dataArray = $(myform).serializeArray(), dataObj = {};
+
+	$(dataArray).each(function(i, field){
+	  dataObj[field.name] = field.value;
+	});
+
+	var id = dataObj['id'];
+	var divID = dataObj['divID'];
+	$(divID).remove();
+	//console.log(divID);
+	//console.log(myform);
+	$.get('/ajax/reservations/ajax_hotel_remove_payments.php',
+	$(myform).serialize(),
+	function(php_msg) {
+        $("#null").html(php_msg);
+	});
+
+}
+
+function add_vendor(myform) {
+	$.get('/ajax/reservations/ajax_hotel_vendor_payments.php',
+	$(myform).serialize(),
+	function(php_msg) {
+        $("#ajax_payments2").html(php_msg);
+	});
+	document.getElementById('date2').value='';
+	document.getElementById('type2').value='';
+	document.getElementById('amount2').value='';
+	document.getElementById('details2').value='';
+}
+</script>

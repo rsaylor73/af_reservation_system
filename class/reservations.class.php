@@ -836,6 +836,32 @@ class reservation extends charters {
                 $data['resellerID'] = $reservation_headers->resellerID;
                 /* End top of tab */
 
+                // payments
+                $sql = "
+                SELECT
+                    `p`.`hotel_paymentID`,
+                    DATE_FORMAT(`p`.`payment_date`, '%Y-%m-%d') AS 'payment_date',
+                    `p`.`payment_amount`,
+                    `p`.`payment_type`,
+                    `p`.`comment`
+                FROM
+                    `hotel_payments` p
+
+                WHERE
+                    `p`.`reservationID` = '$_GET[reservationID]'
+                    AND `p`.`payment_date` IS NOT NULL
+
+                ORDER BY `p`.`payment_date` ASC
+                ";
+                $i = "0";
+                $result = $this->new_mysql($sql);
+                while ($row = $result->fetch_assoc()) {
+                    foreach ($row as $key=>$value) {
+                        $data['payment'][$i][$key] = $value;
+                    }
+                    $i++;
+                }
+
                 $template = "reservations_hotel.tpl";
                 $dir = "/reservations";
                 $this->load_smarty($data,$template,$dir);
