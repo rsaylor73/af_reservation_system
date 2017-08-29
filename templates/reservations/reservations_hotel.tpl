@@ -41,10 +41,39 @@
 		<div class="col-sm-2">&nbsp;</div>
 	</div>
 
+	<form name="myform0">
+	<input type="hidden" name="reservationID" value="{$reservationID}">
 	<div class="row pad-top">
-		<div class="col-sm-6"><input type="text" name="description" class="form-control"></div>
-		<div class="col-sm-4"><input type="number" name="amount" class="form-control"></div>
-		<div class="col-sm-2"><input type="button" value="Add" class="btn btn-primary"></div>
+		<div class="col-sm-6"><input type="text" name="description0" id="description0" class="form-control"></div>
+		<div class="col-sm-4"><input type="number" name="amount0" id="amount0" class="form-control"></div>
+		<div class="col-sm-2"><input type="button" value="Add" class="btn btn-primary" onclick="add_invoice(this.form)"></div>
+	</div>
+	</form>
+
+	<!-- loop -->
+	<div id="ajax_invoice">
+		{foreach $invoice_data as $i}
+		<form name="myform_{$i.id}">
+		<input type="hidden" name="reservationID" value="{$i.reservationID}">
+		<input type="hidden" name="id" value="{$i.id}">
+		<div class="row pad-top">
+			<div class="col-sm-6">
+				<input type="text" name="description_{$i.id}" value="{$i.description}" class="form-control">
+			</div>
+			<div class="col-sm-4">
+				<input type="text" name="price_{$i.id}" value="{$i.price}" class="form-control">
+			</div>
+			<div class="col-sm-2">
+				<input type="button" value="Update" class="btn btn-primary">&nbsp;
+				<input type="button" value="Delete" class="btn btn-danger" onclick="
+				if(confirm('You are about to delete {$i.description}. Click OK to continue.')) {
+					delete_invoice(this.form);
+				}
+				">
+			</div>
+		</div>
+		</form>
+		{/foreach}
 	</div>
 
 	<div class="row pad-top">
@@ -134,12 +163,14 @@
 		<div class="col-sm-2">&nbsp;</div>
 	</div>
 
+	<form name="myform2">
+	<input type="hidden" name="reservationID" value="{$reservationID}">
 	<div class="row pad-top">
 		<div class="col-sm-2">
-			<input type="text" name="accounting_payment_date" class="form-control date">
+			<input type="text" name="date2" id="date2" class="form-control date">
 		</div>
 		<div class="col-sm-2">
-			<select name="accounting_type" class="form-control">
+			<select name="type2" id="type2" class="form-control">
 			<option selected value="">Select</option>
 			<option value="ARC">ARC</option>
 			<option value="WW Check">WW Check</option>
@@ -148,18 +179,40 @@
 			</select>
 		</div>
 		<div class="col-sm-2">
-			<input type="number" name="accounting_amount" class="form-control">
+			<input type="number" name="amount2" id="amount2" class="form-control">
 		</div>
 		<div class="col-sm-4">
-			<input type="text" name="accounting_comments" class="form-control">
+			<input type="text" name="details2" id="details2" class="form-control">
 		</div>
 		<div class="col-sm-2">
-			<input type="button" value="Add Payment" class="btn btn-primary">
+			<input type="button" value="Add Payment" class="btn btn-primary" onclick="add_vendor(this.form)">
 		</div>
 	</div>
+	</form>
 
 	<!-- loop payments -->
+	<div id="ajax_payments2">
 
+		{foreach $vendor_payment as $v}
+		<form name="myform2_{$v.hotel_paymentID}" style="display:inline">
+		<input type="hidden" name="id" value="{$v.hotel_paymentID}">
+		<input type="hidden" name="divID" value="#v_{$v.hotel_paymentID}">
+		<div id="v_{$v.hotel_paymentID}">
+		<div class="row pad-top">
+			<div class="col-sm-2">{$v.vendor_payment_date}</div>
+			<div class="col-sm-2">{$v.vendor_payment_type}</div>
+			<div class="col-sm-2">$ {$v.vendor_payment_amount}</div>
+			<div class="col-sm-4">{$v.vendor_comment}</div>
+			<div class="col-sm-2">
+				<input type="button" value="Edit" onclick="edit_vendor_payment(this.form)" class="btn btn-primary">&nbsp;
+				<input type="button" value="Delete" onclick="remove_payment(this.form)" class="btn btn-danger">
+			</div>
+		</div>
+		</div>
+		</form>
+		{/foreach}
+
+	</div>
 	<div class="row pad-top">
 		<div class="col-sm-7">&nbsp;</div>
 		<div class="col-sm-3"><b><i>total hotel vendor payments:</i></b></div>
@@ -251,5 +304,23 @@ function add_vendor(myform) {
 	document.getElementById('type2').value='';
 	document.getElementById('amount2').value='';
 	document.getElementById('details2').value='';
+}
+
+function add_invoice(myform) {
+	$.get('/ajax/reservations/ajax_hotel_add_invoice.php',
+	$(myform).serialize(),
+	function(php_msg) {
+        $("#ajax_invoice").html(php_msg);
+	});
+	document.getElementById('description0').value='';
+	document.getElementById('amount0').value='';	
+}
+
+function delete_invoice(myform) {
+	$.get('/ajax/reservations/ajax_hotel_delete_invoice.php',
+	$(myform).serialize(),
+	function(php_msg) {
+        $("#ajax_invoice").html(php_msg);
+	});	
 }
 </script>

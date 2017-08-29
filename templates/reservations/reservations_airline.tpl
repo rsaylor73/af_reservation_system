@@ -133,10 +133,8 @@
 
 	</div>
 
-
-
-
 </div>
+
 
 <script>
 function add_payment(myform) {
