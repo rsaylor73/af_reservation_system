@@ -22,7 +22,7 @@
 	</div>
 	<div class="row pad-top">
 		<div class="col-sm-2"><b>Total Paid:</b></div>
-		<div class="col-sm-4">$ {$total_paid|number_format:2:".":","}</div>
+		<div class="col-sm-4">$ {$total_payments|number_format:2:".":","}</div>
 	</div>
 	<div class="row pad-top">
 		<div class="col-sm-2"><b>Total Due:</b></div>
@@ -58,13 +58,13 @@
 		<input type="hidden" name="id" value="{$i.id}">
 		<div class="row pad-top">
 			<div class="col-sm-6">
-				<input type="text" name="description_{$i.id}" value="{$i.description}" class="form-control">
+				<input type="text" name="description" value="{$i.description}" class="form-control">
 			</div>
 			<div class="col-sm-4">
-				<input type="text" name="price_{$i.id}" value="{$i.price}" class="form-control">
+				<input type="text" name="price" value="{$i.price}" class="form-control">
 			</div>
 			<div class="col-sm-2">
-				<input type="button" value="Update" class="btn btn-primary">&nbsp;
+				<input type="button" value="Update" class="btn btn-primary" onclick="update_invoice(this.form)">&nbsp;
 				<input type="button" value="Delete" class="btn btn-danger" onclick="
 				if(confirm('You are about to delete {$i.description}. Click OK to continue.')) {
 					delete_invoice(this.form);
@@ -146,7 +146,7 @@
 	<div class="row pad-top">
 		<div class="col-sm-8">&nbsp;</div>
 		<div class="col-sm-2"><b><i>total hotel payments:</i></b></div>
-		<div class="col-sm-2" id="payments_total">{$payments_total|number_format:2:".":","}</div>
+		<div class="col-sm-2" id="payments_total">$ {$total_payments|number_format:2:".":","}</div>
 	</div>
 
 	<div class="row pad-top">
@@ -216,14 +216,14 @@
 	<div class="row pad-top">
 		<div class="col-sm-7">&nbsp;</div>
 		<div class="col-sm-3"><b><i>total hotel vendor payments:</i></b></div>
-		<div class="col-sm-2" id="vendor_payments_total">{$vendor_payments_total|number_format:2:".":","}</div>
+		<div class="col-sm-2" id="vendor_payments_total">$ {$vendor_payment_amount|number_format:2:".":","}</div>
 	</div>
 
 
 	<div class="row pad-top">
 		<div class="col-sm-8">&nbsp;</div>
 		<div class="col-sm-2"><b><i>Difference:</i></b></div>
-		<div class="col-sm-2" id="difference">{$difference|number_format:2:".":","}</div>
+		<div class="col-sm-2" id="difference">$ {$difference|number_format:2:".":","}</div>
 	</div>
 
 
@@ -314,6 +314,14 @@ function add_invoice(myform) {
 	});
 	document.getElementById('description0').value='';
 	document.getElementById('amount0').value='';	
+}
+
+function update_invoice(myform) {
+	$.get('/ajax/reservations/ajax_hotel_update_invoice.php',
+	$(myform).serialize(),
+	function(php_msg) {
+        $("#ajax_invoice").html(php_msg);
+	});		
 }
 
 function delete_invoice(myform) {

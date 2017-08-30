@@ -860,6 +860,7 @@ class reservation extends charters {
                         $data['payment'][$i][$key] = $value;
                     }
                     $i++;
+                    $total_payments = $total_payments + $row['payment_amount'];
                 }
 
                 // vendor payments
@@ -886,6 +887,7 @@ class reservation extends charters {
                         $data['vendor_payment'][$i][$key] = $value;
                     }
                     $i++;
+                    $vendor_payment_amount = $vendor_payment_amount + $row['vendor_payment_amount'];
                 }
 
                 // invoice
@@ -897,7 +899,15 @@ class reservation extends charters {
                         $data['invoice_data'][$i][$key] = $value;
                     }
                     $i++;
+                    $total_invoice = $total_invoice + $row['price'];
                 }
+
+                $data['total_payments'] = $total_payments;
+                $data['total_invoice'] = $total_invoice;
+                $data['vendor_payment_amount'] = $vendor_payment_amount;
+                $total_due = $total_invoice - $total_payments;
+                $data['total_due'] = $total_due;
+                $data['difference'] = $total_payments - $vendor_payment_amount;
 
                 $template = "reservations_hotel.tpl";
                 $dir = "/reservations";

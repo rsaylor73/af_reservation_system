@@ -10,8 +10,23 @@
 
 {include file="reservation_navigation.tpl"}
 
-<div class="well">
+<div class="jumbotron">
 
+	<div class="row pad-top">
+		<div class="col-sm-12">
+			<h3>Aggressor Adventure Travel &nbsp;
+			<input type="button" value="Create New Invoice" class="btn btn-success btn-lg">
+			</h3>
+		</div>
+	</div>
+
+	<div class="row pad-top">
+		<div class="col-sm-2"><b>Invoice Number</b></div>
+		<div class="col-sm-4"><b>Title</b></div>
+		<div class="col-sm-2"><b>Amount</b></div>
+		<div class="col-sm-2"><b>Paid</b></div>
+		<div class="col-sm-2"><b>Due</b></div>
+	</div>
 
 
 
