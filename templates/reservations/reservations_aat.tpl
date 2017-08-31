@@ -22,12 +22,25 @@
 
 	<div class="row pad-top">
 		<div class="col-sm-2"><b>Invoice Number</b></div>
-		<div class="col-sm-4"><b>Title</b></div>
+		<div class="col-sm-3"><b>Title</b></div>
 		<div class="col-sm-2"><b>Amount</b></div>
 		<div class="col-sm-2"><b>Paid</b></div>
 		<div class="col-sm-2"><b>Due</b></div>
+		<div class="col-sm-1">&nbsp;</div>
 	</div>
 
+	{foreach $aat as $a}
+	<div class="row pad-top">
+		<div class="col-sm-2">{$a.id}</div>
+		<div class="col-sm-3">{$a.title}</div>
+		<div class="col-sm-2">$ {$a.amount|number_format:2:".":","}</div>
+		<div class="col-sm-2">$ {$a.payment|number_format:2:".":","}</div>
+		<div class="col-sm-2">$ {$a.due|number_format:2:".":","}</div>
+		<div class="col-sm-1">
+			<input type="button" value="Manage" class="btn btn-primary btn-block">
+		</div>
+	</div>
+	{/foreach}
 
 
 

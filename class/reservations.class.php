@@ -929,6 +929,32 @@ class reservation extends charters {
                 $data['resellerID'] = $reservation_headers->resellerID;
                 /* End top of tab */
 
+                $sql = "
+                SELECT
+                    `a`.`id`,
+                    `a`.`title`,
+                    SUM(`l`.`amount`) AS 'amount',
+                    SUM(`p`.`payment_amount`) AS 'payment',
+                    (`l`.`amount` - `p`.`payment_amount`) AS 'due'
+
+                FROM
+                    `aat_invoices` a
+
+                LEFT JOIN `aat_line_items` l ON `a`.`id` = `l`.`invoiceID`
+                LEFT JOIN `hotel_payments` p ON `a`.`reservationID` = `p`.`reservationID`
+
+                WHERE
+                    `a`.`reservationID` = '$_GET[reservationID]'
+                ";
+                $result = $this->new_mysql($sql);
+                $i = "0";
+                while ($row = $result->fetch_assoc()) {
+                    foreach ($row as $key=>$value) {
+                        $data['aat'][$i][$key] = $value;
+                    }
+                    $i++;
+                }
+
                 $template = "reservations_aat.tpl";
                 $dir = "/reservations";
                 $this->load_smarty($data,$template,$dir);
