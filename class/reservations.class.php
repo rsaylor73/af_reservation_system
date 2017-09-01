@@ -960,6 +960,46 @@ class reservation extends charters {
                 $this->load_smarty($data,$template,$dir);
         }
 
+        /* This is the 8th tab and manages the invoice for aat */
+        public function reservations_aat_manage() {
+                $this->security('reservations',$_SESSION['user_typeID']);
+                $data['t8'] = "active";
+                $data['reservationID'] = $_GET['reservationID'];
+                $data['invoiceID'] = $_GET['invoiceID'];
+
+                /* This will get the data for the top of the tab */
+                $reservation_headers = json_decode($this->get_reservations_headers($_GET['reservationID']));
+                $data['start_date'] = $reservation_headers->start_date;
+                $data['end_date'] = $reservation_headers->end_date;
+                $data['boat_name'] = $reservation_headers->boat_name;
+                $data['company'] = $reservation_headers->company;
+                $data['resellerID'] = $reservation_headers->resellerID;
+                /* End top of tab */
+
+                $sql = "
+                SELECT
+                    `a`.`title`,
+                    `a`.`contact_name`,
+                    `a`.`contact_email`
+                FROM
+                    `aat_invoices` a
+
+                WHERE
+                    `a`.`id` = '$_GET[invoiceID]'
+                    AND `a`.`reservationID` = '$_GET[reservationID]'
+                ";
+                $result = $this->new_mysql($sql);
+                while ($row = $result->fetch_assoc()) {
+                    $data['title'] = $row['title'];
+                    $data['contact_name'] = $row['contact_name'];
+                    $data['contact_email'] = $row['contact_email'];
+                }
+
+                $template = "reservations_aat_manage.tpl";
+                $dir = "/reservations";
+                $this->load_smarty($data,$template,$dir);
+        }
+
         /* This is the 9th tab */
         public function reservations_itinerary() {
                 $this->security('reservations',$_SESSION['user_typeID']);
