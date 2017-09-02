@@ -19,31 +19,49 @@
 
 	<div class="row pad-top">
 		
+		<form name="myform1">
+		<input type="hidden" name="reservationID" value="{$reservationID}">
+		<input type="hidden" name="invoiceID" value="{$invoiceID}">
 		<div class="col-sm-4">
 			<div class="row pad-top">
 				<div class="col-sm-2">Contact:</div>
 				<div class="col-sm-10">
-					<input type="text" name="contact" value="{$contact_name}" class="form-control">
+					<input type="text" name="contact" value="{$contact_name}" class="form-control" 
+					onchange="update_contact(this.form)"
+					onfocus="warning_contact(this.form)"
+					>
 				</div>
 			</div>
 			<div class="row pad-top">
 				<div class="col-sm-2">Title:</div>
 				<div class="col-sm-10">
-					<input type="text" name="title" value="{$title}" class="form-control">
+					<input type="text" name="title" value="{$title}" class="form-control" 
+					onchange="update_contact(this.form)"
+					onfocus="warning_contact(this.form)"
+					>
 				</div>
 			</div>
 			<div class="row pad-top">
 				<div class="col-sm-2">Email:</div>
 				<div class="col-sm-10">
-					<input type="text" name="email" value="{$contact_email}" class="form-control">
+					<input type="text" name="email" value="{$contact_email}" class="form-control" 
+					onchange="update_contact(this.form)"
+					onfocus="warning_contact(this.form)"
+					>
 				</div>
 			</div>
 		</div>
+		</form>
 
 		<div class="col-sm-4">
 			<div class="row pad-top">
 				<div class="col-sm-2">Balance:</div>
 				<div class="col-sm-10">$ {$balance|number_format:2:".":","} USD</div>
+			</div>
+			<div class="row pad-top">
+				<div class="col-sm-12">
+					<div id="ajax_results"></div>
+				</div>
 			</div>
 		</div>
 
@@ -83,6 +101,20 @@
 	</div>
 
 	<!-- loop here -->
+	{foreach $invoice as $i}
+	<div class="row pad-top">
+		<div class="col-sm-6">
+			<input type="text" value="{$i.description}" class="form-control">
+		</div>
+		<div class="col-sm-3">
+			<input type="number" value="{$i.amount}" class="form-control">
+		</div>
+		<div class="col-sm-3">
+			<input type="button" value="Update" class="btn btn-success">&nbsp;
+			<input type="button" value="Delete" class="btn btn-danger">
+		</div>
+	</div>
+	{/foreach}
 
 
 
@@ -124,3 +156,18 @@
 	<!-- loop -->
 
 </div>
+
+<script>
+function update_contact(myform) {
+    $.get('/ajax/reservations/aat_update_contact.php',
+    $(myform).serialize(),
+    function(php_msg) {     
+		$("#ajax_results").html(php_msg);
+    });	
+}
+
+function warning_contact(myform) {
+	$("#ajax_results").html('<div class="alert alert-info">To update the contact make your change then click outside of the field to save.</div>');	
+}
+
+</script>

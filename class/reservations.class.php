@@ -995,6 +995,28 @@ class reservation extends charters {
                     $data['contact_email'] = $row['contact_email'];
                 }
 
+                // get line items
+                $sql = "
+                SELECT
+                    `id`,
+                    `description`,
+                    `amount`
+                FROM
+                    `aat_line_items`
+
+                WHERE
+                    `invoiceID` = '$_GET[invoiceID]'
+                ";
+                $i = "0";
+                $result = $this->new_mysql($sql);
+                while ($row = $result->fetch_assoc()) {
+                    foreach ($row as $key=>$value) {
+                        $data['invoice'][$i][$key] = $value;
+                    }
+                    $i++;
+                }
+                
+
                 $template = "reservations_aat_manage.tpl";
                 $dir = "/reservations";
                 $this->load_smarty($data,$template,$dir);
