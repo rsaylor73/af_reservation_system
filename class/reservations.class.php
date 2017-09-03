@@ -1015,11 +1015,147 @@ class reservation extends charters {
                     }
                     $i++;
                 }
-                
+
+                // payments
+                $sql = "
+                SELECT
+                    `p`.`hotel_paymentID`,
+                    DATE_FORMAT(`p`.`payment_date`, '%Y-%m-%d') AS 'payment_date',
+                    `p`.`payment_amount`,
+                    `p`.`payment_type`,
+                    `p`.`comment`
+                FROM
+                    `hotel_payments` p
+
+                WHERE
+                    `p`.`reservationID` = '$_GET[reservationID]'
+                    AND `p`.`payment_date` IS NOT NULL
+                    AND `p`.`invoiceID` = '$_GET[invoiceID]'
+
+                ORDER BY `p`.`payment_date` ASC
+                ";
+                $i = "0";
+                $result = $this->new_mysql($sql);
+                while ($row = $result->fetch_assoc()) {
+                    foreach ($row as $key=>$value) {
+                        $data['payment'][$i][$key] = $value;
+                    }
+                    $i++;
+                }
+
+                // vendor payments
+                $sql = "
+                SELECT
+                    `a`.`hotel_paymentID`,
+                    DATE_FORMAT(`a`.`vendor_payment_date`, '%Y-%m-%d') AS 'vendor_payment_date',
+                    `a`.`vendor_payment_amount`,
+                    `a`.`vendor_payment_type`,
+                    `a`.`vendor_comment`
+                FROM
+                    `hotel_payments` a
+
+                WHERE
+                    `a`.`reservationID` = '$_GET[reservationID]'
+                    AND `a`.`vendor_payment_date` IS NOT NULL
+                    AND `a`.`invoiceID` = '$_GET[invoiceID]'
+
+                ORDER BY `a`.`vendor_payment_date` ASC
+                ";
+                $i = "0";
+                $result = $this->new_mysql($sql);
+                while ($row = $result->fetch_assoc()) {
+                    foreach ($row as $key=>$value) {
+                        $data['vendor_payment'][$i][$key] = $value;
+                    }
+                    $i++;
+                }
+              
 
                 $template = "reservations_aat_manage.tpl";
                 $dir = "/reservations";
                 $this->load_smarty($data,$template,$dir);
+        }
+
+        public function reservations_aat_add_new() {
+            $this->security('reservations',$_SESSION['user_typeID']);
+            $data['reservationID'] = $_GET['reservationID'];
+            $data['invoiceID'] = $_GET['invoiceID'];
+
+            $template = "aat_add_new.tpl";
+            $dir = "/reservations";
+            $this->load_smarty($data,$template,$dir);
+        }
+
+        public function reservations_save_aat_plans() {
+            $this->security('reservations',$_SESSION['user_typeID']);
+            $description = $this->linkID->escape_string($_POST['description']);
+            $date = date("Ymd");
+            $time = date("H:i:s");
+            $user = $_SESSION['username'];
+
+            $sql = "INSERT INTO `aat_line_items` 
+            (`invoiceID`,`description`,`amount`,`date`,`time`,`uuname`,`date_updated`)
+            VALUES
+            ('$_POST[invoiceID]','$description','$_POST[amount]','$date','$time','$user','$date')
+            ";
+
+            $result = $this->new_mysql($sql);
+            if ($result == "TRUE") {
+                print "<div class=\"alert alert-success\">The travel plans was added. Loading...</div>";
+            } else {
+                print "<div class=\"alert alert-danger\">The travel plans failed add. Loading...</div>";
+            }
+            $redirect = "/reservations_aat_manage/$_POST[reservationID]/$_POST[invoiceID]";
+            ?>
+            <script>
+            setTimeout(function() {
+                  window.location.replace('<?=$redirect;?>')
+            }
+            ,2000);
+            </script>
+            <?php
+        }
+
+        public function reservations_aat_add_payment() {
+            $this->security('reservations',$_SESSION['user_typeID']);
+            $data['reservationID'] = $_GET['reservationID'];
+            $data['invoiceID'] = $_GET['invoiceID'];
+
+            $template = "aat_add_payment.tpl";
+            $dir = "/reservations";
+            $this->load_smarty($data,$template,$dir);           
+        }
+
+        public function reservations_save_aat_payment() {
+            $this->security('reservations',$_SESSION['user_typeID']);
+
+            $payment_date = date("Ymd", strtotime($_POST['payment_date']));
+            $comment = $this->linkID->escape_string($_POST['comments']);
+
+            $sql = "INSERT INTO `hotel_payments` (
+            `reservationID`,`payment_amount`,`payment_date`,`payment_type`,`comment`,`invoiceID`
+            ) VALUES (
+            '$_POST[reservationID]','$_POST[payment_amount]','$payment_date','$_POST[payment_type]',
+            '$comment','$_POST[invoiceID]'
+            )
+            ";
+
+            $result = $this->new_mysql($sql);
+            if ($result == "TRUE") {
+                print "<div class=\"alert alert-success\">The payment was added. Loading...</div>";
+            } else {
+                print "<div class=\"alert alert-danger\">The payment failed add. Loading...</div>";
+            }
+            $redirect = "/reservations_aat_manage/$_POST[reservationID]/$_POST[invoiceID]";
+            ?>
+            <script>
+            setTimeout(function() {
+                  window.location.replace('<?=$redirect;?>')
+            }
+            ,2000);
+            </script>
+            <?php
+
         }
 
         /* This is the 9th tab */

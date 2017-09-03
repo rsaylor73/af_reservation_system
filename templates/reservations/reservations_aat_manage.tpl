@@ -1,3 +1,24 @@
+<!-- Modal -->
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+   <div class="modal-dialog custom-class">
+       <div class="modal-content">
+           <div class="modal-header">
+               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title"></h4>
+
+           </div>
+           <div class="modal-body"><div class="te"></div></div>
+           <div class="modal-footer">
+               <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+               <button type="button" class="btn btn-primary">Save changes</button>
+           </div>
+       </div>
+       <!-- /.modal-content -->
+   </div>
+   <!-- /.modal-dialog -->
+</div>
+<!-- /.modal --> 
+
 <h2><a href="/">Main Menu</a> : Reservations</h2>
 
 {$msg}
@@ -89,31 +110,46 @@
 	<div class="row pad-top">
 		<div class="col-sm-12 alert alert-info">
 			<h3>Invoice Description - due from client
-			<input type="button" value="Add Travel Plans" class="btn btn-primary">
-			</h3>
+			<a data-toggle="modal" 
+            style="text-decoration:none; color:#FFFFFF;"
+            href="/reservations_aat_add_new/{$reservationID}/{$invoiceID}" 
+            data-target="#myModal2" data-backdrop="static" data-keyboard="false" class="btn btn-primary" 
+            >Add Travel Plans</a>
+            </h3>
 		</div>
 	</div>
 
 	<div class="row pad-top">
 		<div class="col-sm-6"><b>Description/Details</b></div>
 		<div class="col-sm-3"><b>Amount</b></div>
-		<div class="col-sm-3">&nbsp;</div>
+		<div class="col-sm-3"><div id="ajax_invoice">&nbsp;</div></div>
 	</div>
 
 	<!-- loop here -->
 	{foreach $invoice as $i}
-	<div class="row pad-top">
-		<div class="col-sm-6">
-			<input type="text" value="{$i.description}" class="form-control">
-		</div>
-		<div class="col-sm-3">
-			<input type="number" value="{$i.amount}" class="form-control">
-		</div>
-		<div class="col-sm-3">
-			<input type="button" value="Update" class="btn btn-success">&nbsp;
-			<input type="button" value="Delete" class="btn btn-danger">
+	<form name="myform_i{$i.id}">
+	<input type="hidden" name="id" value="{$i.id}">
+	<input type="hidden" name="divID" value="#i_{$i.id}">
+	<div id="i_{$i.id}">
+		<div class="row pad-top">
+			<div class="col-sm-6">
+				<input type="text" name="description" value="{$i.description}" class="form-control">
+			</div>
+			<div class="col-sm-3">
+				<input type="number" name="amount" value="{$i.amount}" class="form-control">
+			</div>
+			<div class="col-sm-3">
+				<input type="button" value="Update" class="btn btn-success" onclick="update_invoice(this.form)" >&nbsp;
+				<input type="button" value="Delete" class="btn btn-danger" 
+				onclick="
+				if(confirm('You are about to delete {$i.description}. Click OK to continue.')) {
+					remove_invoice(this.form);
+				}
+				">
+			</div>
 		</div>
 	</div>
+	</form>
 	{/foreach}
 
 
@@ -121,7 +157,13 @@
 	<div class="row pad-top">
 		<div class="col-sm-12 alert alert-info">
 			<h3>Payments 
-			<input type="button" value="Add Payment" class="btn btn-primary">
+
+			<a data-toggle="modal" 
+            style="text-decoration:none; color:#FFFFFF;"
+            href="/reservations_aat_add_payment/{$reservationID}/{$invoiceID}" 
+            data-target="#myModal2" data-backdrop="static" data-keyboard="false" class="btn btn-primary" 
+            >Add Payment</a>
+
 			</h3>
 		</div>
 	</div>
@@ -131,11 +173,42 @@
 		<div class="col-sm-2"><b>Type</b></div>
 		<div class="col-sm-2"><b>Amount</b></div>
 		<div class="col-sm-4"><b>Notes</b></div>
-		<div class="col-sm-2">&nbsp;</div>
+		<div class="col-sm-2"><div id="ajax_payment">&nbsp;</div></div>
 	</div>
 
 	<!-- loop -->
-
+	{foreach $payment as $p}
+	<form name="myform_{$p.id}">
+	<input type="hidden" name="id" value="{$p.hotel_paymentID}">
+	<div class="row pad-top" id="p_{$p.hotel_paymentID}">
+		<div class="col-sm-2">
+			<input type="text" name="payment_date" value="{$p.payment_date}" class="form-control date">
+		</div>
+		<div class="col-sm-2">
+			<select name="payment_type" class="form-control">
+			<option selected value="{$p.payment_type}">{$p.payment_type}</option>
+			<option>ARC</option>
+			<option>Cash Transfer</option>
+			<option>Check</option>
+			<option>Credit Card</option>
+			<option>Due From</option>
+			<option>MCO</option>
+			<option>Wire</option>
+			</select>
+		</div>
+		<div class="col-sm-2">
+			<input type="number" name="payment_amount" value="{$p.payment_amount}" class="form-control">
+		</div>
+		<div class="col-sm-4">
+			<input type="text" name="comment" value="{$p.comment}" class="form-control">
+		</div>
+		<div class="col-sm-2">
+			<input type="button" value="Update" class="btn btn-success" onclick="update_payment(this.form)">&nbsp;
+			<input type="button" value="Delete" class="btn btn-danger">
+		</div>
+	</div>
+	</form>
+	{/foreach}
 
 	<div class="row pad-top">
 		<div class="col-sm-12 alert alert-info">
@@ -154,7 +227,32 @@
 	</div>
 
 	<!-- loop -->
-
+	{foreach $vendor_payment as $v}
+	<div class="row pad-top">
+		<div class="col-sm-2">
+			<input type="text" name="vendor_payment_date" value="{$v.vendor_payment_date}" class="form-control date">
+		</div>
+		<div class="col-sm-2">
+			<select name="vendor_payment_type" class="form-control">
+			<option selected value="{$p.vendor_payment_type}">{$v.vendor_payment_type}</option>
+			<option>ARC</option>
+			<option>WW Check</option>
+			<option>WW Comm.</option>
+			<option>WW Wire</option>
+			</select>
+		</div>
+		<div class="col-sm-2">
+			<input type="number" name="vendor_payment_amount" value="{$v.vendor_payment_amount}" class="form-control">
+		</div>
+		<div class="col-sm-4">
+			<input type="text" name="vendor_comment" value="{$v.vendor_comment}" class="form-control">
+		</div>
+		<div class="col-sm-2">
+			<input type="button" value="Update" class="btn btn-success">&nbsp;
+			<input type="button" value="Delete" class="btn btn-danger">
+		</div>
+	</div>
+	{/foreach}
 </div>
 
 <script>
@@ -168,6 +266,43 @@ function update_contact(myform) {
 
 function warning_contact(myform) {
 	$("#ajax_results").html('<div class="alert alert-info">To update the contact make your change then click outside of the field to save.</div>');	
+}
+
+function update_invoice(myform) {
+    $.get('/ajax/reservations/aat_invoice_update.php',
+    $(myform).serialize(),
+    function(php_msg) {     
+		$("#ajax_invoice").html(php_msg);
+    });	
+}
+
+function update_payment(myform) {
+    $.get('/ajax/reservations/aat_payment_update.php',
+    $(myform).serialize(),
+    function(php_msg) {     
+		$("#ajax_payment").html(php_msg);
+    });		
+}
+
+function remove_invoice(myform) {
+	var dataArray = $(myform).serializeArray(), dataObj = {};
+
+	$(dataArray).each(function(i, field){
+	  dataObj[field.name] = field.value;
+	});
+
+	var id = dataObj['id'];
+	var divID = dataObj['divID'];
+	$(divID).remove();
+	console.log(divID);
+	console.log(myform);
+	
+	$.get('/ajax/reservations/ajax_aat_remove_invoice.php',
+	$(myform).serialize(),
+	function(php_msg) {
+        $("#null").html(php_msg);
+	});
+
 }
 
 </script>

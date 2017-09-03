@@ -37,7 +37,7 @@
 		<div class="col-sm-2">$ {$a.payment|number_format:2:".":","}</div>
 		<div class="col-sm-2">$ {$a.due|number_format:2:".":","}</div>
 		<div class="col-sm-1">
-			<input type="button" value="Manage" class="btn btn-primary btn-block"
+			<input type="button" value="Manage" class="btn btn-primary"
 			onclick="document.location.href='/reservations_aat_manage/{$reservationID}/{$a.id}'"
 			>
 		</div>
