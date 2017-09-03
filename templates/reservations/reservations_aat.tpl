@@ -30,6 +30,7 @@
 	</div>
 
 	{foreach $aat as $a}
+	{if $a.id ne ""}
 	<div class="row pad-top">
 		<div class="col-sm-2">{$a.id}</div>
 		<div class="col-sm-3">{$a.title}</div>
@@ -42,6 +43,11 @@
 			>
 		</div>
 	</div>
+	{else}
+	<div class="row pad-top">
+		<div class="col-sm-12"><font color="blue">There are no invoices for this reservation.</font></div>
+	</div>
+	{/if}
 	{/foreach}
 
 

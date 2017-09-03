@@ -1126,6 +1126,16 @@ class reservation extends charters {
             $this->load_smarty($data,$template,$dir);           
         }
 
+        public function reservations_aat_add_vendor_payment() {
+            $this->security('reservations',$_SESSION['user_typeID']);
+            $data['reservationID'] = $_GET['reservationID'];
+            $data['invoiceID'] = $_GET['invoiceID'];
+
+            $template = "aat_add_vendor_payment.tpl";
+            $dir = "/reservations";
+            $this->load_smarty($data,$template,$dir);           
+        }
+
         public function reservations_save_aat_payment() {
             $this->security('reservations',$_SESSION['user_typeID']);
 
@@ -1158,6 +1168,39 @@ class reservation extends charters {
 
         }
 
+        public function reservations_save_aat_vendor_payment() {
+            $this->security('reservations',$_SESSION['user_typeID']);
+
+            $vendor_payment_date = date("Ymd", strtotime($_POST['vendor_payment_date']));
+            $comment = $this->linkID->escape_string($_POST['vendor_comments']);
+
+            $sql = "INSERT INTO `hotel_payments` (
+            `reservationID`,`vendor_payment_amount`,`vendor_payment_date`,`vendor_payment_type`,
+            `vendor_comment`,`invoiceID`
+            ) VALUES (
+            '$_POST[reservationID]','$_POST[vendor_payment_amount]','$vendor_payment_date',
+            '$_POST[vendor_payment_type]',
+            '$comment','$_POST[invoiceID]'
+            )
+            ";
+
+            $result = $this->new_mysql($sql);
+            if ($result == "TRUE") {
+                print "<div class=\"alert alert-success\">The vendor payment was added. Loading...</div>";
+            } else {
+                print "<div class=\"alert alert-danger\">The vendor payment failed add. Loading...</div>";
+            }
+            $redirect = "/reservations_aat_manage/$_POST[reservationID]/$_POST[invoiceID]";
+            ?>
+            <script>
+            setTimeout(function() {
+                  window.location.replace('<?=$redirect;?>')
+            }
+            ,2000);
+            </script>
+            <?php
+
+        }
         /* This is the 9th tab */
         public function reservations_itinerary() {
                 $this->security('reservations',$_SESSION['user_typeID']);

@@ -180,7 +180,10 @@
 	{foreach $payment as $p}
 	<form name="myform_{$p.id}">
 	<input type="hidden" name="id" value="{$p.hotel_paymentID}">
-	<div class="row pad-top" id="p_{$p.hotel_paymentID}">
+
+	<input type="hidden" name="divID" value="#p_{$p.hotel_paymentID}">
+	<div id="p_{$p.hotel_paymentID}">
+	<div class="row pad-top">
 		<div class="col-sm-2">
 			<input type="text" name="payment_date" value="{$p.payment_date}" class="form-control date">
 		</div>
@@ -204,16 +207,27 @@
 		</div>
 		<div class="col-sm-2">
 			<input type="button" value="Update" class="btn btn-success" onclick="update_payment(this.form)">&nbsp;
-			<input type="button" value="Delete" class="btn btn-danger">
+			<input type="button" value="Delete" class="btn btn-danger" onclick="
+			if(confirm('You are about to delete the payment ${$p.payment_amount}. Click OK to continue.')) {
+				delete_payment(this.form);
+			}
+			">
 		</div>
+	</div>
 	</div>
 	</form>
 	{/foreach}
 
 	<div class="row pad-top">
 		<div class="col-sm-12 alert alert-info">
-			<h3>Accounting 
-			<input type="button" value="Add Payment" class="btn btn-primary">
+			<h3>Accounting
+
+			<a data-toggle="modal" 
+            style="text-decoration:none; color:#FFFFFF;"
+            href="/reservations_aat_add_vendor_payment/{$reservationID}/{$invoiceID}" 
+            data-target="#myModal2" data-backdrop="static" data-keyboard="false" class="btn btn-primary" 
+            >Add Payment</a>
+
 			</h3>
 		</div>
 	</div>
@@ -223,18 +237,23 @@
 		<div class="col-sm-2"><b>Type</b></div>
 		<div class="col-sm-2"><b>Amount</b></div>
 		<div class="col-sm-4"><b>Notes</b></div>
-		<div class="col-sm-2">&nbsp;</div>
+		<div class="col-sm-2"><div id="ajax_vendor_payment">&nbsp;</div></div>
 	</div>
 
 	<!-- loop -->
 	{foreach $vendor_payment as $v}
+	<form name="myform_{$v.id}">
+	<input type="hidden" name="id" value="{$v.hotel_paymentID}">
+
+	<input type="hidden" name="divID" value="#v_{$v.hotel_paymentID}">
+	<div id="v_{$v.hotel_paymentID}">
 	<div class="row pad-top">
 		<div class="col-sm-2">
 			<input type="text" name="vendor_payment_date" value="{$v.vendor_payment_date}" class="form-control date">
 		</div>
 		<div class="col-sm-2">
 			<select name="vendor_payment_type" class="form-control">
-			<option selected value="{$p.vendor_payment_type}">{$v.vendor_payment_type}</option>
+			<option selected value="{$v.vendor_payment_type}">{$v.vendor_payment_type}</option>
 			<option>ARC</option>
 			<option>WW Check</option>
 			<option>WW Comm.</option>
@@ -248,10 +267,16 @@
 			<input type="text" name="vendor_comment" value="{$v.vendor_comment}" class="form-control">
 		</div>
 		<div class="col-sm-2">
-			<input type="button" value="Update" class="btn btn-success">&nbsp;
-			<input type="button" value="Delete" class="btn btn-danger">
+			<input type="button" value="Update" class="btn btn-success" onclick="update_vendor_payment(this.form)">&nbsp;
+			<input type="button" value="Delete" class="btn btn-danger" onclick="
+			if(confirm('You are about to delete the payment ${$v.vendor_payment_amount}. Click OK to continue.')) {
+				delete_vendor_payment(this.form);
+			}
+			">
 		</div>
 	</div>
+	</div>
+	</form>
 	{/foreach}
 </div>
 
@@ -284,6 +309,15 @@ function update_payment(myform) {
     });		
 }
 
+function update_vendor_payment(myform) {
+    $.get('/ajax/reservations/aat_vendor_payment_update.php',
+    $(myform).serialize(),
+    function(php_msg) {     
+		$("#ajax_vendor_payment").html(php_msg);
+    });		
+}
+
+
 function remove_invoice(myform) {
 	var dataArray = $(myform).serializeArray(), dataObj = {};
 
@@ -294,15 +328,53 @@ function remove_invoice(myform) {
 	var id = dataObj['id'];
 	var divID = dataObj['divID'];
 	$(divID).remove();
-	console.log(divID);
-	console.log(myform);
+	//console.log(divID);
+	//console.log(myform);
 	
 	$.get('/ajax/reservations/ajax_aat_remove_invoice.php',
 	$(myform).serialize(),
 	function(php_msg) {
         $("#null").html(php_msg);
 	});
-
 }
 
+function delete_payment(myform) {
+	var dataArray = $(myform).serializeArray(), dataObj = {};
+
+	$(dataArray).each(function(i, field){
+	  dataObj[field.name] = field.value;
+	});
+
+	var id = dataObj['id'];
+	var divID = dataObj['divID'];
+	$(divID).remove();
+	//console.log(divID);
+	//console.log(myform);
+	
+	$.get('/ajax/reservations/ajax_aat_remove_payment.php',
+	$(myform).serialize(),
+	function(php_msg) {
+        $("#null").html(php_msg);
+	});	
+}
+
+function delete_vendor_payment(myform) {
+	var dataArray = $(myform).serializeArray(), dataObj = {};
+
+	$(dataArray).each(function(i, field){
+	  dataObj[field.name] = field.value;
+	});
+
+	var id = dataObj['id'];
+	var divID = dataObj['divID'];
+	$(divID).remove();
+	//console.log(divID);
+	//console.log(myform);
+	
+	$.get('/ajax/reservations/ajax_aat_remove_vendor_payment.php',
+	$(myform).serialize(),
+	function(php_msg) {
+        $("#null").html(php_msg);
+	});	
+}
 </script>

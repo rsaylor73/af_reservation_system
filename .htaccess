@@ -81,6 +81,8 @@ RewriteRule ^reservations_aat_add_new/([a-zA-Z0-9]+)/([a-zA-Z0-9]+)/?$ index.php
 
 RewriteRule ^reservations_aat_add_payment/([a-zA-Z0-9]+)/([a-zA-Z0-9]+)/?$ index.php?section=reservations_aat_add_payment&reservationID=$1&invoiceID=$2 [NC,L]
 
+RewriteRule ^reservations_aat_add_vendor_payment/([a-zA-Z0-9]+)/([a-zA-Z0-9]+)/?$ index.php?section=reservations_aat_add_vendor_payment&reservationID=$1&invoiceID=$2 [NC,L]
+
 # Four params
 RewriteRule ^contact/delete_imported/([a-zA-Z0-9]+)/([a-zA-Z0-9]+)/?$ index.php?section=delete_imported&id=$1&contactID=$2 [NC,L]
 RewriteRule ^contact/([a-zA-Z0-9]+)/([a-zA-Z0-9]+)/([a-zA-Z0-9]+)/?$ index.php?section=contacts_part&part=$1&contactID=$2&reservationID=$3 [NC,L]
