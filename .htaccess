@@ -56,7 +56,7 @@ RewriteRule ^stateroom_survey/([a-zA-Z0-9]+)/?$ index.php?section=stateroom_surv
 RewriteRule ^manage_res_pax/([a-zA-Z0-9]+)/?$ index.php?section=manage_res_pax&reservationID=$1 [NC,L]
 RewriteRule ^change_stateroom_guest/([a-zA-Z0-9]+)/?$ index.php?section=change_stateroom_guest&inventoryID=$1 [NC,L]
 RewriteRule ^manage_stateroom_discounts/([a-zA-Z0-9]+)/?$ index.php?section=manage_stateroom_discounts&inventoryID=$1 [NC,L]
-
+RewriteRule ^reservations_aat_newinvoice/([a-zA-Z0-9]+)/?$ index.php?section=reservations_aat_newinvoice&reservationID=$1 [NC,L]
 
 
 

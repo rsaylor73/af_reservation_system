@@ -49,6 +49,7 @@ switch ($section) {
 	case "reservations_aat_add_new":
 	case "reservations_aat_add_payment":
 	case "reservations_aat_add_vendor_payment":
+	case "reservations_aat_newinvoice":
 	// The following items above will not display the header (do the same in the footer)
 	break;
 
@@ -106,6 +107,7 @@ switch ($section) {
 	case "reservations_aat_add_new":
 	case "reservations_aat_add_payment":
 	case "reservations_aat_add_vendor_payment":
+	case "reservations_aat_newinvoice":
     // The following items above will not display the footer (do the same in the header)
     break;
 

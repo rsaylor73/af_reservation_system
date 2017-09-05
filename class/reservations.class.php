@@ -960,6 +960,25 @@ class reservation extends charters {
                 $this->load_smarty($data,$template,$dir);
         }
 
+        public function reservations_aat_newinvoice() {
+            $this->security('reservations',$_SESSION['user_typeID']);
+            $data['reservationID'] = $_GET['reservationID'];
+
+            $sql = "SELECT `id`,`contact_name` FROM `aat_invoices` WHERE `reservationID` = '$_GET[reservationID]' ORDER BY `contact_name` ASC";
+            $result = $this->new_mysql($sql);
+            $i = "0";
+            while ($row = $result->fetch_assoc()) {
+                foreach($row as $key=>$value) {
+                    $data['guests'][$i][$key] = $value;
+                }
+                $i++;
+            }
+
+            $template = "reservations_aat_newinvoice.tpl";
+            $dir = "/reservations";
+            $this->load_smarty($data,$template,$dir);
+        }
+
         /* This is the 8th tab and manages the invoice for aat */
         public function reservations_aat_manage() {
                 $this->security('reservations',$_SESSION['user_typeID']);
