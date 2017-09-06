@@ -941,10 +941,14 @@ class reservation extends charters {
                     `aat_invoices` a
 
                 LEFT JOIN `aat_line_items` l ON `a`.`id` = `l`.`invoiceID`
-                LEFT JOIN `hotel_payments` p ON `a`.`reservationID` = `p`.`reservationID`
+                LEFT JOIN `hotel_payments` p ON 
+                    `a`.`reservationID` = `p`.`reservationID`
+                    AND `a`.`id` = `p`.`invoiceID`
 
                 WHERE
                     `a`.`reservationID` = '$_GET[reservationID]'
+
+                GROUP BY `a`.`id`
                 ";
                 $result = $this->new_mysql($sql);
                 $i = "0";
@@ -977,6 +981,36 @@ class reservation extends charters {
             $template = "reservations_aat_newinvoice.tpl";
             $dir = "/reservations";
             $this->load_smarty($data,$template,$dir);
+        }
+
+        public function save_new_aat_invoice() {
+            $this->security('reservations',$_SESSION['user_typeID']);
+            $date = date("Ymd");
+            $title = $this->linkID->escape_string($_POST['title']);
+            $contact_name = $this->linkID->escape_string($_POST['contact_name']);
+            $contact_email = $this->linkID->escape_string($_POST['contact_email']);
+
+            $sql = "INSERT INTO `aat_invoices` 
+            (`reservationID`,`title`,`contact_name`,`contact_email`,`date_created`)
+            VALUES
+            ('$_POST[reservationID]','$title','$contact_name','$contact_email','$date')
+            ";
+            $result = $this->new_mysql($sql);
+            if ($result == "TRUE") {
+                print "<div class=\"alert alert-success\">The AAT invoice was added. Loading...</div>";
+            } else {
+                print "<div class=\"alert alert-danger\">The AAT invoice failed to add. Loading...</div>";
+            }
+            $redirect = "/reservations_aat/$_POST[reservationID]";
+            ?>
+            <script>
+            setTimeout(function() {
+                  window.location.replace('<?=$redirect;?>')
+            }
+            ,2000);
+            </script>
+            <?php
+
         }
 
         /* This is the 8th tab and manages the invoice for aat */

@@ -3,7 +3,8 @@
         <h4 class="modal-title">New Invoice</h4>
 </div>
 
-<form name="myform1">
+<form name="myform1" method="post" action="/index.php">
+<input type="hidden" name="section" value="save_new_aat_invoice">
 <input type="hidden" name="reservationID" value="{$reservationID}">
 <div class="modal-body">
 	<div class="te">
@@ -23,19 +24,19 @@
 			<div class="row pad-top">
 				<div class="col-sm-6"><b>Title:</b></div>
 				<div class="col-sm-6">
-					<input type="text" name="title" id="title" class="form-control">
+					<input type="text" name="title" id="title" class="form-control" required>
 				</div>
 			</div>
 			<div class="row pad-top">
 				<div class="col-sm-6"><b>Contact Name:</b></div>
 				<div class="col-sm-6">
-					<input type="text" name="contact_name" id="contact_name" class="form-control">
+					<input type="text" name="contact_name" id="contact_name" class="form-control" required>
 				</div>
 			</div>
 			<div class="row pad-top">
 				<div class="col-sm-6"><b>Contact Email:</b></div>
 				<div class="col-sm-6">
-					<input type="text" name="contact_email" id="contact_email" class="form-control">
+					<input type="text" name="contact_email" id="contact_email" class="form-control" required>
 				</div>
 			</div>
 		</div>
