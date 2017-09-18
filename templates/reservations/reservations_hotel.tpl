@@ -76,6 +76,17 @@
 		{/foreach}
 	</div>
 
+	{if $imported_amount ne ""}
+
+	<div class="row pad-top">
+		<div class="col-sm-6"><b><font color="blue">Imported from AAT</font></b></div>
+		<div class="col-sm-6">
+			<b><font color="blue">$ {$imported_amount|number_format:2:".":","}</font></b>
+		</div>
+	</div>
+
+	{/if}
+
 	<div class="row pad-top">
 		<div class="col-sm-12 alert alert-info">
 			<b>Payments</b>

@@ -89,10 +89,16 @@
 		<div class="col-sm-4">
 			<div class="row pad-top">
 				<div class="col-sm-6">
-					<input type="button" value="Send Payment Link" class="btn btn-success btn-lg btn-block">
+					<input type="button" value="Payment Link TBD" disabled class="btn btn-success btn-lg btn-block">
 				</div>
 				<div class="col-sm-6">
-					<input type="button" value="Delete Invoice" class="btn btn-danger btn-lg btn-block">
+					<input type="button" value="Delete Invoice" class="btn btn-danger btn-lg btn-block"
+					onclick="
+					if(confirm('You are about to delete this invoice. Click OK to continue.')) {
+						document.location.href='/reservations_aat_delete_invoice/{$reservationID}/{$invoiceID}';
+					}
+					"
+					>
 				</div>
 			</div>
 			<div class="row pad-top">

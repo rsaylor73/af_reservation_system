@@ -185,7 +185,7 @@
 			<b>Bunk comm red.:</b>
 		</div>
 		<div class="col-sm-3">
-			{$bunk_comm_red}
+			$ {$comm_reduction|number_format:2:".":","}
 		</div>
 		<div class="col-sm-3">
 			<b>Final balance:</b>

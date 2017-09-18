@@ -507,40 +507,59 @@ class reservation extends charters {
 
         ORDER BY `i`.`bunk` ASC
         ";
+        //print "$sql<br>";
         $id = "0";
         $result = $this->new_mysql($sql);
         while ($row = $result->fetch_assoc()) {
             $credit = $row['DWC_discount'] + $row['voucher'] + $row['manual_discount'];
-            $discount = $row['DWC_discount'] + $row['manual_discount'];
+            $discount = $row['DWC_discount'];
             $bunk_price = $row['bunk_price'] + $row['add_on_price_commissionable'];
             $base_price = $base_price + $row['bunk_price'];
-            $pax_credit = $pax_credit + $row['DWC_discount'] + $row['manual_discount'] + $row['voucher'];
-            $commission_amount = ($bunk_price - $credit) * ($row['commission_at_time_of_booking'] / 100);
+            $pax_credit = $pax_credit + $row['DWC_discount'] + $row['voucher'];
+            $commission_amount = $bunk_price * ($row['commission_at_time_of_booking'] / 100);
             
             $amount_for_comm = $row['bunk_price'] + $row['add_on_price_commissionable'] - $row['manual_discount'];
 
             $bunk_comm = $amount_for_comm * ($row['commission_at_time_of_booking'] / 100);
             $bunk_comm_total = $bunk_comm_total + $bunk_comm;
 
-            $pre_comm = $row['bunk_price'] + $row['add_on_price'] + $row['add_on_price_commissionable']
-- $row['manual_discount'] - $row['DWC_discount'] - $row['voucher'];
-            $pre_comm_total = $pre_comm_total + $pre_comm;
+            //$pre_comm = $row['bunk_price'] + $row['add_on_price'] + $row['add_on_price_commissionable'] - $row['manual_discount'] - $row['DWC_discount'] - $row['voucher'];
+            //$pre_comm_total = $pre_comm_total + $pre_comm;
 
             $amount = $bunk_price + $row['add_on_price'];
             $cash_value = ($bunk_price + $row['add_on_price']) - $credit;
             foreach ($row as $key=>$value) {
                 $data['guests'][$id][$key] = $value;
             }
+
+            // check if free
+            if ($discount >= $amount) {
+                $commission_amount = $commission_amount * -1;
+                $comm_reduction = $comm_reduction - $commission_amount;
+            }
+
+            $total_manual_discount = $total_manual_discount + $row['manual_discount'];
+            //print "Test $total_manual_discount<Br>";
             $data['guests'][$id]['commission_amount'] = $commission_amount;
             $data['guests'][$id]['amount'] = $amount;
             $data['guests'][$id]['discount'] = $discount;
             $data['guests'][$id]['cash_value'] = $cash_value;
             $id++;
         }
+
+        if ($comm_reduction > 0) {
+            $comm_reduction = $comm_reduction * -1;
+        }
+
+        $pre_comm_total = $base_price - $payment_amount - $pax_credit - $total_manual_discount;
+
+        $base_price = $base_price - $total_manual_discount;
+
         $data['base_price'] = $base_price;
         $data['pax_credit'] = $pax_credit;
         $data['bunk_comm_total'] = $bunk_comm_total;
         $data['pre_comm_total'] = $pre_comm_total;
+        $data['comm_reduction'] = $comm_reduction;
 
 
         $template = "reservations_dollars.tpl";
@@ -902,6 +921,26 @@ class reservation extends charters {
                     $total_invoice = $total_invoice + $row['price'];
                 }
 
+                // invoice imported
+                $sql = "
+                SELECT
+                    SUM(`a`.`amount`) AS 'imported_amount'
+
+                FROM
+                    `aat_invoices` i
+
+                LEFT JOIN `aat_line_items` a ON `i`.`id` = `a`.`invoiceID`
+
+                WHERE
+                    `i`.`reservationID` = '$_GET[reservationID]'
+                ";
+                $result = $this->new_mysql($sql);
+                while ($row = $result->fetch_assoc()) {
+                    $imported_amount = $row['imported_amount'];
+                    $total_invoice = $total_invoice + $imported_amount;
+                }
+
+                $data['imported_amount'] = $imported_amount;
                 $data['total_payments'] = $total_payments;
                 $data['total_invoice'] = $total_invoice;
                 $data['vendor_payment_amount'] = $vendor_payment_amount;
@@ -962,6 +1001,27 @@ class reservation extends charters {
                 $template = "reservations_aat.tpl";
                 $dir = "/reservations";
                 $this->load_smarty($data,$template,$dir);
+        }
+
+        public function reservations_aat_delete_invoice() {
+            $this->security('reservations',$_SESSION['user_typeID']);
+            $sql = "DELETE FROM `aat_invoices` WHERE `id` = '$_GET[invoiceID]'";
+
+            $result = $this->new_mysql($sql);
+            if ($result == "TRUE") {
+                print "<div class=\"alert alert-success\">The AAT invoice was deleted. Loading...</div>";
+            } else {
+                print "<div class=\"alert alert-danger\">The AAT invoice failed to delete. Loading...</div>";
+            }
+            $redirect = "/reservations_aat/$_GET[reservationID]";
+            ?>
+            <script>
+            setTimeout(function() {
+                  window.location.replace('<?=$redirect;?>')
+            }
+            ,2000);
+            </script>
+            <?php            
         }
 
         public function reservations_aat_newinvoice() {
