@@ -500,7 +500,7 @@ class reservation extends charters {
             `inventory` i
 
         LEFT JOIN contacts c ON i.passengerID = c.contactID
-        LEFT JOIN charters ch ON '$row[charterID]' = ch.charterID
+        LEFT JOIN charters ch ON i.charterID = ch.charterID
 
         WHERE
             `i`.`reservationID` = '$_GET[reservationID]'
@@ -511,6 +511,25 @@ class reservation extends charters {
         $id = "0";
         $result = $this->new_mysql($sql);
         while ($row = $result->fetch_assoc()) {
+            
+            if ($row['add_on_price'] == "") {
+                $row['add_on_price'] = "0";
+            }
+            if ($row['add_on_price_commissionable'] == "") {
+                $row['add_on_price_commissionable'] = "0";
+            }
+
+            $bc_red = 
+            ((
+                ($row['bunk_price'] + $row['add_on_price'] + $row['add_on_price_commissionable']) 
+                - 
+                ($row['manual_discount'] + $row['DWC_discount'] + $row['voucher'])
+            ) * $row['commission_at_time_of_booking']) / 100;
+
+            $bal_after_disc_with_payments = $row['bunk_price'] + $row['add_on_price'] + $row['add_on_price_commissionable'] - $row['manual_discount'] - $row['DWC_discount'] - $row['voucher'];
+
+            $dollar_value_of_bunk_discounts = $row['DWC_discount'];
+
             $credit = $row['DWC_discount'] + $row['voucher'] + $row['manual_discount'];
             $discount = $row['DWC_discount'];
             $bunk_price = $row['bunk_price'] + $row['add_on_price_commissionable'];
@@ -540,7 +559,11 @@ class reservation extends charters {
 
             $total_manual_discount = $total_manual_discount + $row['manual_discount'];
             //print "Test $total_manual_discount<Br>";
-            $data['guests'][$id]['commission_amount'] = $commission_amount;
+            //$data['guests'][$id]['commission_amount'] = $commission_amount;
+            $data['guests'][$id]['bc_red'] = $bc_red;
+            $data['guests'][$id]['bal_after_disc_with_payments'] = $bal_after_disc_with_payments;
+            $data['guests'][$id]['dollar_value_of_bunk_discounts'] = $dollar_value_of_bunk_discounts;
+
             $data['guests'][$id]['amount'] = $amount;
             $data['guests'][$id]['discount'] = $discount;
             $data['guests'][$id]['cash_value'] = $cash_value;

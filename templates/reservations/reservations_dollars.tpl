@@ -121,21 +121,19 @@
 
 			<div class="row pad-top">
 				<div class="col-sm-3"><b>Name</b></div>
-				<div class="col-sm-1"><b>Comm</b></div>
-				<div class="col-sm-2"><b>Comm Amount.</b></div>
+				<div class="col-sm-2"><b>Commission</b></div>
+				<div class="col-sm-3"><b>Bunk Cash Reduction</b></div>
 				<div class="col-sm-2"><b>Balance</b></div>
 				<div class="col-sm-2"><b>Discounts</b></div>
-				<div class="col-sm-2"><b>Cash Value</b></div>
 			</div>
 
 			{foreach $guests as $g}
 			<div class="row pad-top">
 				<div class="col-sm-3">{$g.first} {$g.middle} {$g.last}</div>
-				<div class="col-sm-1">{$g.commission_at_time_of_booking} %</div>
-				<div class="col-sm-2">$ {$g.commission_amount|number_format:2:".":","}</div>
-				<div class="col-sm-2">$ {$g.amount|number_format:2:".":","}</div>
-				<div class="col-sm-2">$ {$g.discount|number_format:2:".":","}</div>
-				<div class="col-sm-2">$ {$g.cash_value|number_format:2:".":","}</div>
+				<div class="col-sm-2">{$g.commission_at_time_of_booking} %</div>
+				<div class="col-sm-3">$ {$g.bc_red|number_format:2:".":","}</div>
+				<div class="col-sm-2">$ {$g.bal_after_disc_with_payments|number_format:2:".":","}</div>
+				<div class="col-sm-2">$ {$g.dollar_value_of_bunk_discounts|number_format:2:".":","}</div>
 			</div>
 			{/foreach}
 
