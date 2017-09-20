@@ -432,7 +432,9 @@ class reservation extends charters {
             `r`.`reservation_date` AS 'res_date',
             `r`.`reservation_type`,
             `c`.`start_date` AS 's_date',
-            `c`.`charterID`
+            `c`.`charterID`,
+            `r`.`manual_commission_adjustment`,
+            `r`.`manual_commission_reduction_reason`
 
         FROM
             `reservations` r, `charters` c
@@ -447,6 +449,7 @@ class reservation extends charters {
             foreach ($row as $key=>$value) {
                 $data[$key] = $value;
             }
+            $manual_commission_adjustment = $row['manual_commission_adjustment'];
             $deposit_info = $this->due_dates($row['res_date'],$row['reservation_type'], $row['s_date']);
             $data['deposit_date'] = date("m/d/Y", strtotime($deposit_info[0]));
             $data['balance_date'] = date("m/d/Y", strtotime($deposit_info[1]));
@@ -492,6 +495,7 @@ class reservation extends charters {
             `i`.`manual_discount`,
             `i`.`voucher`,
             `i`.`bunk_price`,
+            `i`.`passenger_discount`,
             `ch`.`add_on_price`,
             `ch`.`add_on_price_commissionable`
 
@@ -519,27 +523,32 @@ class reservation extends charters {
                 $row['add_on_price_commissionable'] = "0";
             }
 
-            $bc_red = 
-            ((
-                ($row['bunk_price'] + $row['add_on_price'] + $row['add_on_price_commissionable']) 
-                - 
-                ($row['manual_discount'] + $row['DWC_discount'] + $row['voucher'])
-            ) * $row['commission_at_time_of_booking']) / 100;
 
-            $bal_after_disc_with_payments = $row['bunk_price'] + $row['add_on_price'] + $row['add_on_price_commissionable'] - $row['manual_discount'] - $row['DWC_discount'] - $row['voucher'];
+            // bc take 2
+            $bc_red = (((((((($row['bunk_price'] + $row['add_on_price'] + $row['add_on_price_commissionable']) - $row['manual_discount']) - $row['DWC_discount'] - $row['voucher']) - $row['add_on_price']) * ($row['passenger_discount'] / 100)) + $row['DWC_discount'] + $row['voucher']) * ($row['commission_at_time_of_booking'] / 100)));
+            $bc_red = $bc_red * -1;
+            $comm_reduction = $comm_reduction + $bc_red;
+
 
             $dollar_value_of_bunk_discounts = $row['DWC_discount'];
 
             $credit = $row['DWC_discount'] + $row['voucher'] + $row['manual_discount'];
             $discount = $row['DWC_discount'];
             $bunk_price = $row['bunk_price'] + $row['add_on_price_commissionable'];
-            $base_price = $base_price + $row['bunk_price'];
+            $base_price = $base_price + $row['bunk_price'] + $row['add_on_price'] + $row['add_on_price_commissionable'] - $row['manual_discount'];
+            
+            //$pax_credit = bcadd($row['DWC_discount'],$row['voucher']);
             $pax_credit = $pax_credit + $row['DWC_discount'] + $row['voucher'];
             $commission_amount = $bunk_price * ($row['commission_at_time_of_booking'] / 100);
             
             $amount_for_comm = $row['bunk_price'] + $row['add_on_price_commissionable'] - $row['manual_discount'];
 
+            //$commission_at_time_of_booking = bcdiv($row['commission_at_time_of_booking'],100);
+
             $bunk_comm = $amount_for_comm * ($row['commission_at_time_of_booking'] / 100);
+            //$bunk_comm = bcmul($amount_for_comm,$commission_at_time_of_booking);
+
+
             $bunk_comm_total = $bunk_comm_total + $bunk_comm;
 
             //$pre_comm = $row['bunk_price'] + $row['add_on_price'] + $row['add_on_price_commissionable'] - $row['manual_discount'] - $row['DWC_discount'] - $row['voucher'];
@@ -570,25 +579,46 @@ class reservation extends charters {
             $id++;
         }
 
-        if ($comm_reduction > 0) {
-            $comm_reduction = $comm_reduction * -1;
-        }
 
-        $pre_comm_total = $base_price - $payment_amount - $pax_credit - $total_manual_discount;
+        $pre_comm_total = $base_price - $payment_amount - $pax_credit;
 
-        $base_price = $base_price - $total_manual_discount;
+        //$base_price = bcsub($base_price,$total_manual_discount);
+        //$base_price = $base_price - $total_manual_discount;
+
+        /*
+        settype($base_price, "string");
+        settype($pax_credit, "string");
+        settype($bunk_comm_total, "string");
+        settype($pre_comm_total, "string");
+        settype($comm_reduction, "string");
+        */
 
         $data['base_price'] = $base_price;
         $data['pax_credit'] = $pax_credit;
         $data['bunk_comm_total'] = $bunk_comm_total;
         $data['pre_comm_total'] = $pre_comm_total;
         $data['comm_reduction'] = $comm_reduction;
+        $final_comm_balance = $bunk_comm_total + $comm_reduction;
 
+        $data['final_comm_balance'] = $bunk_comm_total + $comm_reduction;
+
+        $fb1 = bcsub($base_price,$payment_amount);
+
+        $fb2 = bcadd($final_comm_balance,$pax_credit);
+
+        $fb2 = bcsub($fb2,$manual_commission_adjustment);
+
+        $final_balance = bcsub($fb1,$fb2);
+        //$final_balance = $base_price - $payment_amount - $final_comm_balance - $pax_credit;
+
+        $data['final_balance'] = $final_balance;
+        $final_balance_type = gettype($data['final_balance']);
 
         $template = "reservations_dollars.tpl";
         $dir = "/reservations";
         $this->load_smarty($data,$template,$dir);
 	}
+
 
     private function get_reservation_payments($reservationID) {
         $sql = "

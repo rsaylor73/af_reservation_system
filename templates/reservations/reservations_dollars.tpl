@@ -122,7 +122,7 @@
 			<div class="row pad-top">
 				<div class="col-sm-3"><b>Name</b></div>
 				<div class="col-sm-2"><b>Commission</b></div>
-				<div class="col-sm-3"><b>Bunk Cash Reduction</b></div>
+				<div class="col-sm-3"><b>Bunk Comm. Reduction</b></div>
 				<div class="col-sm-2"><b>Balance</b></div>
 				<div class="col-sm-2"><b>Discounts</b></div>
 			</div>
@@ -189,16 +189,16 @@
 			<b>Final balance:</b>
 		</div>
 		<div class="col-sm-3">
-			{$final_balance}
+			$ {$final_balance|number_format:2:".":","}
 		</div>
 	</div>
 
 	<div class="row pad-top">
 		<div class="col-sm-3">
-			<b>Reservation commission red.:</b>
+			<!--<b>Reservation commission red.:</b>-->
 		</div>
 		<div class="col-sm-3">
-			{$reservation_commission_red}
+			<!--{$reservation_commission_red}-->
 		</div>
 		<div class="col-sm-3">
 			<b>Payment notes:</b>
@@ -217,21 +217,21 @@
 			<div class="row pad-top">
 				<div class="col-sm-2"><b>Reason:</b></div>
 				<div class="col-sm-4">
-					<input type="text" name="reason" value="{$reason}" class="form-control">
+					<input type="text" name="reason" value="{$manual_commission_reduction_reason}" class="form-control">
 				</div>
 			</div>
 
 			<div class="row pad-top">
 				<div class="col-sm-2"><b>Adjustment:</b></div>
 				<div class="col-sm-4">
-					<input type="text" name="adjustment" value="{$adjustment}" class="form-control">
+					<input type="text" name="adjustment" value="{$manual_commission_adjustment}" class="form-control">
 				</div>
 			</div>
 
 			<div class="row pad-top">
 				<div class="col-sm-6"><b>Final commission balance:</b></div>
 				<div class="col-sm-6">
-					{$final_commission_balance}
+					$ {$final_comm_balance|number_format:2:".":","}
 				</div>
 			</div>
 		</div>
