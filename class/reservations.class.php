@@ -434,7 +434,8 @@ class reservation extends charters {
             `c`.`start_date` AS 's_date',
             `c`.`charterID`,
             `r`.`manual_commission_adjustment`,
-            `r`.`manual_commission_reduction_reason`
+            `r`.`manual_commission_reduction_reason`,
+            `r`.`payment_notes`
 
         FROM
             `reservations` r, `charters` c

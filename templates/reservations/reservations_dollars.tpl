@@ -10,6 +10,8 @@
 
 {include file="reservation_navigation.tpl"}
 
+<form name="myform">
+<input type="hidden" name="reservationID" value="{$reservationID}">
 <div class="jumbotron">
 	<div class="row pad-top">
 		<div class="col-sm-2">
@@ -213,25 +215,31 @@
 					<b>Manual commission reduction:</b>
 				</div>
 			</div>
-
+			
 			<div class="row pad-top">
 				<div class="col-sm-2"><b>Reason:</b></div>
-				<div class="col-sm-4">
-					<input type="text" name="reason" value="{$manual_commission_reduction_reason}" class="form-control">
+				<div class="col-sm-6">
+					<input type="text" name="manual_commission_reduction_reason" value="{$manual_commission_reduction_reason}" class="form-control">
 				</div>
 			</div>
 
 			<div class="row pad-top">
 				<div class="col-sm-2"><b>Adjustment:</b></div>
-				<div class="col-sm-4">
-					<input type="text" name="adjustment" value="{$manual_commission_adjustment}" class="form-control">
+				<div class="col-sm-6">
+					<input type="number" name="manual_commission_adjustment" value="{$manual_commission_adjustment}" class="form-control">
+				</div>
+				<div class="col-sm-2">
+					<input type="button" value="Update" class="btn btn-success" onclick="update_commission_reduction(this.form)">
 				</div>
 			</div>
+
+			<div id="ajax_results_reduction"></div>
 
 			<div class="row pad-top">
 				<div class="col-sm-6"><b>Final commission balance:</b></div>
 				<div class="col-sm-6">
-					$ {$final_comm_balance|number_format:2:".":","}
+					$ {$pre_comm_total|number_format:2:".":","}
+					<!--$ {$final_comm_balance|number_format:2:".":","}-->
 				</div>
 			</div>
 		</div>
@@ -239,16 +247,35 @@
 			<!-- right -->
 			<div class="row">
 				<div class="col-sm-12">
-					<textarea name="payment_notes" class="form-control">{$payment_notes}</textarea>
+					<input type="hidden" name="payment_notes" id="payment_notes">
+					<textarea name="tiny1" id="tiny1" class="form-control">{$payment_notes}</textarea>
 				</div>
 			</div>
+			<div class="row pad-top">
+				<div class="col-sm-12">
+					<input type="button" value="Update" class="btn btn-success" onclick="update_payment_notes(this.form)">
+				</div>
+			</div>
+			<div id="ajax_results_paymentnotes"></div>
 		</div>
 	</div>
-
-
-
-
-
-
-
 </div>
+</form>
+
+<script>
+function update_commission_reduction(myform) {
+	$.get('/ajax/reservations/update_commission_reduction.php',
+	$(myform).serialize(),
+	function(php_msg) {
+        $("#ajax_results_reduction").html(php_msg);
+	});		
+}
+function update_payment_notes(myform) {
+	$('#payment_notes').val(tinyMCE.get('tiny1').getContent());
+	$.get('/ajax/reservations/update_payment_notes.php',
+	$(myform).serialize(),
+	function(php_msg) {
+        $("#ajax_results_paymentnotes").html(php_msg);
+	});		
+}
+</script>
